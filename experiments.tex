@@ -277,52 +277,39 @@ the necessity that user provides data capacity demand for each phase.
 If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 dynamic programming based job scheduler can further reduce jobs' wait time.
 We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
-three version of Cerberus scheduler differing in
-how they schedule jobs in queues ($Q_I$, $Q_R,$ and $Q_O$):
+two versions of Cerberus:
 \begin{itemize}
         \item \textbf{FCFS Cerberus} uses naive first come first serve policy.
                 Whoever at the front of queue are considered favorably.
-        \item \textbf{MaxT Cerberus} select these jobs in $Q_I$ and $Q_O$
+        \item \textbf{Optimized Cerberus} select these jobs in $Q_I$ and $Q_O$
                 such that volume of to be transferred data
                 is maximized by Recursion~\ref{Equ:MaxTransferDataRecursion}.
-        \item \textbf{MaxP Cerberus} tries to optimize
-                the number of parallel jobs from $Q_I$ and $Q_O$
-                using Recursion~\ref{Equ:MaxTaskNumberRecursion}.
+                For jobs in $Q_R$, it chooses jobs according to the optimization solution
+                given by Equation~\ref{Equ:MaxProductRecursion}
 \end{itemize}
-Besides, MaxT Cerberus and MaxP Cerberus, together referred as \textbf{optimized Cerberus},
-treat jobs in run queue identically.
-They choose jobs according to the optimization solution
-given by Equation~\ref{Equ:MaxProductRecursion}
-
 As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, response time of
-jobs scheduled by both MaxT Cerberus and MaxP Cerberus are reduced.
-The most non-responsive job for both MaxT Cerberus and MaxP Cerberus is job \#445,
-taking 303,523 and 304,299 seconds respectively.
+jobs scheduled by Optimized Cerberus is reduced.
+The most non-responsive job for Optimized Cerberus is job \#445,
+taking 303,523 seconds.
 In contrast, job \#445 takes 376,026 seconds to finish in FCFS Cerberus.
-This is 19.28\% slower than MaxT Cerberus and 19.08\% slower than MaxP Cerberus.
+This is 19.28\% slower than Optimized Cerberus.
 When we consider the overall response time of entire job set,
 we see more than \textit{80\% of the tasks response faster when we do optimization}.
-The scheduling results of optimized Cerberus are fairly closed to each other.
-%In this simulation, 70\% of the jobs could get better response time
-%if we maximizing number of tasks, versus maximizing transferred data.
 
 The time duration application waits for running,
 or the time application spend in running queue,
 is plotted in Figure~\ref{Fig:DPvsFIFOWaitRun}.
-The tail of both MaxT and MaxP shows that Cerberus hold a couple of jobs waiting
-in its running queue for a very long time,
-even longer than the FCFS case.
+The tail of Optimized Cerberus shows that it holds a couple of jobs waiting
+in its running queue for a very long time.
 We figure out the reason of this long delay once we examine the detail of these jobs.
-First they are submitted at early middle phase.
-Job \#435 waits 268,322 seconds in the maximizing burst buffer usage case;
-it waits 267,853 seconds in the case of MaxP Cerberus (maximizing number of tasks).
+First they are submitted at early middle phase (Job \#435 waits 268,322 seconds).
 Second, these jobs are requesting huge amount of compute nodes (163840 cores)
-but comparably less burst buffer (7 TB for job \#435 and 8 TB for job \#438)
+but comparably less burst buffer (7 TB for job \#435)
 The third and the most important reason is that there are jobs requesting similarly
 large number of cores but request less running time and larger amount of burst buffer.
 For example, job \#434 requests 163840 cores
 but its expected running time is mere 3600 seconds;
-it also requests 59 TB burst buffer.
+in addition, it also requests 59 TB burst buffer.
 As a result, Cerberus, according to Equation~\ref{Equ:MaxProductRecursion},
 favors the jobs with less request time but larger burst buffer demand.
 This is interesting because it is a potential flaws in the optimization-based policy:
@@ -332,23 +319,19 @@ In other words, our optimization scheme, even though providing performance enhan
 for the waiting time of 70\% jobs, is not strategy-proofness\cite{Ghodsi:NSDI:2011}
 
 
-We can see in Figure~\ref{Fig:DPvsFIFOThroughput} the throughput of system
-when scheduled by 3 different versions of Cerberus.
+We can see in Figure~\ref{Fig:DPvsFIFOThroughput} the system throughput
+when scheduled by different versions of Cerberus.
 For optimized Cerberus, job \#445 decides the finishing time of all 1185 jobs.
-That is 303,940 seconds for MaxT Cerberus and 304,716 seconds for MaxP Cerberus.
+That is 303,940 seconds for Optimized Cerberus.
 FCFS Cerberus makes system ends its last job, also job \#455, at 376,443 seconds.
-The worst case completion improvement to FCFS-style Cerberus is
-19.26\% for MaxT Cerberus and 19.05\% for MaxP Cerberus.
+The worst case completion improvement to FCFS-style Cerberus is 19.26\%.
 When we look at the time sequence of throughput,
-we found the peak value 9 jobs / 500 seconds obtained by MaxP Cerberus.
-The alternative optimization method, MaxT Cerberus,
-could achieve 10 jobs / 500 seconds.
-The peak throughput of FCFS Cerberus is 9 jobs / 500 seconds around 280,000 seconds.
+we found the peak value 9 jobs / 500 seconds obtained by Optimized Cerberus.
+The peak throughput of FCFS Cerberus is also 9 jobs / 500 seconds.
 Mean throughputs of these 3 scheduling methods are drawn
 as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
-\textit{Comparing with FCFS Cerberus, MaxT Cerberus achieves
-23.87\% higher average throughput (1.951 jobs / 500 seconds)
-while MaxP Cerberus gives 23.43\% improvement (1.944 jobs / 500 seconds)}
+\textit{Comparing with FCFS Cerberus, Optimized Cerberus achieves
+23.87\% higher average throughput (1.951 jobs / 500 seconds).}
 
 \begin{figure}[!t]
         \centering
@@ -384,11 +367,9 @@ while MaxP Cerberus gives 23.43\% improvement (1.944 jobs / 500 seconds)}
 
 Table~\ref{Tab:OptimizationTime} demonstrate that our dynamic programming based
 optimized Cerberus can schedule jobs online,
-even though solving the optmization problem is thoretically NP-hard.
-For MaxT Cerberus, it solved about 8400 Problems~\ref{Equ:MaxTransferData} and
+even though solving the optmization problem is theoretically NP-hard.
+For Optimized Cerberus, it solved about 8400 Problems~\ref{Equ:MaxTransferData} and
 Problem~\ref{Equ:MaxProduct} when scheduling 1185 jobs, taking less than 370 seconds.
-MaxP Cerberus, similarly solves Problem~\ref{Equ:MaxTaskNumber} and
-Problem~\ref{Equ:MaxProduct} in total 8220 times using less than 355 seconds.
 The time of solving each optimization is about 0.04 seconds per time.
 
 \begin{table}[!t] 
@@ -396,14 +377,14 @@ The time of solving each optimization is about 0.04 seconds per time.
         \caption{Time Consumption in Dynamic Programming}
         \label{Tab:OptimizationTime}
         \centering
-        \begin{tabular}{l|c|c}
+        \begin{tabular}{l|c}
                 \hline
-                Optimization Policy Used & MaxT Cerberus & MaxP Cerberus \\
+                Optimization Policy Used & Optimized Cerberus\\
                 \hline
                 \hline
-                Simulation Run Time / seconds & 375.55 & 362.40 \\
-                Optimization Run Time / seconds & 364.62 & 354.39 \\
-                Total Number of Optimizations & 8406 & 8220 \\
+                Simulation Run Time / seconds & 375.55\\
+                Optimization Run Time / seconds & 364.62\\
+                Total Number of Optimizations & 8406\\
                 \hline
         \end{tabular}
 \end{table}
