@@ -49,7 +49,7 @@ or for different job queues.
 \end{figure}
 
 
-\subsection{Optimize Stage-In Phase}
+\subsection{Optimize Stage-in Phase}
 In the stage-in phase, only burst buffer demand is considered.
 Scheduling is made based on the value of $bb\_in$ of jobs in $Q_I$.
 If we care about data transfer throughput,
@@ -69,19 +69,11 @@ $S\subseteq J_{Q_I}$ is the set of job selected by Cerberus,
 $bb\_in_i$ is the burst buffer demand of $job_i$,
 $BB_{available}$ is system's available amount of burst buffer.
 
-If we care about task parallelism, following optimization could help:
-\begin{align*}
-        & \max |S| \\
-        & s.t. \sum_{i\in S} bb\_in_i \leq BB_{available} \numberthis \label{Equ:MaxTaskNumber}  
-        %\left\{
-                %\begin{array}{l}
-                        %S \subseteq J_{Q_I} \\ [1em] 
-                        %\sum_{i\in S} bb\_in_i \leq BB_{available}
-                %\end{array} 
-        %\right.
-\end{align*}
-The number of tasks doing data loading will be maximized.
-
+Stage-out phase scheduling are made based on the value of $bb\_out$ of jobs in $Q_O$.
+Optimization formula for different purpose are almost the same as
+Equation~\ref{Equ:MaxTransferData},
+except that $bb\_in$ is replaced with $bb\_out$,
+$J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
 
 \subsection{Optimize Running Phase}
 Running jobs require not only compute nodes, but burst buffer to ensure performance and correctness.
@@ -119,26 +111,19 @@ $S\subseteq J_{Q_R}$ stands for jobs selected by scheduler,
 $CN_{available}$ and $BB_{available}$ represent the amount of system's available resources
 (compute nodes and burst buffer nodes) at current moment.
 
-\subsection{Optimize Stage-Out Phase}
-Scheduling are made based on the value of $bb\_out$ of jobs in $Q_O$.
-Optimization formula for different purpose are almost the same as
-Equation~\ref{Equ:MaxTransferData} and Equation~\ref{Equ:MaxTaskNumber}
-in stage-in scheduling, except that $bb\_in$ is replaced with $bb\_out$,
-$J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
-
 
 \subsection{Solving the Optimization Problems}
 It is trivial to show that optimization problem~\ref{Equ:MaxTransferData}
-and~\ref{Equ:MaxTaskNumber}
-are equivalent to 0-1 knapsack problem.
+is equivalent to 0-1 knapsack problem.
 Problem~\ref{Equ:MaxProduct} can be informally treat as 2-dimension 0-1 knapsack problem.
-In fact, we expect all of them are NP-hard problems.
+We expect all of them are NP-hard problems.
 We can solve them with dynamic programming in pseudo polynomial time.
 Applying memorization could also help accelerate the solving process.
-In fact we are not interested in the optimal result of problem~\ref{Equ:MaxTransferData},
-problem~\ref{Equ:MaxTaskNumber} and problem~\ref{Equ:MaxProduct} at all
+However, we are not interested in the optimal result of
+problem~\ref{Equ:MaxTransferData} and problem~\ref{Equ:MaxProduct}
 but in a combination of jobs that yields the optimal solution,
-which can also be easily tracked back down by keeping memorizations.
+which, fortunately, can also be tracked back down
+using the memorizations kept in dynamic programming.
 
 %The solution to Problem~\ref{Equ:MaxTransferData},
 %Problem~\ref{Equ:MaxTaskNumber} and Problem~\ref{Equ:MaxProduct} are similar.
@@ -147,34 +132,31 @@ given by Recursion~\ref{Equ:MaxTransferDataRecursion}.
 In~\ref{Equ:MaxTransferDataRecursion}, the memo we keeps during solving is
 the optimal solution for 
 $jobs=(job_1, job_2, \ldots, job_i)$ with $w$ GB of available burst buffer.
-It turns out that the recursion for Problem~\ref{Equ:MaxTaskNumber} is
-extremely similar to~\ref{Equ:MaxTransferDataRecursion}
-The memo in Recursion~\ref{Equ:MaxTaskNumberRecursion} is the same
-as that in Recursion~\ref{Equ:MaxTransferDataRecursion}.
-The recursion for Problem~\ref{Equ:MaxProduct} is a little bit complicated.
-Here we should keep the memo of the optimal solution for $jobs=(job_1, job_2, \ldots, job_i)$
+For Problem~\ref{Equ:MaxProduct}, we keep the memo of the optimal solution 
+for $jobs=(job_1, job_2, \ldots, job_i)$
 with $c$ computing nodes and $w$ GB of burst buffer being available.
 
-Scheduler can obtain an optimal combination of jobs by examining the memo.
+Scheduler can obtain an optimal combination of jobs by tracking along the memo.
 Take the problem~\ref{Equ:MaxProduct} problem for example.
 We start from $dp(n, CN, BB)$.
 If $c_n \leq CN$ and $bb\_in_n \leq BB$, $job_n$ should be scheduled if
 $dp(i-1, c, w) \leq dp(i-1, c - c_i, w - bb\_in_i) + c_i bb\_in_i$ and
 recurse with $dp(n - 1, CN - c_i, BB - bb\_in_i)$;
 otherwise, $job_n$ should be skipped and we recurse the process on $dp(n-1, CN, BB)$.
-The time complexity of solving Equation~\ref{Equ:MaxTransferDataRecursion} and
-Equation~\ref{Equ:MaxTaskNumberRecursion} is $O(n\times BB)$.
+The time complexity of solving Recursion~\ref{Equ:MaxTransferDataRecursion} is $O(n\times BB)$.
 The time complexity of solving Recursion~\ref{Equ:MaxProductRecursion}
 is $O(n\times CN\times BB)$.
+
 Notice that $CN$ and $BB$ may be very large integers,
 making the pseudo-polynomial algorithm unsuitable
 to be used online by scheduler.
 In practice, we could reduce the time complexity by allocating resource
 in a coarser granularity.
 For example, jobs usually asks for compute node in the unit of $cn\_unit = 512$ nodes;
-their demands for burst buffer nodes are usually in the unit of $bb\_unit = 100$ GB.
+demands for burst buffer nodes on checkpointing and output are
+usually in the unit of $bb\_unit = 1$ TB.
 We can divide both $CN$ and $c_i$ by $cn\_unit$;
-divide both $BB$ and $bb\_in, bb\_run, bb\_out$ by $bb\_unit$.
+divide both $BB$ and $bb\_run, bb\_out$ by $bb\_unit$.
 It is also possible to reduce the value of $n$, the number of jobs in the queue.
 For example, we can consider only $\frac{1}{\alpha}n$ jobs in the queue.
 This will give us only the partial optimal solution
@@ -193,19 +175,7 @@ in exchange of less computation complexity.
                 \label{Equ:MaxTransferDataRecursion} 
         \end{align}
 \end{strip}
-\begin{strip}
-        \begin{align}
-                dp(i, w) = &
-                \left\{
-                        \begin{array}{l}
-                                0, \text{ if $i=0$ } \\ [0.4em]
-                                dp(i-1, w), \text{ if $bb\_in_i > w$} \\ [0.4em]
-                                \max \{ dp(i-1, w), dp(i-1, w-bb\_in_i) + 1 \}, \text{ if $bb\_in_i \leq w$}
-                        \end{array} 
-                \right.
-                \label{Equ:MaxTaskNumberRecursion}
-        \end{align}
-\end{strip}
+
 \begin{strip}
         \begin{align}
                 dp(i, c, w) = &
