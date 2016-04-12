@@ -76,13 +76,10 @@ user jobs suffer less wait time.
 The burst buffer and/or compute nodes will be released immediately
 if the job don't need them to finish the next phase,
 and become available to the waiting jobs.
-System utilization can thus be improved.
 As Cerberus takes advantage of the parallelism of jobs in different phases,
 system throughput also gets improved.
-
 %6. Summarize our contribution
 Our contributions in this paper are summarized as follows:
-
 \begin{enumerate}
         \item %Explore how HPC workload scheduler allocates burst buffer resources.
                 We propose a 3-phase application model tailored the typical
@@ -100,22 +97,21 @@ Our contributions in this paper are summarized as follows:
                 BB enabled HPC system.
                 BBSim is motivated by simulating Cerberus
                 on burst buffer enabled systems but also supports various kind of job schedulers.
-                It help us simulate and compare the scheduling results of
-                Trinity, a systems with both traditional IO nodes and burst buffer nodes.
+                %It help us simulate and compare the scheduling results of
+                %Trinity, a systems with both traditional IO nodes and burst buffer nodes.
 \end{enumerate}
 
 In the reminder of this paper,
 the next section talks about the status quo of burst buffer and
-the motivation of our work (Section~\ref{Sec:Background}).
+the motivation of our work.
 Section~\ref{Sec:Model} begins elaborating the 3-phase model,
-after which Cerberus is introduced in Section~\ref{Sec:Scheduler}.
+after which Cerberus is introduced.
 The details of formulating and solving scheduling problems with
-dynamic programming at each job phase are also
-enumerated in Section~\ref{Sec:Scheduler}.
+dynamic programming at each job phase are enumerated in Section~\ref{Sec:Scheduler}.
 Core events in simulating Cerberus and execution logic of BBSim are
 briefly discussed in Section~\ref{Sec:Simulation}.
-Starting from Section~\ref{Sec:Experiments}, we validate Cerberus
-by simulating the burst buffer enabled Trinity supercomputing platform on BBSim.
+We validate Cerberus by simulating the burst buffer enabled
+Trinity supercomputing platform on BBSim (Section~\ref{Sec:Experiments}).
 Related works are discussed in Section~\ref{Sec:RelatedWorks}.
 We conclude this paper and list possible future works in Section~\ref{Sec:Conclusion}.
 

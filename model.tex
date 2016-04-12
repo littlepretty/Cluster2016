@@ -30,14 +30,13 @@
 %\end{table}
 
 \subsection{System Resources}
-The system contains resources like compute node, main memory, burst buffer and IO node.
+The system contains resources like compute nodes, main memory, burst buffer,
+IO nodes and external storage.
 In most system architecture, compute nodes are coupled with main memory.
-Since IO capacity at most time is sufficient, we assume IO nodes are always available.
-Therefore, the schedule targets are modeled as compute node and burst buffer.
-We consider a system with $CN$ compute nodes and $BB$ GB of burst buffer.
-Burst buffer are able to be shared by applications with any fraction of total amount.
-Later we will see that when doing optimal scheduling, we may need to allocate by a fixed
-fraction of the total resources (number of compute nodes or amount of burst buffer).
+Since storage capacity at most time is sufficient, we assume IO nodes are always available.
+The schedule targets are compute node and burst buffer:
+a system with $CN$ compute nodes and $BB$ GB of burst buffer.
+BB are able to be shared by applications with any fractional amount.
 
 \subsection{Three-Phase Model for HPC Jobs}
 Users request the system to run their applications as jobs.
@@ -66,14 +65,12 @@ these nodes are exclusively used by this job.
 The first thing to do in running phase is fetching in data from burst buffer to memory,
 which is not available until compute nodes is allocated to job.
 We refer this sub-phase as \textit{fectch-in} phase.
-Burst buffers used in \textit{stage-in} phase will be hold by job
-until \textit{fetch-in} phase finished.
+$bb\_in$ will be hold by job until \textit{fetch-in} phase finished.
 Even if the computation is done when job exit \textit{running phase},
 compute nodes cannot be released until job enters \textit{stage-out} phase 
 \textbf{and} output data are drained out to burst buffer from memory,
 referred as \textit{drain-out} phase.
-However, burst buffer used for checkpointing during job execution
-can be immediately reclaimed at the end of \textit{running phase}.
+However, $bb\_run$ can be immediately reclaimed at the end of \textit{running phase}.
 Once \textit{drain-out} phase is done,
 compute nodes become available for jobs waiting to be run
 because staging output data out to IO node is the business of burst buffer nodes,
@@ -99,8 +96,8 @@ $bb\_out$ is the volume of burst buffer needed to hold the resulting output data
 A job that providing demand vector augmented with
 burst buffer triple is called a \textit{3-phase modeled job}.
 Alternatively, a lazy user may just use the $\max\{bb\_in, bb\_run, bb\_out\}$ at every stage.
-We do not make any assumption about $bb\_run$ and $bb\_out$ because it is nontrivial to predict them,
-both for system scheduler and application owner.
+%We do not make any assumption about $bb\_run$ and $bb\_out$
+%because it is nontrivial to predict them, both for system scheduler and application owner.
 We refer this augmentation as
 \textit{1-phase modeled jobs} thereafter.
 
