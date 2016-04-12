@@ -29,12 +29,12 @@ def throughputPlot(prefix, delta=500.0):
                           skip_header=1, names=first_row3)
     data2 = np.genfromtxt(file_prefix + '_maxbb.out.csv', delimiter=',',
                           skip_header=1, names=first_row3)
-    data3 = np.genfromtxt(file_prefix + '_maxparallel.out.csv', delimiter=',',
-                          skip_header=1, names=first_row3)
+    """data3 = np.genfromtxt(file_prefix + '_maxparallel.out.csv', delimiter=',',
+                          skip_header=1, names=first_row3)"""
     lines = ['b:', 'r:', 'g:', 'b', 'r', 'g']
-    labels = ['FCFS Cerberus', 'MaxT Cerberus', 'MaxP Cerberus']
+    labels = ['FCFS Cerberus', 'Optimized Cerberus', 'MaxP Cerberus']
     hatches = ['/', '\\', '-']
-    all_data = [data1, data2, data3]
+    all_data = [data1, data2]
     avgs = []
     i = 0
     fig, ax1 = plt.subplots()
@@ -58,7 +58,7 @@ def throughputPlot(prefix, delta=500.0):
         i += 1
         end = max(end, intervals[-1])
     i = 0
-    end += 50000
+    end += 80000
     for avg in avgs:
         log.info('Avg Throughput of %s = %.3f' % (labels[i], avg))
         ax2.bar(end + width * i, avg, width, hatch=hatches[i],
@@ -67,11 +67,11 @@ def throughputPlot(prefix, delta=500.0):
 
     ax1.set_ylim([0, 16])
     ax1.set_yticks(np.arange(0.0, 17, 2))
-    ax2.set_ylim([0, 2.8])
-    ax2.set_yticks(np.arange(0.0, 2.9, 0.35))
+    ax2.set_ylim([0, 2.4])
+    ax2.set_yticks(np.arange(0.0, 2.5, 0.3))
     ax1.grid()
     ax1.legend(loc='upper left', fontsize=16)
-    ax2.legend(loc='upper right', fontsize=16)
+    ax2.legend(loc='lower right', fontsize=16)
     ax1.set_xlabel('Time Sequence / Seconds')
     ax1.set_ylabel('#Jobs / 500 Seconds')
     ax2.set_ylabel('Mean #Jobs')
@@ -112,9 +112,9 @@ def cdfPlot(prefix, column='wait'):
                           skip_header=1, names=first_row3)
     data2 = np.genfromtxt(prefix + '_maxbb.out.csv', delimiter=',',
                           skip_header=1, names=first_row3)
-    data3 = np.genfromtxt(prefix + '_maxparallel.out.csv', delimiter=',',
+    """data3 = np.genfromtxt(prefix + '_maxparallel.out.csv', delimiter=',',
                           skip_header=1, names=first_row3)
-    """data4 = np.genfromtxt(file_prefix + '_1pio.out.csv', delimiter=',',
+    data4 = np.genfromtxt(file_prefix + '_1pio.out.csv', delimiter=',',
                           skip_header=1, names=first_row1)
     data5 = np.genfromtxt(file_prefix + '_1pbb.out.csv', delimiter=',',
                           skip_header=1, names=first_row1)
@@ -122,10 +122,10 @@ def cdfPlot(prefix, column='wait'):
                           skip_header=1, names=first_row3)"""
     plt.figure(figure_no)
     figure_no += 1
-    labels = ['FCFS Cerberus', 'MaxT Cerberus', 'MaxP Cerberus']
-    lines = ['b-', 'r:', 'g--']
+    labels = ['FCFS Cerberus', 'Optimized Cerberus', 'MaxP Cerberus']
+    lines = ['b-', 'r--', 'g:']
     i = 0
-    for data in [data1, data2, data3]:
+    for data in [data1, data2]:
         time = data[column]
         sorted_time = np.sort(time)
         log.info('%s\'s %s = %.2f' % (labels[i], column, sorted_time[-1]))
