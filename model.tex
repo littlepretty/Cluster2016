@@ -56,29 +56,6 @@ namely \textit{stage-out} phase.
 Burst buffer plays as an efficient IO broker for compute nodes,
 in replacing of traditional IO nodes.
 
-The tightly coupling between processing cores and memory makes 3-phase model
-more complicated than it appears in terms of resource releasing.
-For a job at the stage-in phase, compute nodes is not allocated to it yet
-but that will not effect staging in data.
-When scheduler allocate compute nodes (coupled with memory) to a job,
-these nodes are exclusively used by this job.
-The first thing to do in running phase is fetching in data from burst buffer to memory,
-which is not available until compute nodes is allocated to job.
-We refer this sub-phase as \textit{fectch-in} phase.
-$bb\_in$ will be hold by job until \textit{fetch-in} phase finished.
-Even if the computation is done when job exit \textit{running phase},
-compute nodes cannot be released until job enters \textit{stage-out} phase 
-\textbf{and} output data are drained out to burst buffer from memory,
-referred as \textit{drain-out} phase.
-However, $bb\_run$ can be immediately reclaimed at the end of \textit{running phase}.
-Once \textit{drain-out} phase is done,
-compute nodes become available for jobs waiting to be run
-because staging output data out to IO node is the business of burst buffer nodes,
-sometimes with the help from traditional IO nodes.
-Burst buffer nodes used for caching output data can thus be put back for reuse
-when \textit{stage-out} phase, as well as the entire lifetime of job, concludes.
-
-
 \subsection{Three-Phase Resource Demand}
 Users typically provide their resource demand for their jobs.
 This is the most important information scheduler could get from the users.
@@ -101,4 +78,25 @@ Alternatively, a lazy user may just use the $\max\{bb\_in, bb\_run, bb\_out\}$ a
 We refer this augmentation as
 \textit{1-phase modeled jobs} thereafter.
 
+The tightly coupling between processing cores and memory makes 3-phase model
+more complicated than it appears in terms of resource releasing.
+For a job at the stage-in phase, compute nodes is not allocated to it yet
+but that will not effect staging in data.
+When scheduler allocate compute nodes (coupled with memory) to a job,
+these nodes are exclusively used by this job.
+The first thing to do in running phase is fetching in data from burst buffer to memory,
+which is not available until compute nodes is allocated to job.
+We refer this sub-phase as \textit{fectch-in} phase.
+$bb\_in$ will be hold by job until \textit{fetch-in} phase finished.
+Even if the computation is done when job exit \textit{running phase},
+compute nodes cannot be released until job enters \textit{stage-out} phase 
+\textbf{and} output data are drained out to burst buffer from memory,
+referred as \textit{drain-out} phase.
+However, $bb\_run$ can be immediately reclaimed at the end of \textit{running phase}.
+Once \textit{drain-out} phase is done,
+compute nodes become available for jobs waiting to be run
+because staging output data out to IO node is the business of burst buffer nodes,
+sometimes with the help from traditional IO nodes.
+Burst buffer nodes used for caching output data can thus be put back for reuse
+when \textit{stage-out} phase, as well as the entire lifetime of job, concludes.
 

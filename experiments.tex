@@ -365,29 +365,30 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
         %\end{tabular}
 %\end{table}
 
-Table~\ref{Tab:OptimizationTime} demonstrate that our dynamic programming based
-optimized Cerberus can schedule jobs online,
+%Table~\ref{Tab:OptimizationTime} demonstrate that 
+Our dynamic programming based optimized Cerberus can schedule jobs online,
 even though solving the optmization problem is theoretically NP-hard.
 For Optimized Cerberus, it solved about 8400 Problems~\ref{Equ:MaxTransferData} and
-Problem~\ref{Equ:MaxProduct} when scheduling 1185 jobs, taking less than 370 seconds.
-The time of solving each optimization is about 0.04 seconds per time.
+Problem~\ref{Equ:MaxProduct} when scheduling 1185 jobs,
+taking less than 370 seconds.
+The time overhead of solving each optimization is about 0.04 seconds per time.
 
-\begin{table}[!t] 
-        \renewcommand{\arraystretch}{1.3}
-        \caption{Time Consumption in Dynamic Programming}
-        \label{Tab:OptimizationTime}
-        \centering
-        \begin{tabular}{l|c}
-                \hline
-                Optimization Policy Used & Optimized Cerberus\\
-                \hline
-                \hline
-                Simulation Run Time / seconds & 375.55\\
-                Optimization Run Time / seconds & 364.62\\
-                Total Number of Optimizations & 8406\\
-                \hline
-        \end{tabular}
-\end{table}
+%\begin{table}[!t] 
+        %\renewcommand{\arraystretch}{1.3}
+        %\caption{Time Consumption in Dynamic Programming}
+        %\label{Tab:OptimizationTime}
+        %\centering
+        %\begin{tabular}{l|c}
+                %\hline
+                %Optimization Policy Used & Optimized Cerberus\\
+                %\hline
+                %\hline
+                %Simulation Run Time / seconds & 375.55\\
+                %Optimization Run Time / seconds & 364.62\\
+                %Total Number of Optimizations & 8406\\
+                %\hline
+        %\end{tabular}
+%\end{table}
 
 
 
