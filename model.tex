@@ -156,9 +156,9 @@ as job's burst buffer demand in every phase.
 
 %==========XY=====================
 The resource releasing for the 3-phase modeled jobs are complicated than it used to be. 
-For a job at \texit{stage-in} phase, compute nodes is not allocated to it yet. 
+For a job at \textit{stage-in} phase, compute nodes is not allocated to it yet. 
 The job can stage in data from IO nodes to burst buffer without the involvement of compute nodes.
-When scheduler allocates compute nodes to the job, the job enters the \texit{running} phase 
+When scheduler allocates compute nodes to the job, the job enters the \textit{running} phase 
 and starts to read the pre-fetched data from burst buffer into the main memory, 
 $bb\_in$ will be released after all the data are moved into main memory. 
 When the job finishes computation and exits \textit{running} phase, 
