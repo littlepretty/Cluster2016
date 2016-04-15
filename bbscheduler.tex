@@ -302,6 +302,14 @@
 
 
 
+%*******to add comment tag***********
+\usepackage{verbatim}
+\usepackage{soul}
+\usepackage{xcolor}
+\newcommand{\TODO}[1]{\hl{TODO: #1}}
+\newcommand{\NOTE}[1]{\hl {NOTE: #1}}
+% \newcommand{\changed}[1]{\textcolor{red}{#1}}
+
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 %
@@ -456,9 +464,9 @@ benefit burst buffer equipped system.
 
 \input{model}
 
-\input{sched_policy}
-
 \input{simulation}
+
+\input{sched_policy}
 
 \input{experiments}
 
