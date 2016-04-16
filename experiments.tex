@@ -17,8 +17,7 @@
 %==============XY===================
 This section evaluate Cerberus by answering several key questions.
 \begin{itemize}
-        \item \textbf{Q1}: will Cerberus improve the overall scheduling performance
-                by utilizing burst buffer nodes?
+        \item \textbf{Q1}: will utilizing burst buffer nodes could improve both jobs and system performance?
         \item \textbf{Q2}: Will job demand on burst buffer affect Cerberus?
                 Why bother to divide the job execution into 3 phases?
         \item \textbf{Q3}: Can dynamic programming based optimization
@@ -100,38 +99,77 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 
 
 
-\subsection{Q1: Cerberus vs. 1-Phase Batch Scheduler}
+\subsection{Q1: BB-enabled system vs. Direct-IO system}
 \label{Sec:Sim:DirectIOvsBB}
-In this section, we demonstrate that by utilizing burst buffer nodes,
-job scheduler could improve the performance of both applications and system.
-We compare two systems:
-\begin{itemize}
-        \item \textbf{1-Phase IO}: system without burst buffer nodes
-                scheduled by FCFS policy
-        \item \textbf{Cerberus}: system with burst buffer 
-                scheduled by our proposed Cerberus
-\end{itemize}
+% In this section, we demonstrate that by utilizing burst buffer nodes,
+% job scheduler could improve the performance of both applications and system.
+% We compare two systems:
+% \begin{itemize}
+%         \item \textbf{1-Phase IO}: system without burst buffer nodes
+%                 scheduled by FCFS policy
+%         \item \textbf{Cerberus}: system with burst buffer 
+%                 scheduled by our proposed Cerberus
+% \end{itemize}
 
-Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of the response time of 1185 jobs.
-When scheduler can allocate burst buffer to jobs,
-response time is bounded by 376,443.12 seconds.
-However, the worst case in system without burst buffer
-(1-Phase IO) is catastrophical.
+
+%=============XY==============
+In this section, we demonstrate that by utilizing burst buffer nodes,
+both the performance of jobs and system can be greatly improved. 
+We compare the overall performance on burst buffer enabled system
+agaist the traditional system without burst buffer (Direct IO).
+
+
+% Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of the response time of 1185 jobs.
+% When scheduler can allocate burst buffer to jobs,
+% response time is bounded by 376,443.12 seconds.
+% However, the worst case in system without burst buffer
+% (Direct IO) is catastrophical.
+% There are jobs that takes 889,239.20 seconds to finish,
+% which is 2.36 times slow as the most non-responsive job
+% in system equipped with burst buffer.
+% In average case, \textit{nearly 99\% of the jobs scheduled by Cerberus
+% response faster than Direct batch scheduler on non-BB system.}
+% The improvement mainly comes from the difference of IO operation efficiency between
+% traditional IO nodes and burst buffer nodes.
+
+%=============XY==============
+Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of jobs response
+time by on burst buffer enabled system and the traditional system (Direct IO).
+When running on system with burst buffer,
+jobs response time is bounded by 376,443.12 seconds.
+However, the worst case of 
+Direct-IO is catastrophical.
 There are jobs that takes 889,239.20 seconds to finish,
 which is 2.36 times slow as the most non-responsive job
 in system equipped with burst buffer.
-In average case, \textit{nearly 99\% of the jobs scheduled by Cerberus
-response faster than 1-Phase batch scheduler on non-BB system.}
-The improvement mainly comes from the difference of IO operation efficiency between
-traditional IO nodes and burst buffer nodes.
+In average case, \textit{nearly 99\% of the jobs scheduled on the burst buffer enabled system
+response faster than the traditional system without burst buffer.}
+The improvement is intuitive, since the burst buffer can mitigate the IO gap between
+IO nodes and compute nodes.
 
-Figure~\ref{Fig:DirectIOvsBBWait} reveals the total waiting time for both cases.
-Notice that system without burst buffer only request compute nodes.
-In this case, waiting time is the duration from its submission
-to actual starting running.
+
+% Figure~\ref{Fig:DirectIOvsBBWait} reveals the total waiting time for both cases.
+% Notice that system without burst buffer only request compute nodes.
+% In this case, waiting time is the duration from its submission
+% to actual starting running.
+% The difference of worst case waiting time is drastic.
+% Without burst buffer nodes, job's wait duration in worst case is 3.02 times
+% slow as the worst one on systems with burst buffer;
+% the upper bound of waiting duration for burst buffer systems is about 285,254 seconds.
+% Because of burst buffer's better ability to
+% absorb checkpoint operations and data moving in/out,
+% the execution pipeline of job series is significantly speed up.
+% Statistically, \textit{more than 80\% jobs waited less time, thus response faster,
+% if they can access burst buffer.}
+
+%=============XY==============
+Figure~\ref{Fig:DirectIOvsBBWait} reveals jobs aggregated waiting time.
+Noticing that in the case of Direct IO, jobs only request compute nodes.
+Thus, waiting time is the duration between submission
+and starting to run.
 The difference of worst case waiting time is drastic.
-Without burst buffer nodes, job's wait duration in worst case is 3.02 times
-slow as the worst one on systems with burst buffer;
+On the system without burst buffer nodes, job's wait duration in worst case is 3.02 times
+slow as the worst one on the burst buffer enabled system;
 the upper bound of waiting duration for burst buffer systems is about 285,254 seconds.
 Because of burst buffer's better ability to
 absorb checkpoint operations and data moving in/out,
@@ -139,21 +177,38 @@ the execution pipeline of job series is significantly speed up.
 Statistically, \textit{more than 80\% jobs waited less time, thus response faster,
 if they can access burst buffer.}
 
+% Using the collected completion time, we calculate system's throughput over time sequence.
+% Figure~\ref{Fig:DirectIOvsBBThroughput} shows the system throughput for
+% both system using burst buffer nodes and not.
+% As indicated by the bar chart,
+% \textit{the ratio of average throughput between two systems is 2.36},
+% namely 1.575 to 0.667.
+% It totally takes 889,239 seconds for the system without burst buffer nodes to
+% server all 1185 jobs.
+% The last job is job \#1150, which requested 4096 cores and 59 TB data space.
+% It starts at 1126 seconds but waited 827,241 seconds.
+% In contrast, when system installed burst buffer nodes,
+% it accomplishes the same 1185 jobs in 376,443 seconds.
+% Job \#1150 is the second last job finished, but both its waiting time and response time
+% are significantly reduced, 272,741 and 376,026 seconds respectively.
 
-Using the collected completion time, we calculate system's throughput over time sequence.
+%=============XY==============
 Figure~\ref{Fig:DirectIOvsBBThroughput} shows the system throughput for
 both system using burst buffer nodes and not.
 As indicated by the bar chart,
 \textit{the ratio of average throughput between two systems is 2.36},
 namely 1.575 to 0.667.
 It totally takes 889,239 seconds for the system without burst buffer nodes to
-server all 1185 jobs.
-The last job is job \#1150, which requested 4096 cores and 59 TB data space.
+complete the workload.
+We pick a specific job, job with ID \#1150 from the workload, to observe its
+waiting time in both cases.
+Job \#1150 request 4096 cores and 59 TB data space.
 It starts at 1126 seconds but waited 827,241 seconds.
 In contrast, when system installed burst buffer nodes,
-it accomplishes the same 1185 jobs in 376,443 seconds.
-Job \#1150 is the second last job finished, but both its waiting time and response time
+it accomplishes the same workload in 376,443 seconds, and waiting time and response time of job \#1150
 are significantly reduced, 272,741 and 376,026 seconds respectively.
+\NOTE{replace the legend in Fig4,5. 1-Phase IO->Direct IO, Cerberus->BB-enabled}
+
 
 \begin{figure*}[!t]
         \centering
@@ -166,7 +221,7 @@ are significantly reduced, 272,741 and 376,026 seconds respectively.
                 \includegraphics[width=3.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_wait}
                 \label{Fig:DirectIOvsBBWait}
         }
-        \caption{Performance of 1185 Applications: IO Node Only System vs. Burst Buffer System}
+        \caption{Jobs Performance: IO Node Only System vs. Burst Buffer System}
         \label{Fig:DirectIOPerformance}
 \end{figure*}
 
@@ -179,35 +234,89 @@ are significantly reduced, 272,741 and 376,026 seconds respectively.
 
 
 \subsection{Q2: Demand Granularity Matters?}
-In this section we validate our 3-phase model.
-Applications are benefited when scheduler dividing jobs into 3 separated phases and 
-scheduling are based on corresponding burst buffer demand in each phase.
-This suggests that user should provide burst buffer demand as granular as possible.
 
-In Figure~\ref{Fig:3Pvs1PResponse}, we plot 3 different scheduling results by 3 FCFS scheduler.
+\NOTE{change terms in this section. The logic is we have three job models. 1-phase-1d, 3-phase-1d, and 3-phase-3d. 
+For both 3-phase-1d, and 3-phase-3d, Cerberus is used for job scheduling}
+
+In this section we validate our 3-phase model.
+Jobs performance are improved when the scheduler makkes scheduling decision in each phase separately.
+This encourages that user should provide detailed burst buffer demand in each phase for his job.
+
+% In Figure~\ref{Fig:3Pvs1PResponse}, we plot 3 different scheduling results by 3 FCFS scheduler.
+% \begin{itemize}
+%         \item \textbf{1-Phase BB}: Jobs are modeled as just 1 phase.
+%                 Users just provide general burst buffer demand throughout
+%                 entire application lifetime.
+%         \item \textbf{1D Cerberus}: In this case Cerberus only knows
+%                 the overall burst buffer demand.
+%         \item \textbf{Cerberus}: Users kindly provided all the burst buffer
+%                 demand in all 3 phases.
+%                 %the same as Cerberus in section~\ref{Sec:Sim:DirectIOvsBB}
+% \end{itemize}
+% We simulate the 3 cases with the same generated random data volume sequence.
+% We assume the overall burst buffer demand in 1-phase BB and 1D Cerberus is
+% $\max \{data\_in, data\_out, data\_run\}$.
+% Notice that 1-phase BB scheduler must subject to burst buffer capacity constraint.
+% %For 1-phase-modeled jobs, scheduler will make decision
+% %based on $\max \{data\_in, data\_out, data\_run\}$
+% %since we assume user will only tell the upper bound of its application's demand.
+% %However, in simulation, we use the generated data amount as the same as 3-modeled jobs.
+% %Response time of system without burst buffer devices are also plotted for comparison.
+
+%========XY========================
+In Figure~\ref{Fig:3Pvs1PResponse}, the results of scheduling jobs based on three models
+are presented. The three models are:
 \begin{itemize}
-        \item \textbf{1-Phase BB}: Jobs are modeled as just 1 phase.
-                Users just provide general burst buffer demand throughout
-                entire application lifetime.
-        \item \textbf{1D Cerberus}: In this case Cerberus only knows
-                the overall burst buffer demand.
-        \item \textbf{Cerberus}: Users kindly provided all the burst buffer
-                demand in all 3 phases.
+        \item \textbf{1-Phase-1D}: The job is submitted with total burst buffer demand, 
+        but its lifetime are not divided into three phases. 
+	Instead, the scheduler makes scheduling decision only once for each job.
+
+        \item \textbf{3-Phase-1D}: The job is submitted with total burst buffer demand,
+        its lifetime is divided into the three phases as disscussed in section~\ref{Sec:Model}
+        
+        \item \textbf{3-Phase-3D}: The job is submitted with detailed burst buffer demand for each phases.
                 %the same as Cerberus in section~\ref{Sec:Sim:DirectIOvsBB}
 \end{itemize}
 We simulate the 3 cases with the same generated random data volume sequence.
-We assume the overall burst buffer demand in 1-phase BB and 1D Cerberus is
+We assume the overall burst buffer demand in 1-Phase-1D and 3-Phase-1D is
 $\max \{data\_in, data\_out, data\_run\}$.
 Notice that 1-phase BB scheduler must subject to burst buffer capacity constraint.
-%For 1-phase-modeled jobs, scheduler will make decision
-%based on $\max \{data\_in, data\_out, data\_run\}$
-%since we assume user will only tell the upper bound of its application's demand.
-%However, in simulation, we use the generated data amount as the same as 3-modeled jobs.
-%Response time of system without burst buffer devices are also plotted for comparison.
+Cerberus is responsible for scheduling jobs in 3-Phase-1D and 3-Phase-3D model.
+The scheduling decision is made for all three models are FCFS based.
 
-%Unsurprisingly, jobs' response time is improving as long as they could utilizing burst buffer.
-When comparing scheduling results of 1-Phase BB and 1D Cerberus,
-both of which only have rough data information of application,
+% 
+% %Unsurprisingly, jobs' response time is improving as long as they could utilizing burst buffer.
+% When comparing scheduling results of 1-Phase BB and 1D Cerberus,
+% both of which only have rough data information of application,
+% more than 60\% of the 3-phase-modeled jobs finish faster than 1-phase-modeled jobs.
+% The longest 3-phase-modeled job takes 418,927 seconds to finish
+% while the slowest 1-phase-modeled job needs about 492,591 seconds to finish.
+% The improvement is about 14.95\% for the worst case.
+% The reason of such improvement is as follows.
+% For the 1-phase-modeled jobs, burst buffer nodes will be exclusively
+% taken by scheduled jobs throughout their lifetime.
+% In contrast, Cerberus will reclaim burst buffer multiple times;
+% it also releases burst buffer nodes and CPU resources as soon as possible.
+% This gives Cerberus more opportunity to schedule the system resources.
+% At last, when comparing the case of Cerberus with 1D Cerberus,
+% we find another advantage of our 3-phase model.
+% If benign users can provide finer-grain information of data/IO demand,
+% Cerberus can programme each queue separately and get better scheduling result.
+% In our simulation,
+% since Cerberus knows more about application's demand in different phases,
+% the worst absolute response time is less than 379,026 seconds.
+% This is 10.24\% improvement to 3-phase-modeled jobs
+% when Cerberus only knows the upper bound of data demand,
+% 23.66\% better than the slowest 1-phase-modeled job.
+% In average case, \textit{more than 80\% of the jobs 
+% scheduled by Cerberus finish earlier than 1-phase-modeled jobs.}
+% Meanwhile, \textit{more than 60\% of the jobs takes less time if user 
+% specifies data usage demand at each phase to Cerberus, e.g. Cerberus vs. 3-Phase-1D.}
+
+
+%==============XY===============
+When comparing scheduling results of 1-Phase-1D and 3-Phase-1D,
+both of which only have overall burst buffer demand of each job,
 more than 60\% of the 3-phase-modeled jobs finish faster than 1-phase-modeled jobs.
 The longest 3-phase-modeled job takes 418,927 seconds to finish
 while the slowest 1-phase-modeled job needs about 492,591 seconds to finish.
@@ -218,21 +327,51 @@ taken by scheduled jobs throughout their lifetime.
 In contrast, Cerberus will reclaim burst buffer multiple times;
 it also releases burst buffer nodes and CPU resources as soon as possible.
 This gives Cerberus more opportunity to schedule the system resources.
-At last, when comparing the case of Cerberus with 1D Cerberus,
+At last, when comparing the case of 3-Phase-3D with 3-Phase-1D,
 we find another advantage of our 3-phase model.
 If benign users can provide finer-grain information of data/IO demand,
 Cerberus can programme each queue separately and get better scheduling result.
-In our simulation,
-since Cerberus knows more about application's demand in different phases,
+For the 3-Phase-3D model,
+Cerberus knows each job's demand in different phases,
 the worst absolute response time is less than 379,026 seconds.
 This is 10.24\% improvement to 3-phase-modeled jobs
 when Cerberus only knows the upper bound of data demand,
 23.66\% better than the slowest 1-phase-modeled job.
 In average case, \textit{more than 80\% of the jobs 
-scheduled by Cerberus finish earlier than 1-phase-modeled jobs.}
+modeled by 3-phase-3D finish earlier than 1-phase-modeled jobs.}
 Meanwhile, \textit{more than 60\% of the jobs takes less time if user 
-specifies data usage demand at each phase to Cerberus, e.g. Cerberus vs. 1D Cerberus.}
+specifies data usage demand at each phase, e.g. 3-Phase-3D vs. 3-Phase-1D.}
 
+
+
+% We can reason about why Cerberus's scheduling result is better than
+% naively integrating batch scheduler with burst buffer constraint
+% by looking at the detailed waiting time.
+% Figure~\ref{Fig:3Pvs1PWaitRun} shows the time job spend in running queue.
+% There are 3 queues in Cerberus;
+% correspondingly we have 3 kinds of waiting for jobs in Cerberus.
+% %Figure~\ref{Fig:3Pvs1PWaitIn} shows the time job spend in inputing queue,
+% %Figure~\ref{Fig:3Pvs1PWaitOut} the time job spend in outputing queue.
+% For 1-phase-modeled jobs, there is just one queue;
+% therefore the waiting time in Figure~\ref{Fig:3Pvs1PWaitRun} is the total waiting time.
+% We see that jobs did not spend much time in either input queue $Q_I$ or output queue.
+% The upper bounds of time spent in input queue are
+% 2500 seconds for 1D Cerberus and Cerberus respectively.
+% This is because input data is very small (tens of GB level)
+% comparing to checkpointing data and application output (tens of TB level).
+% In contrast, in worst case job scheduled by 1-Phase BB needs to wait for 443,203 seconds,
+% because scheduler makes one-time decision on the basis of demand of
+% both computer node and maximum burst buffer.
+% %the upper bounds of time spent in output queue $Q_O$ are
+% %less than 5\% of the total waiting time of 1-phase-scheduler case
+% %for both 3-phases cases.
+% As for the time waiting for running, more than 60\% of the jobs scheduled by
+% 1D Cerberus and Cerberus are better than 1-phase-modeled jobs.
+% The difference of waiting time results in the different
+% response performance.
+
+
+%==============XY===============
 We can reason about why Cerberus's scheduling result is better than
 naively integrating batch scheduler with burst buffer constraint
 by looking at the detailed waiting time.
@@ -245,34 +384,53 @@ For 1-phase-modeled jobs, there is just one queue;
 therefore the waiting time in Figure~\ref{Fig:3Pvs1PWaitRun} is the total waiting time.
 We see that jobs did not spend much time in either input queue $Q_I$ or output queue.
 The upper bounds of time spent in input queue are
-2500 seconds for 1D Cerberus and Cerberus respectively.
+2500 seconds for 3-Phase-1D and 3-Phase-3D modeled jobs respectively.
 This is because input data is very small (tens of GB level)
 comparing to checkpointing data and application output (tens of TB level).
-In contrast, in worst case job scheduled by 1-Phase BB needs to wait for 443,203 seconds,
+In contrast, in worst case of 1-Phase-1D, the job needs to wait for 443,203 seconds,
 because scheduler makes one-time decision on the basis of demand of
 both computer node and maximum burst buffer.
 %the upper bounds of time spent in output queue $Q_O$ are
 %less than 5\% of the total waiting time of 1-phase-scheduler case
 %for both 3-phases cases.
-As for the time waiting for running, more than 60\% of the jobs scheduled by
-1D Cerberus and Cerberus are better than 1-phase-modeled jobs.
+As for the time waiting for running, 
+more than 60\% of the 3-Phase-1D and 3-Phase-3D modeled jobs are scheduled, 
+which is much better than 1-phase-model.
 The difference of waiting time results in the different
 response performance.
 
-Figure~\ref{Fig:3Pvs1PThroughput} describes system throughput of these three different scenarios.
+
+% Figure~\ref{Fig:3Pvs1PThroughput} describes system throughput of these three different scenarios.
+% It helps us examine the performance of the scheduling in time sequence.
+% For 1-phase-modeled job, we can see an obvious `throughput gap'
+% from 150,000 second to 200,000 second approximately,
+% similar for the case of 1D Cerberus, throughput also starts provocatively,
+% Cerberus' runs counter to both previous cases.
+% Even though there is a throughput trough between 100,000 to 150,000 seconds,
+% Cerberus manages to make the system having high throughput at the beginning and
+% later (from 150,000 to 300,000 seconds).
+% \textit{In average, the throughput of Cerberus is 1.575 jobs / 500 seconds.}
+% It is 11.39\% of the 1-Phase BB case (1.414 jobs / 500 seconds) and
+% 31.03\% higher than the 1D Cerberus case (1.202 jobs / 500 seconds).
+% We believe this validates the indispensable 3 phase job model and
+% the necessity that user provides data capacity demand for each phase.
+
+%==============XY===============
+Figure~\ref{Fig:3Pvs1PThroughput} describes system throughput of these three different job models.
 It helps us examine the performance of the scheduling in time sequence.
-For 1-phase-modeled job, we can see an obvious `throughput gap'
+For 1-Phase-1D modeled job, we can see an obvious `throughput gap'
 from 150,000 second to 200,000 second approximately,
-similar for the case of 1D Cerberus, throughput also starts provocatively,
-Cerberus' runs counter to both previous cases.
+similar for the case of 3-Phase-1D Cerberus, throughput also starts provocatively,
+3-Phase-3D runs counter to both previous cases.
 Even though there is a throughput trough between 100,000 to 150,000 seconds,
-Cerberus manages to make the system having high throughput at the beginning and
+3-Phase-3D model manages to make the system having high throughput at the beginning and
 later (from 150,000 to 300,000 seconds).
-\textit{In average, the throughput of Cerberus is 1.575 jobs / 500 seconds.}
-It is 11.39\% of the 1-Phase BB case (1.414 jobs / 500 seconds) and
-31.03\% higher than the 1D Cerberus case (1.202 jobs / 500 seconds).
+\textit{In average, the throughput of 3-Phase-3D model is 1.575 jobs / 500 seconds.}
+It is 11.39\% of the 1-Phase-1D case (1.414 jobs / 500 seconds) and
+31.03\% higher than the 3-Phase-1D case (1.202 jobs / 500 seconds).
 We believe this validates the indispensable 3 phase job model and
 the necessity that user provides data capacity demand for each phase.
+
 
 
 \begin{figure*}[!t]
