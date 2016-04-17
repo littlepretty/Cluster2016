@@ -481,19 +481,43 @@ the necessity that user provides data capacity demand for each phase.
 
 
 \subsection{Q3: Cerberus vs. Optimized Cerberus}
-If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
-dynamic programming based job scheduler can further reduce jobs' wait time.
-We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
-two versions of Cerberus:
-\begin{itemize}
-        \item \textbf{FCFS Cerberus} uses naive first come first serve policy.
-                Whoever at the front of queue are considered favorably.
-        \item \textbf{Optimized Cerberus} select these jobs in $Q_I$ and $Q_O$
-                such that volume of to be transferred data
-                is maximized by Recursion~\ref{Equ:MaxTransferDataRecursion}.
-                For jobs in $Q_R$, it chooses jobs according to the optimization solution
-                given by Equation~\ref{Equ:MaxProductRecursion}
-\end{itemize}
+%If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
+%dynamic programming based job scheduler can further reduce jobs' wait time.
+%We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
+%two versions of Cerberus:
+%\begin{itemize}
+%        \item \textbf{FCFS Cerberus} uses naive first come first serve policy.
+%                Whoever at the front of queue are considered favorably.
+%        \item \textbf{Optimized Cerberus} select these jobs in $Q_I$ and $Q_O$
+%                such that volume of to be transferred data
+%                is maximized by Recursion~\ref{Equ:MaxTransferDataRecursion}.
+%                For jobs in $Q_R$, it chooses jobs according to the optimization solution
+%                given by Equation~\ref{Equ:MaxProductRecursion}
+%\end{itemize}
+%As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, response time of
+%jobs scheduled by Optimized Cerberus is reduced.
+%The most non-responsive job for Optimized Cerberus is job \#445,
+%taking 303,523 seconds.
+%In contrast, job \#445 takes 376,026 seconds to finish in FCFS Cerberus.
+%This is 19.28\% slower than Optimized Cerberus.
+%When we consider the overall response time of entire job set,
+%we see more than \textit{80\% of the tasks response faster when we do optimization}.
+
+%===========XY===============
+Cerberus could deploy different optimization algorithms with regard to different
+scheduling objectives.
+In this section, we present the comparison of Cerberus when deploying two different 
+scheduling objectives. 
+The first objective is to guarantee the absolute fairness. Cerberus deploys the
+naive first come first serve policy for this objective.
+The other objective is to maximize the utilization in every scheduling phase. Cerberus adopts
+the optimization algorithm presented in section~\ref{Sec:Scheduler}. 
+In the stage-in phase, Cerberus schedules jobs in $Q_I$ and $Q_O$ according to solution given by
+Recursion~\ref{Equ:MaxTransferDataRecursion}. For jobs in $Q_R$, Cerberus makes scheduling decision
+based on the solution given by Recursion~\ref{Equ:MaxProductRecursion}.
+We denote Cerberus coupled with two scheduling objectives 
+as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus}.\TODO{better name? FCFS and MAX-U}
+
 As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, response time of
 jobs scheduled by Optimized Cerberus is reduced.
 The most non-responsive job for Optimized Cerberus is job \#445,
@@ -502,6 +526,9 @@ In contrast, job \#445 takes 376,026 seconds to finish in FCFS Cerberus.
 This is 19.28\% slower than Optimized Cerberus.
 When we consider the overall response time of entire job set,
 we see more than \textit{80\% of the tasks response faster when we do optimization}.
+
+
+
 
 The time duration application waits for running,
 or the time application spend in running queue,
@@ -527,7 +554,7 @@ for the waiting time of 70\% jobs, is not strategy-proofness\cite{Ghodsi:NSDI:20
 
 
 We can see in Figure~\ref{Fig:DPvsFIFOThroughput} the system throughput
-when scheduled by different versions of Cerberus.
+when scheduled by Cerberus with different scheduling objectives.
 For optimized Cerberus, job \#445 decides the finishing time of all 1185 jobs.
 That is 303,940 seconds for Optimized Cerberus.
 FCFS Cerberus makes system ends its last job, also job \#455, at 376,443 seconds.
@@ -574,9 +601,9 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
 
 %Table~\ref{Tab:OptimizationTime} demonstrate that 
 Our dynamic programming based optimized Cerberus can schedule jobs online,
-even though solving the optmization problem is theoretically NP-hard.
+even though solving the optimization problem is theoretically NP-hard.
 For Optimized Cerberus, it solved about 8400 Problems~\ref{Equ:MaxTransferData} and
-Problem~\ref{Equ:MaxProduct} when scheduling 1185 jobs,
+Problem~\ref{Equ:MaxProduct} when scheduling all the jobs in workload,
 taking less than 370 seconds.
 The time overhead of solving each optimization is about 0.04 seconds per time.
 
