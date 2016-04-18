@@ -1,34 +1,6 @@
 \section{Model for HPC Jobs on BB-Enabled System}
 \label{Sec:Model}
 
-%\begin{table}[!t] 
-        %\renewcommand{\arraystretch}{1.3}
-        %\caption{Summary of Symbols}
-        %\label{Tab:Symbols}
-        %\centering
-        %\begin{tabular}{l|l}
-                %\hline
-                %$CN$ & number of total compute nodes \\
-                %$BB$ & amount of total burst buffer nodes \\
-                %$CN_{available}$ & number of available compute nodes \\
-                %$BB_{available}$ & amount of available burst buffer nodes \\
-                %$c_i$ & compute node demand of $job_i$ \\
-                %$bb\_in_i$ & burst buffer demand of $job_i$ at \textit{stage-in} phase \\
-                %$bb\_run_i$ & burst buffer demand of $job_i$ at \textit{running} phase \\
-                %$bb\_out_i$ & burst buffer demand of $job_i$ at \textit{stage-out} phase \\
-                %$rt_i$ & running time of $job_i$ \\
-                %$ert_i$ & estimated or expected running time of $job_i$ \\
-                %$Q_I, Q_R, Q_O$ & queues for \textit{stage-in, running, stage-out} phase \\
-                %$J_{Q_I}, J_{Q_R}, J_{Q_O}$ & set of jobs in corresponding queue \\
-                %$S$ & set of jobs selected by scheduler \\
-                %$v_i$ & value of $job_i \in J_{Q_R}$ defined by Equation~\ref{Equ:DefValue}\\
-                %$dp(\cdot)$ & memo used in dynamic programming \\
-                %$TS_{s\_x}$ & event timestamps of starting phase $x$ in simulation \\
-                %$TS_{f\_x}$ & event timestamps of finishing phase $x$ in simulation \\
-                %\hline
-        %\end{tabular}
-%\end{table}
-
 \subsection{System Resources}
 % The system contains resources like compute nodes, main memory, burst buffer,
 % IO nodes and external storage.
@@ -73,18 +45,39 @@ Users can require any fractional amount of burst buffer for their jobs.
 
 
 %=============Xu======================
-As the aforementioned discussion in section~\ref{Sec:Background}, jobs could utilize burst buffer to pre-fetch data from external storage before running. When jobs start running on compute nodes, they could burst the checkpoint data to burst buffer at high speed. Upton jobs completion, their data could be staged out to burst buffer, and then drained out to external storage, for the purpose of earlier releasing of compute node. According to these scenarios, the job lifetime is divided up to three different phases in our scheduling framework.
+As the aforementioned discussion in section~\ref{Sec:Background},
+jobs could utilize burst buffer to pre-fetch data from external storage before running.
+When jobs start running on compute nodes,
+they could burst the checkpoint data to burst buffer at high speed.
+Upton jobs completion, their data could be staged out to burst buffer,
+and then drained out to external storage, for the purpose of earlier releasing of compute node.
+According to these scenarios,
+the job lifetime is divided up to three different phases in our scheduling framework.
 
-\begin{itemize}
- \item \textbf{Stage-In}. After the job being submitted to the system, it needs to pre-fetch data, such as configuration files and input data, from IO nodes to burst buffer. We refer this phase as \textit{stage-in}. The only resource needed by the job in this phase is burst buffer. Users are encouraged to specify the amount of burst buffer required in the \textit{stage-in} phase. When the data is pre-fetched into burst buffer, the job is ready to run.
+\textbf{Stage-In}: After the job being submitted to the system,
+         it needs to pre-fetch data, such as configuration files and input data,
+         from IO nodes to burst buffer. We refer this phase as \textit{stage-in}.
+         The only resource needed by the job in this phase is burst buffer.
+         Users are encouraged to specify the amount of burst buffer required in the \textit{stage-in} phase.
+         When the data is pre-fetched into burst buffer, the job is ready to run.
  
- \item \textbf{Running}. The scheduler will allocate the job with required number of compute nodes and the amount of burst buffer and dispatch the job to the system for running. This is referred as \textit{running} phase. During the running phase, there could be frequent data exchange between compute node and burst buffer. These interactions are mainly due to fault tolerance reasons, like check-pointing. 
+\textbf{Running}: The scheduler will allocate the job with required
+         number of compute nodes and the amount of burst buffer and
+         dispatch the job to the system for running.
+         This is referred as \textit{running} phase.
+         During the running phase, there could be frequent data exchange
+         between compute node and burst buffer.
+         These interactions are mainly due to fault tolerance reasons, like check-pointing. 
  
- \item \textbf{Stage-out}. When the job finishes computation and exit the \textit{running} phase, its output data needs to be drained out to external storage from the on-node memory. We refer this as \textit{stage-out} phase. The job can release its compute nodes when the output data is staged out into burst buffer at high speed. The burst buffer plays as an efficient IO broker for the compute nodes and drain the output data out to the external storage.
- 
-\end{itemize}
+\textbf{Stage-out}: When the job finishes computation and
+         exit the \textit{running} phase, its output data needs to be drained out
+         to external storage from the on-node memory. We refer this as \textit{stage-out} phase.
+         The job can release its compute nodes when the output data is staged out
+         into burst buffer at high speed. The burst buffer plays as an efficient
+         IO broker for the compute nodes and drain the output data out to the external storage.
 
-We can observed that burst buffer has been utilized during all three phases, while compute nodes are only required during the \textit{running} phase. 
+We can observed that burst buffer has been utilized during all three phases,
+while compute nodes are only required during the \textit{running} phase. 
 
 
 \subsection{Three-Phase Resource Demand}
