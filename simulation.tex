@@ -19,8 +19,8 @@ We develop an event-driven simulator, named \textbf{BBSim},
 for the simulation of job scheduling on the burst buffer enabled HPC system.
 Figure~\ref{Fig:JobFSM} illustrates the BBSim flow chart and the event-driven approach in the simulation.
 The \textit{state} of the job changes depending on current status and
-happening \textit{events}, along with which \textit{action} is triggered.
-When a job $j_i$ is submitted to the system, 
+happening \textit{events}, along with triggered \textit{action}.
+For example, when a job $j_i$ is submitted to the system, 
 it enters \textit{Waiting Stage-in} state, 
 waiting to be scheduled in job queue $Q_I$. 
 The scheduler checks $j_i$ resource demand and 

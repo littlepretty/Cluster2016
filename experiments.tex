@@ -24,9 +24,9 @@ This section evaluate Cerberus by answering several key questions.
                 makes Cerberus even better?
 \end{itemize}
 We integrate Cerberus into our newly developed event-driven simulator, 
-BBSim, and evaluate Cerberus agaist the traditional FCFS/EASY backfilling scheduler.
-We make the source code of BBsim and Cerberus public to the community,
-which can be obtained online\footnote{https://github.com/}.
+BBSim, and evaluate Cerberus against the traditional FCFS/EASY backfilling scheduler.
+The source code of BBsim and Cerberus are public to the community,
+available at \footnote{https://github.com/urlplaceholder}.
 % metric
 
 % We select two evaluation metrics, job's \textit{response time} and 
@@ -62,7 +62,7 @@ a fixed time period (500 seconds), measures the performance of the system.
 % Bandwidth between CPU node and non-burst-buffer IO node is set to 2.5 GBps.
 
 %==============XY===================
-The parameters used in our simulation are inspired by Trinity~\cite{TrinitySystem}, 
+The parameters used in our simulation are inspired and sampled by Trinity~\cite{TrinitySystem}, 
 the next generation supercomputer in Los Alamos National Laboratory.
 The simulated system consists of 18,936,
 e.g. 9,436 Intel Haswell nodes
@@ -118,7 +118,7 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 In this section, we demonstrate that by utilizing burst buffer nodes,
 both the performance of jobs and system can be greatly improved. 
 We compare the overall performance on burst buffer enabled system
-agaist the traditional system without burst buffer (Direct IO).
+against the traditional system without burst buffer (Direct IO).
 
 
 % Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of the response time of 1185 jobs.
@@ -139,8 +139,7 @@ Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of jobs response
 time by on burst buffer enabled system and the traditional system (Direct IO).
 When running on system with burst buffer,
 jobs response time is bounded by 376,443.12 seconds.
-However, the worst case of 
-Direct-IO is catastrophical.
+However, the worst case of Direct-IO is catastrophic.
 There are jobs that takes 889,239.20 seconds to finish,
 which is 2.36 times slow as the most non-responsive job
 in system equipped with burst buffer.
@@ -209,7 +208,7 @@ It starts at 1126 seconds but waited 827,241 seconds.
 In contrast, when system installed burst buffer nodes,
 it accomplishes the same workload in 376,443 seconds, and waiting time and response time of job \#1150
 are significantly reduced, 272,741 and 376,026 seconds respectively.
-\NOTE{replace the legend in Fig4,5. 1-Phase IO->Direct IO, Cerberus->BB-enabled}
+\NOTE{Xu's suggestion: replace the legend in Fig4,5. 1-Phase IO->Direct IO, Cerberus->BB-enabled}
 
 
 \begin{figure*}[!t]
@@ -241,8 +240,8 @@ are significantly reduced, 272,741 and 376,026 seconds respectively.
 For both 3-phase-1d, and 3-phase-3d, Cerberus is used for job scheduling}
 
 In this section we validate our 3-phase model.
-Jobs performance are improved when the scheduler makkes scheduling decision in each phase separately.
-This encourages that user should provide detailed burst buffer demand in each phase for his job.
+Jobs performance are improved when the scheduler makes scheduling decision in each phase separately.
+This encourages user to provide detailed burst buffer demand in each phase for her job.
 
 % In Figure~\ref{Fig:3Pvs1PResponse}, we plot 3 different scheduling results by 3 FCFS scheduler.
 % \begin{itemize}
@@ -269,14 +268,14 @@ This encourages that user should provide detailed burst buffer demand in each ph
 In Figure~\ref{Fig:3Pvs1PResponse}, the results of scheduling jobs based on three models
 are presented. The three models are:
 \begin{itemize}
-        \item \textbf{1-Phase-1D}: The job is submitted with total burst buffer demand, 
-        but its lifetime are not divided into three phases. 
+        \item \textbf{1-Phase-1D}: Jobs are submitted with total burst buffer demand, 
+        but their lifetime are not divided into three phases. 
 	Instead, the scheduler makes scheduling decision only once for each job.
 
-        \item \textbf{3-Phase-1D}: The job is submitted with total burst buffer demand,
-        its lifetime is divided into the three phases as disscussed in section~\ref{Sec:Model}
+        \item \textbf{3-Phase-1D}: Jobs are submitted with total burst buffer demand,
+        their lifetime are divided into three phases as discussed in section~\ref{Sec:Model}
         
-        \item \textbf{3-Phase-3D}: The job is submitted with detailed burst buffer demand for each phases.
+        \item \textbf{3-Phase-3D}: Jobs are submitted with detailed burst buffer demand for each phases.
                 %the same as Cerberus in section~\ref{Sec:Sim:DirectIOvsBB}
 \end{itemize}
 We simulate the 3 cases with the same generated random data volume sequence.
@@ -582,22 +581,6 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
         \label{Fig:DPvsFIFOThroughput}
 \end{figure}
 
-%\begin{table}[!t] 
-        %\renewcommand{\arraystretch}{1.3}
-        %\caption{Time Consumption in Dynamic Programming}
-        %\label{Tab:OptimizationTime}
-        %\centering
-        %\begin{tabular}{l|c|c|c}
-                %\hline
-                %Cerberus Version & FCFS & MaxT & MaxP \\
-                %\hline
-                %\hline
-                %Simulation Time / seconds & 6.59 & 246.87 & 257.42 \\
-                %Optimization Time / seconds & 0 & 241.11 & 251.75 \\
-                %Total Number of Optimizations & 0 & 8702 & 9114 \\
-                %\hline
-        %\end{tabular}
-%\end{table}
 
 %Table~\ref{Tab:OptimizationTime} demonstrate that 
 Our dynamic programming based optimized Cerberus can schedule jobs online,

@@ -13,12 +13,12 @@
 %============XY==========
 Users specify the required number of compute nodes and expected runtime for their jobs upon submission. 
 With such information about jobs' requirement, 
-batch scheduler makes scheduling decision for each job with objectives 
-such as minimizing job wait time and maximizing system throughput. 
+existing batch schedulers make scheduling decision for each job with objectives 
+such as minimizing overall job wait time and maximizing system throughput. 
 In our scheduling framework, 
 burst buffer is considered as a new kind of resource that users can request upon job submission. 
-Therefore, the system resource that scheduler targets for making scheduling decision are compute node, 
-burst buffer and expected runtime. 
+Therefore, the system resource that scheduler targets for making scheduling decision are
+compute nodes and burst buffer.
 The burst buffer enabled system considered in our framework consists of 
 $CN$ compute nodes and $BB$ GB of burst buffer. 
 Users can require any fractional amount of burst buffer for their jobs. 
@@ -46,24 +46,24 @@ Users can require any fractional amount of burst buffer for their jobs.
 
 %=============Xu======================
 As the aforementioned discussion in section~\ref{Sec:Background},
-jobs could utilize burst buffer to pre-fetch data from external storage before running.
+jobs utilize burst buffer to pre-fetch data from external storage before running.
 When jobs start running on compute nodes,
 they could burst the checkpoint data to burst buffer at high speed.
-Upton jobs completion, their data could be staged out to burst buffer,
-and then drained out to external storage, for the purpose of earlier releasing of compute node.
+Upton jobs completion, their data are staged out to burst buffer,
+then drained out to external storage for the purpose of earlier releasing of compute node.
 According to these scenarios,
-the job lifetime is divided up to three different phases in our scheduling framework.
+the job lifetime is divided up to three different phases in our scheduling paradigm.
 
 \textbf{Stage-In}: After the job being submitted to the system,
          it needs to pre-fetch data, such as configuration files and input data,
          from IO nodes to burst buffer. We refer this phase as \textit{stage-in}.
          The only resource needed by the job in this phase is burst buffer.
          Users are encouraged to specify the amount of burst buffer required in the \textit{stage-in} phase.
-         When the data is pre-fetched into burst buffer, the job is ready to run.
+         The job is ready to run when the data is pre-fetched into burst buffer.
  
 \textbf{Running}: The scheduler will allocate the job with required
-         number of compute nodes and the amount of burst buffer and
-         dispatch the job to the system for running.
+         number of compute nodes and the amount of burst buffer. 
+         It will then dispatch the job to the system for running.
          This is referred as \textit{running} phase.
          During the running phase, there could be frequent data exchange
          between compute node and burst buffer.
@@ -76,8 +76,8 @@ the job lifetime is divided up to three different phases in our scheduling frame
          into burst buffer at high speed. The burst buffer plays as an efficient
          IO broker for the compute nodes and drain the output data out to the external storage.
 
-We can observed that burst buffer has been utilized during all three phases,
-while compute nodes are only required during the \textit{running} phase. 
+While burst buffer has been utilized during all three phases,
+compute nodes are only required during the \textit{running} phase. 
 
 
 \subsection{Three-Phase Resource Demand}
@@ -150,13 +150,13 @@ as job's burst buffer demand in every phase.
 %==========XY=====================
 The resource releasing for the 3-phase modeled jobs are complicated than it used to be. 
 For a job at \textit{stage-in} phase, compute nodes is not allocated to it yet. 
-The job can stage in data from IO nodes to burst buffer without the involvement of compute nodes.
+The job can stage in data from external storage to burst buffer without the involvement of compute nodes.
 When scheduler allocates compute nodes to the job, the job enters the \textit{running} phase 
 and starts to read the pre-fetched data from burst buffer into the main memory, 
 $bb\_in$ will be released after all the data are moved into main memory. 
 When the job finishes computation and exits \textit{running} phase, 
 $bb\_run$ are released while compute nodes are still hold by the job. 
 The compute nodes will be released after all the output data are moved into $bb\_out$ burst buffer from main memory.
-The job enters \textit{stage-out} phase and only holds $bb\_out$ burst buffer. 
+Jobs at \textit{stage-out} phase only holds $bb\_out$ burst buffer. 
 Once all the output data are drained out to the external storage,  
-$bb\_out$ can be released. 
+$bb\_out$ is released.

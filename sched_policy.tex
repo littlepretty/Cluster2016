@@ -3,7 +3,7 @@
 
 %=======XY======
 The traditional batch scheduler on system without burst buffer only
-takes job size (required number of nodes) and expected runtime for scheduling decision making. 
+takes job size (required number of nodes) and expected runtime into scheduling decision making. 
 The most commonly used scheduling policy are First Come First Serve with EASY backfilling~\cite{tsafrir-tpds-2007}.
 However, on burst buffer enabled systems, 
 the available amount of burst buffer capacity becomes the new scheduling constraint. 
@@ -51,14 +51,14 @@ needs to pre-fetch data from external storage to burst buffer.
 When the data flows from external disk
 to burst buffer nodes, indicated by the red arrow, the job enters the run queue $Q_R$, 
 waiting for compute nodes to be allocated.
-Once the job gets the required number of compute nodes, it can start to run. There might be frequent 
-data exchange between burst buffer and compute nodes during the running phase. 
+Once the job gets the required number of compute nodes, it can start to run.
+There might be frequent data exchange between burst buffer and compute nodes during the running phase. 
 The job enters the output queue $Q_O$ after finishing computation, 
 and waits for its output data being drained out to external storage. 
 
 There could be multiple jobs waiting in each queue at the same time. 
-Cerberus can schedule the jobs in each queue separately, 
-rather than being held in a particular queue, waiting for certain resources.
+Cerberus schedules the jobs in each queue separately, 
+rather than being held in a particular queue and waiting for certain resources.
 Cerberus can deploy different optimization algorithms for making scheduling decision
 for jobs waiting in each queue.
 
@@ -122,7 +122,7 @@ $bb\_in_i$ is the burst buffer demand of job $j_i$,
 $BB_{available}$ is system's available amount of burst buffer.
 
 Stage-out phase scheduling are made based on the value of $bb\_out$ of jobs in $Q_O$.
-Optimization formula for different purpose are almost the same as
+Optimization formula for stage-out phase are almost the same as
 Equation~\ref{Equ:MaxTransferData},
 except that $bb\_in$ is replaced with $bb\_out$,
 $J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
@@ -173,7 +173,7 @@ $J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
 Running jobs require not only compute nodes, but burst buffer to ensure performance and correctness.
 Cerberus schedules jobs in $Q_R$ based on the $c$ and $bb\_run$.
 To maximize the utilization of compute nodes and burst buffer, 
-the scheduling objective is modeled as a knapsack problem by defining the value of the $j_i$ as
+the scheduling objective is modeled as a knapsack problem by defining the \textbf{value} of the $j_i$ as
 \begin{equation}
         v_i = \frac{c_i / CN}{ert_i} \times \frac{bb\_run_i / BB}{ert_i}
         \label{Equ:DefValue}
@@ -200,8 +200,6 @@ $CN_{available}$ and $BB_{available}$ represent the amount of system's available
 
 
 \subsection{Solving the Optimization Problems}
-\NOTE{Too much algorithm details in this section, may not be a good thing}
-
 % It is trivial to show that optimization problem~\ref{Equ:MaxTransferData}
 % is equivalent to 0-1 knapsack problem.
 % Problem~\ref{Equ:MaxProduct} can be informally treat as 2-dimension 0-1 knapsack problem.
@@ -254,14 +252,14 @@ $CN_{available}$ and $BB_{available}$ represent the amount of system's available
 It is trivial to show that optimization problem~\ref{Equ:MaxTransferData}
 is equivalent to 0-1 knapsack problem.
 Problem~\ref{Equ:MaxProduct} can be informally treat as 2-dimension 0-1 knapsack problem.
-We expect all of them are NP-hard problems.
-We can solve them with dynamic programming in pseudo polynomial time.
+We expect all of them to be NP-hard problems.
+Dynamic programming is adopted to solve them in pseudo polynomial time.
 Applying memorization could also help accelerate the solving process.
-However, we are not interested in the optimal result of
+In addition, we are not interested in the optimal result of
 problem~\ref{Equ:MaxTransferData} and problem~\ref{Equ:MaxProduct}
 but in a combination of jobs that yields the optimal solution,
 which, fortunately, can also be tracked back down
-using the memorizations kept in dynamic programming.
+using the memorizations kept during dynamic programming.
 For Problem~\ref{Equ:MaxTransferData}, the recursive relationship is
 given by Recursion~\ref{Equ:MaxTransferDataRecursion}.
 For Problem~\ref{Equ:MaxProduct}, the recursive relationship is
