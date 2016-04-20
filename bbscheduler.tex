@@ -404,21 +404,31 @@ Email: \{dong.jin, lan\}@iit.edu
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-%In the world full of Big Data, moderate I/O system drastically slows down the overall execution time of computational scientific applications.
-%Burst buffer nodes comes to rescue by providing higher both average and perceived bandwidth.
-%In this paper, we model the execution of typical scientific applications that generates tens and hundreds of TBytes of data
+%In the world full of Big Data, moderate I/O system drastically
+%slows down the overall execution time of computational scientific applications.
+%Burst buffer nodes comes to rescue by providing higher
+%both average and perceived bandwidth.
+%In this paper, we model the execution of typical
+%scientific applications that generates tens and hundreds of TBytes of data
 %on super computer equipped with burst buffer nodes.
-%Computing nodes are then able to be freed earlier due to these efficient and reliable IO broker,
+%Computing nodes are then able to be freed earlier %
+%due to these efficient and reliable IO broker,
 %improving the utilization of task execution pipeline.
 %We thus characterize generic applications by 3 phases:
-%\textit{data stage in} phase, \textit{running} phase and \textit{data stage out} phase.
-%The novel 3-phase burst buffer aware workload scheduler Cerberus is proposed on the idea that
+%\textit{data stage in} phase, \textit{running} phase and 
+%\textit{data stage out} phase.
+%The novel 3-phase burst buffer aware workload scheduler Cerberus
+%is proposed on the idea that
 %resources in different phases should be scheduled separately.
-%In both data stage input and output phase, it is possible to maximize data transfer throughput or task parallelism when allocating burst buffer resources.
+%In both data stage input and output phase, it is possible to
+%maximize data transfer throughput or task parallelism 
+%when allocating burst buffer resources.
 %In the running phase, we consider maximize the profit of scheduled tasks.
-%%Further investigating shows that all aforementioned optimization problems are equivalent to 0-1 knapsack problem,
+%%Further investigating shows that all aforementioned optimization problems
+%are equivalent to 0-1 knapsack problem,
 %%requiring exponential time to solve.
-%We use dynamic programming and memorization technique to give precise solutions to aforementioned optimization problems.
+%We use dynamic programming and memorization technique to give 
+%precise solutions to aforementioned optimization problems.
 %We simulate Cerberus scheduling the Trinity real supercomputing platform in the scenarios
 %both with and without burst buffer to demonstrate that
 %1) burst buffer nodes can accelerate the execution pipeline of all tasks,
@@ -426,26 +436,27 @@ Email: \{dong.jin, lan\}@iit.edu
 %2) our 3-phase model and dynamic programming solutions further
 %improve burst buffer equipped system.
 
-Burst buffer(BB) nodes are drastically improving
+Burst buffer nodes(BB) are drastically improving
 the performance of computational application by providing high perceived IO bandwidth.
 However, traditional batch scheduler either barely knows BB's existence
 or cannot fully utilize them in practice.
 In this paper, we model the execution of typical scientific applications
 that generates tens of TBytes of data on super computer equipped with BB.
-We characterize generic applications by 3 phases:
-\textit{data stage-in} phase, \textit{running} phase, and \textit{data stage-out} phase.
+We characterize generic applications to 3 phases:
+\textit{data stage-in}, \textit{running}, and \textit{data stage-out} phase.
 We develop a novel 3-phase BB aware batch scheduler \textit{Cerberus}
 managing resources in different phases separately.
 In both data stage input and output phase, Cerberus
 allocates BB resources so that data transfer throughput
-between burst buffer and external storage system is maximized.
-In the running phase, we maximize the profit of scheduled tasks
-by pre-define the value of a job.
-Our simulation result of Cerberus scheduling the burst buffer enabled supercomputer platform demonstrates that
-1) burst buffer nodes can accelerate the execution pipeline of all tasks,
-improving the response time of 99\% jobs;
-2) our 3-phase model and dynamic programming solution
-together deliver 2.925 times average system throughput comparing to non-BB system.
+between BB and external storage system is maximized.
+In the running phase, it maximizes the profit of scheduled tasks.
+Simulation results of Cerberus scheduling the
+BB-enabled supercomputer platform demonstrates that
+1) comparing to non-BB system, 
+Cerberus accelerates the execution pipeline of all tasks by utilizing BB,
+reducing the response time of 99\% jobs;
+2) on BB-enabled system, 3-phase Cerberus and BB oriented optimization
+together further improve average system throughput by 62.31\%.
 \end{abstract}
 
 % no keywords

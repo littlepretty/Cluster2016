@@ -515,7 +515,8 @@ In the stage-in phase, Cerberus schedules jobs in $Q_I$ and $Q_O$ according to s
 Recursion~\ref{Equ:MaxTransferDataRecursion}. For jobs in $Q_R$, Cerberus makes scheduling decision
 based on the solution given by Recursion~\ref{Equ:MaxProductRecursion}.
 We denote Cerberus coupled with two scheduling objectives 
-as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus}.\TODO{better name? FCFS and MAX-U}
+as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus}.
+\TODO{better name? FCFS and MAX-U}
 
 As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, response time of
 jobs scheduled by Optimized Cerberus is reduced.
@@ -548,8 +549,8 @@ favors the jobs with less request time but larger burst buffer demand.
 This is interesting because it is a potential flaws in the optimization-based policy:
 given the user knows the optimization objective of our scheduler,
 it is possible for a user to cheat scheduler by lying about her demand.
-In other words, our optimization scheme, even though providing performance enhancement
-for the waiting time of 70\% jobs, is not strategy-proofness\cite{Ghodsi:NSDI:2011}
+%In other words, our optimization scheme, even though providing performance enhancement
+%for the waiting time of 70\% jobs, is not strategy-proofness\cite{Ghodsi:NSDI:2011}
 
 
 We can see in Figure~\ref{Fig:DPvsFIFOThroughput} the system throughput
