@@ -34,9 +34,9 @@ def cdfPlot(prefix, column='response'):
     log.sub()
     plt.figure(figure_no)
     figure_no += 1
-    plt.plot(sorted_time0, yvals0*100, label='1-Phase IO',
+    plt.plot(sorted_time0, yvals0*100, label='Direct IO',
              linewidth=3, color='blue', linestyle='-')
-    plt.plot(sorted_time1, yvals1*100, label='Cerberus',
+    plt.plot(sorted_time1, yvals1*100, label='BB Enabled',
              linewidth=3, color='red', linestyle='--')
     plt.legend(loc='lower right')
     plt.ylim([0, 101])
@@ -73,7 +73,7 @@ def throughputPlot(prefix, delta=500.0):
     all_data = [data1, data2]
     avgs = []
     lines = ['b:', 'r-.', 'b', 'r']
-    labels = ['1-Phase IO', 'Cerberus']
+    labels = ['Direct IO', 'BB Enabled']
     hatches = ['/', '\\', '-']
     i = 0
     fig, ax1 = plt.subplots()

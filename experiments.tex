@@ -209,38 +209,35 @@ It starts at 1126 seconds but waited 827,241 seconds.
 In contrast, when system installed burst buffer nodes,
 it accomplishes the same workload in 376,443 seconds, and waiting time and response time of job \#1150
 are significantly reduced, 272,741 and 376,026 seconds respectively.
-\NOTE{Replace the legend in Fig4,5. 1-Phase IO with Direct IO,
-Cerberus with BB-enabled}
 
 
 \begin{figure*}[!t]
         \centering
         \subfloat[Job Response Time] {
-                \includegraphics[width=3.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_response}
+                \includegraphics[width=2.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_response}
                 \label{Fig:DirectIOvsBBResponse}
         }
-        ~
         \subfloat[Job Wait Time] {
-                \includegraphics[width=3.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_wait}
+                \includegraphics[width=2.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_wait}
                 \label{Fig:DirectIOvsBBWait}
         }
-        \caption{Jobs Performance: IO Node Only System vs. Burst Buffer System}
+        \subfloat[System Throughput] {
+                \includegraphics[width=2.5in]{IOvsBBFigures/1000jobs_direct_vs_bb_throughput}
+                \label{Fig:DirectIOvsBBThroughput}
+        }
+        \caption{IO Node Only System vs. Burst Buffer System}
         \label{Fig:DirectIOPerformance}
 \end{figure*}
 
-\begin{figure}[!t]
-        \centering
-        \includegraphics[width=3.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_throughput}
-        \caption{System Throughput, IO Node Only vs. Burst Buffer System}
-        \label{Fig:DirectIOvsBBThroughput}
-\end{figure}
+%\begin{figure}[!t]
+        %\centering
+        %\includegraphics[width=3.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_throughput}
+        %\caption{System Throughput, IO Node Only vs. Burst Buffer System}
+        %\label{Fig:DirectIOvsBBThroughput}
+%\end{figure}
 
 
 \subsection{3-Phase Model v.s. 1-Phase Model}
-
-\NOTE{Change legend/term to 1-phase-1d, 3-phase-1d, and 3-phase-3d. 
-For both 3-phase-1d, and 3-phase-3d, Cerberus is used for job scheduling}
-
 In this section we validate our 3-phase model by answering question Q2.
 Simulation results demonstrate that jobs performance are improved 
 when the scheduler makes scheduling decision in each phase separately.
@@ -440,10 +437,9 @@ the necessity that user provides data capacity demand for each phase.
 \begin{figure*}[!t]
         \centering
         \subfloat[Job Response Time] {
-                \includegraphics[width=3.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_response}
+                \includegraphics[width=2.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_response}
                 \label{Fig:3Pvs1PResponse}
         }
-        ~
         %\subfloat[Job Wait Time] {
                 %\includegraphics[width=3.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_wait}
                 %\label{Fig:3Pvs1PWait}
@@ -454,33 +450,48 @@ the necessity that user provides data capacity demand for each phase.
         %}
         %~
         \subfloat[Job Wait Run Time] {
-                \includegraphics[width=3.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_wait_run}
+                \includegraphics[width=2.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_wait_run}
                 \label{Fig:3Pvs1PWaitRun}
         }
-        ~
-        %\subfloat[Job Wait Output Time] {
-                %\includegraphics[width=2.3in]{3Pvs1PFigures/1000jobs_3p_vs_1p_wait_out}
-                %\label{Fig:3Pvs1PWaitOut}
-        %}
-        \caption{Performance of 1185 Applications: 1 Phase Model vs. 3 Phase Model}
+        \subfloat[System Throughput] {
+                \includegraphics[width=2.5in]{3Pvs1PFigures/1000jobs_3p_vs_1p_throughput}
+                \label{Fig:3Pvs1PThroughput}
+        }
+        \caption{3-Phase Model vs. 1-Phase Model}
         \label{Fig:3Pvs1PPerformance}
 \end{figure*}
+
+%\begin{figure}[!t]
+        %\centering
+        %\includegraphics[width=3.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_throughput}
+        %\caption{System Throughput, 1 Phase Model vs. 3 Phase Model}
+        %\label{Fig:3Pvs1PThroughput}
+%\end{figure}
 
 \begin{figure*}[!t]
         \centering
         \subfloat[Job Response Time] {
-                \includegraphics[width=3.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_response}
+                \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_response}
                 \label{Fig:DPvsFIFOResponse}
         }
-        ~
         \subfloat[Job Wait Run Time] {
-                \includegraphics[width=3.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_wait_run}
+                \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_wait_run}
                 \label{Fig:DPvsFIFOWaitRun}
         }
-        \caption{Performance of 1185 Applications: Optimized Cerberus vs. FCFS Cerberus}
+        \subfloat[System Throughput] {
+                \includegraphics[width=2.5in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_throughput}
+                \label{Fig:DPvsFIFOThroughput}
+        }
+        \caption{Optimized Cerberus vs. FCFS Cerberus}
         \label{Fig:DPvsFIFOPerformance}
 \end{figure*}
 
+%\begin{figure}[!t]
+        %\centering
+        %\includegraphics[width=3.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_throughput}
+        %\caption{System Throughput, Optimized Cerberus vs. FCFS Cerberus}
+        %\label{Fig:DPvsFIFOThroughput}
+%\end{figure}
 
 \subsection{Optimized Cerberus v.s. FCFS Cerberus}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
@@ -563,20 +574,8 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
 \textit{Comparing with FCFS Cerberus, Optimized Cerberus achieves
 23.87\% higher average throughput (1.951 jobs / 500 seconds).}
 
-\begin{figure}[!t]
-        \centering
-        \includegraphics[width=3.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_throughput}
-        \caption{System Throughput, 1 Phase Model vs. 3 Phase Model}
-        \label{Fig:3Pvs1PThroughput}
-\end{figure}
 
 
-\begin{figure}[!t]
-        \centering
-        \includegraphics[width=3.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_throughput}
-        \caption{System Throughput, Optimized Cerberus vs. FCFS Cerberus}
-        \label{Fig:DPvsFIFOThroughput}
-\end{figure}
 
 
 %Table~\ref{Tab:OptimizationTime} demonstrate that 
