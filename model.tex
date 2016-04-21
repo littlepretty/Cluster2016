@@ -23,8 +23,6 @@ The burst buffer enabled system considered in our framework consists of
 $CN$ compute nodes and $BB$ GB of burst buffer. 
 Users can require any fractional amount of burst buffer for their jobs. 
 
-
-
 \subsection{Three-Phase Model for HPC Jobs}
 % Users request the system to run their applications as jobs.
 % We define $J = (job_1, job_2, \ldots, job_n)$ to be the set of all unfinished jobs in the system.
@@ -45,8 +43,15 @@ Users can require any fractional amount of burst buffer for their jobs.
 
 
 %=============Xu======================
-As the aforementioned discussion in section~\ref{Sec:Background},
-jobs utilize burst buffer to pre-fetch data from external storage before running.
+\begin{figure}[!htbp]
+\centering
+        \includegraphics[width=3.6in]{3PhaseJobFSM}
+        \caption{Event-driven BBsim scheduling model}
+\label{Fig:JobFSM}
+\end{figure}
+
+With the help of burst buffer nodes,
+jobs can pre-fetch data from external storage before running.
 When jobs start running on compute nodes,
 they could burst the checkpoint data to burst buffer at high speed.
 Upton jobs completion, their data are staged out to burst buffer,
