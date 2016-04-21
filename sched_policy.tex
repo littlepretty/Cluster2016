@@ -310,7 +310,7 @@ The time complexity of solving Algorithm~\ref{Alg:MaxCPU} is $O(n\times CN\times
         \State $\boldsymbol{dp} \gets \boldsymbol{0}_{(N+1) \times (BB+1)}$
         \State $\mathcal{J} \gets \emptyset$\Comment{scheduling result}
         \\
-        \Function{FillInMemo}{}
+        \Function{FillInMemo}{ }
                 \For{$i \gets 1, N$}
                         \For{$w \gets 1, BB$}
                                 \If{$w \geq bb_i$}
@@ -349,17 +349,17 @@ The time complexity of solving Algorithm~\ref{Alg:MaxCPU} is $O(n\times CN\times
 \label{Alg:MaxCPU}
 \begin{algorithmic}[1]
         \State $\boldsymbol{bb} \gets $ burst buffer demands of $J_Q = (j_1, j_2,\ldots, j_N)$
-        \State $\boldsymbol{cpu} \gets $ compute nodes demands of $j \in J_Q$
+        \State $\boldsymbol{cn} \gets $ compute nodes demands of $j \in J_Q$
         \State $\boldsymbol{dp} \gets \boldsymbol{0}_{(N+1) \times (CN) \times (BB+1)}$
         \State $\boldsymbol{v} \gets$ values of $j \in J_Q$
         \State $\mathcal{J} \gets \emptyset$\Comment{scheduling result} 
         \\
-        \Function{FillInMemo}{}
+        \Function{FillInMemo}{ }
                 \For{$i \gets 1, N$}
                         \For{$c \gets 1, CN$} 
                                 \For{$w \gets 1, BB$}
                                         \If{$c \geq cpu_i$ and $w \geq bb_i$}
-                                                \State $dp_1 = dp(i-1, c-cpu_i, w-bb_i)+v_i$
+                                                \State $dp_1 = dp(i-1, c-cn_i, w-bb_i)+v_i$
                                                 \State $dp_2 = dp(i-1, c, w)$
                                                 \State $dp(i, c, w) \gets \max\{dp_1, dp_2\}$
                                         \Else
@@ -374,7 +374,7 @@ The time complexity of solving Algorithm~\ref{Alg:MaxCPU} is $O(n\times CN\times
         \Function{TrackBackJobs}{$i, c, w$}
                 \If{$i > 0$}
                         \If{$c \geq cpu_i$ and $w \geq bb_i$}
-                                \State $dp_1 = dp(i-1, c-cpu_i, w-bb_i)+v_i$
+                                \State $dp_1 = dp(i-1, c-cn_i, w-bb_i)+v_i$
                                 \State $dp_2 = dp(i-1, c, w)$
                                 \If{$dp_1 \geq dp_2$}
                                         \State $\mathcal{J} = \mathcal{J} \cup j_i$

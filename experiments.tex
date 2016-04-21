@@ -15,9 +15,10 @@
 % the Trinity system described later.
 
 %==============XY===================
-This section evaluate Cerberus by answering several key questions.
+This section evaluate Cerberus by answering 3 key questions.
 \begin{itemize}
-        \item \textbf{Q1}: will utilizing burst buffer nodes could improve both jobs and system performance?
+        \item \textbf{Q1}: Will utilizing burst buffer nodes 
+        improve both jobs and system performance?
         \item \textbf{Q2}: Will job demand on burst buffer affect Cerberus?
                 Why bother to divide the job execution into 3 phases?
         \item \textbf{Q3}: Can dynamic programming based optimization
@@ -101,7 +102,7 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 
 
 
-\subsection{Q1: Is Burst Buffer Helpful?}
+\subsection{BB-Enabled System v.s. IO-Node-Only System}
 \label{Sec:Sim:DirectIOvsBB}
 % In this section, we demonstrate that by utilizing burst buffer nodes,
 % job scheduler could improve the performance of both applications and system.
@@ -115,10 +116,10 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 
 
 %=============XY==============
-In this section, we demonstrate that by utilizing burst buffer nodes,
-both the performance of jobs and system can be greatly improved. 
-We compare the overall performance on burst buffer enabled system
+In this section, we compare the overall performance on burst buffer enabled system
 against the traditional system without burst buffer (Direct IO).
+Based on the comparison, we answer question \textbf{Q1}: by utilizing burst buffer nodes,
+both the performance of jobs and system can be greatly improved. 
 
 
 % Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of the response time of 1185 jobs.
@@ -235,14 +236,15 @@ Cerberus with BB-enabled}
 \end{figure}
 
 
-\subsection{Q2: Does Demand Granularity Matter?}
+\subsection{3-Phase Model v.s. 1-Phase Model}
 
 \NOTE{Change legend/term to 1-phase-1d, 3-phase-1d, and 3-phase-3d. 
 For both 3-phase-1d, and 3-phase-3d, Cerberus is used for job scheduling}
 
-In this section we validate our 3-phase model.
-Jobs performance are improved when the scheduler makes scheduling decision in each phase separately.
-This encourages user to provide detailed burst buffer demand in each phase for her job.
+In this section we validate our 3-phase model by answering question Q2.
+Simulation results demonstrate that jobs performance are improved 
+when the scheduler makes scheduling decision in each phase separately.
+thus encouraging users to provide detailed burst buffer demand in each phase for her job.
 
 % In Figure~\ref{Fig:3Pvs1PResponse}, we plot 3 different scheduling results by 3 FCFS scheduler.
 % \begin{itemize}
@@ -267,7 +269,7 @@ This encourages user to provide detailed burst buffer demand in each phase for h
 
 %========XY========================
 In Figure~\ref{Fig:3Pvs1PResponse}, the results of scheduling jobs based on three models
-are presented. The three models are:
+are presented:
 \begin{itemize}
         \item \textbf{1-Phase-1D}: Jobs are submitted with total burst buffer demand, 
         but their lifetime are not divided into three phases. 
@@ -279,12 +281,12 @@ are presented. The three models are:
         \item \textbf{3-Phase-3D}: Jobs are submitted with detailed burst buffer demand for each phases.
                 %the same as Cerberus in section~\ref{Sec:Sim:DirectIOvsBB}
 \end{itemize}
-We simulate the 3 cases with the same generated random data volume sequence.
+We simulate the 3 cases with one set of randomly generated data volume sequence.
 We assume the overall burst buffer demand in 1-Phase-1D and 3-Phase-1D is
 $\max \{data\_in, data\_out, data\_run\}$.
 Notice that 1-phase BB scheduler must subject to burst buffer capacity constraint.
 Cerberus is responsible for scheduling jobs in 3-Phase-1D and 3-Phase-3D model.
-The scheduling decision is made for all three models are FCFS based.
+Scheduling policy used in this experiment is simple "first come first server".
 
 % 
 % %Unsurprisingly, jobs' response time is improving as long as they could utilizing burst buffer.
@@ -480,7 +482,7 @@ the necessity that user provides data capacity demand for each phase.
 \end{figure*}
 
 
-\subsection{Q3: Is Optimization Profitable?}
+\subsection{Optimized Cerberus v.s. FCFS Cerberus}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 %dynamic programming based job scheduler can further reduce jobs' wait time.
 %We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
@@ -504,21 +506,15 @@ the necessity that user provides data capacity demand for each phase.
 %we see more than \textit{80\% of the tasks response faster when we do optimization}.
 
 %===========XY===============
-Cerberus could deploy different optimization algorithms with regard to different
-scheduling objectives.
-In this section, we present the comparison of Cerberus when deploying two different 
-scheduling objectives. 
-The first objective is to guarantee the absolute fairness. Cerberus deploys the
-naive first come first serve policy for this objective.
-The other objective is to maximize the utilization in every scheduling phase. Cerberus adopts
-the optimization algorithm presented in section~\ref{Sec:Scheduler}. 
-In the stage-in phase, Cerberus schedules jobs in $Q_I$ and $Q_O$ according to solution given by
-Algorithm~\ref{Alg:MaxBB} %Recursion~\ref{Equ:MaxTransferDataRecursion}.
-For jobs in $Q_R$, Cerberus makes scheduling decision
-based on the solution given by Algorithm~\ref{Alg:MaxCPU}. %Recursion~\ref{Equ:MaxProductRecursion}.
-We denote Cerberus coupled with two scheduling objectives 
-as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus}.
-\TODO{better name? FCFS and MAX-U}
+In this section we answer question Q3 by showing that
+adopting optimizations in each scheduling phase brings further improvement,
+comparing with the naive first come first server (FCFS) policy adopted in previous experiments.
+Specifically, in the stage-in and stage-out phase, Cerberus schedules jobs in $Q_I$ and $Q_O$
+according to solution given by Algorithm~\ref{Alg:MaxBB};
+for jobs in $Q_R$, Cerberus makes scheduling decision
+based on the solution given by Algorithm~\ref{Alg:MaxCPU}.
+We denote Cerberus coupled with two scheduling methodologies 
+as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus} respectively.
 
 As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, response time of
 jobs scheduled by Optimized Cerberus is reduced.
@@ -584,9 +580,9 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
 
 
 %Table~\ref{Tab:OptimizationTime} demonstrate that 
-Our dynamic programming based optimized Cerberus can schedule jobs online,
-even though solving the optimization problem is theoretically NP-hard.
-For Optimized Cerberus, it solved about 8400 Problems~\ref{Equ:MaxTransferData} and
+Memoization technique helps optimized Cerberus be able to schedule jobs online,
+though solving the optimization problem is theoretically NP-hard.
+For Optimized Cerberus, it solved about 8400 Problem~\ref{Equ:MaxTransferData} and
 Problem~\ref{Equ:MaxProduct} when scheduling all the jobs in workload,
 taking less than 370 seconds.
 The time overhead of solving each optimization is about 0.04 seconds per time.
