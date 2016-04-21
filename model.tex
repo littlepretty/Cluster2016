@@ -1,29 +1,32 @@
-\section{Model for HPC Jobs on BB-Enabled System}
+\section{Scheduling Framework}
 \label{Sec:Model}
 
-\subsection{System Resources}
-% The system contains resources like compute nodes, main memory, burst buffer,
-% IO nodes and external storage.
-% In most system architecture, compute nodes are coupled with main memory.
-% Since storage capacity at most time is sufficient, we assume IO nodes are always available.
-% The schedule targets are compute node and burst buffer:
-% a system with $CN$ compute nodes and $BB$ GB of burst buffer.
-% BB are able to be shared by applications with any fractional amount.
+% % \subsection{System Resources}
+% % The system contains resources like compute nodes, main memory, burst buffer,
+% % IO nodes and external storage.
+% % In most system architecture, compute nodes are coupled with main memory.
+% % Since storage capacity at most time is sufficient, we assume IO nodes are always available.
+% % The schedule targets are compute node and burst buffer:
+% % a system with $CN$ compute nodes and $BB$ GB of burst buffer.
+% % BB are able to be shared by applications with any fractional amount.
 
 %============XY==========
-Users specify the required number of compute nodes and expected runtime for their jobs upon submission. 
-With such information about jobs' requirement, 
-existing batch schedulers make scheduling decision for each job with objectives 
-such as minimizing overall job wait time and maximizing system throughput. 
-In our scheduling framework, 
-burst buffer is considered as a new kind of resource that users can request upon job submission. 
-Therefore, the system resource that scheduler targets for making scheduling decision are
-compute nodes and burst buffer.
-The burst buffer enabled system considered in our framework consists of 
-$CN$ compute nodes and $BB$ GB of burst buffer. 
-Users can require any fractional amount of burst buffer for their jobs. 
 
-\subsection{Three-Phase Model for HPC Jobs}
+When users submit their jobs to burst buffer enabled systems, they can specify the 
+demand of compute nodes, burst buffer and expected running time for each job.
+The batch scheduler makes scheduling decision for each job based on its demand while trying to 
+minimize overall job response time and maximize system throughput. 
+However, jobs require for more than one resources could result in possible deadlock and starvation.\TODO{cite from OS}
+In order to improve the overall resource utilization and system responsiveness, we propose
+a fine granularity job model based on the possible usage cases of burst buffer.  
+In our scheduling framework, 
+the system resources that scheduler targets for making scheduling decision are
+compute nodes and burst buffer.
+Jobs' resource demand could change in different execution phases and the batch scheduler 
+would make scheduling decision in each phase.
+
+
+\subsection{Three-Phase Job Model}
 % Users request the system to run their applications as jobs.
 % We define $J = (job_1, job_2, \ldots, job_n)$ to be the set of all unfinished jobs in the system.
 % To fully utilizing burst buffer, we divide jobs into 3 different phases.
@@ -54,10 +57,10 @@ With the help of burst buffer nodes,
 jobs can pre-fetch data from external storage before running.
 When jobs start running on compute nodes,
 they could burst the checkpoint data to burst buffer at high speed.
-Upton jobs completion, their data are staged out to burst buffer,
+Upton jobs completion, the output data can be staged out to burst buffer,
 then drained out to external storage for the purpose of earlier releasing of compute node.
-According to these scenarios,
-the job lifetime is divided up to three different phases in our scheduling paradigm.
+Therefore,
+the job lifetime is divided up to three different phases in our scheduling framework.
 
 \textbf{Stage-In}: After the job being submitted to the system,
          it needs to pre-fetch data, such as configuration files and input data,
@@ -108,24 +111,24 @@ compute nodes are only required during the \textit{running} phase.
 % \textit{1-phase modeled jobs} thereafter.
 
 %=========XY===============
-Jobs are submitted to system with specified resource demand from users. 
-Each job is associated with a demand vector in the form of $(c, rt)$, 
+Jobs are submitted to system with specified resource demand. 
+Each job is associated with a demand vector in the form of $(c, ert)$, 
 where $c$ is the number of needed compute node in running phase,
-$rt$ is the expected runtime. 
+$ert$ is the expected runtime. 
 In a burst buffer enabled system, demand vector should be augmented
 with fields defining user's request for burst buffer capacity.
 We consider two possible ways that users provide burst buffer demand.
-For the user with accurate speculation about his jobs burst buffer consumption during each of three phases,
+For the user with accurate speculation about his job's burst buffer demand in each phase,
 he may provide a \textit{burst buffer triple} in the form of $(bb\_in, bb\_run, bb\_out)$,
-where $bb\_in$ is the volume of burst buffer user predicted for staging in data files,
-$bb\_run$ is the volume of burst buffer user preferred for checkpointing during running,
-$bb\_out$ is the volume of burst buffer needed to hold the resulting output data.
+where $bb\_in$ is the volume of burst buffer for staging in data files,
+$bb\_run$ is for checkpointing during running,
+$bb\_out$ is for staging out the output data.
 % A job that providing demand vector augmented with
 % burst buffer triple is called a \textit{3-phase modeled job}.
 We will show that providing jobs burst buffer demand in the form of \textit{burst buffer triple} 
 will yield great benefit in the following section.
 Alternatively, a user may just use the $\max\{bb\_in, bb\_run, bb\_out\}$ 
-as job's burst buffer demand in every phase. 
+as job's burst buffer demand in the whole lifetime. 
 % We refer this augmentation as
 % \textit{1-phase modeled jobs} thereafter.
 
@@ -153,7 +156,7 @@ as job's burst buffer demand in every phase.
 
 
 %==========XY=====================
-The resource releasing for the 3-phase modeled jobs are complicated than it used to be. 
+The resource releasing for the 3-phase modeled jobs is nontrivial. 
 For a job at \textit{stage-in} phase, compute nodes is not allocated to it yet. 
 The job can stage in data from external storage to burst buffer without the involvement of compute nodes.
 When scheduler allocates compute nodes to the job, the job enters the \textit{running} phase 
@@ -161,12 +164,10 @@ and starts to read the pre-fetched data from burst buffer into the main memory,
 $bb\_in$ will be released after all the data are moved into main memory. 
 When the job finishes computation and exits \textit{running} phase, 
 $bb\_run$ are released while compute nodes are still hold by the job. 
-The compute nodes will be released after all the output data are moved into $bb\_out$ burst buffer from main memory.
-Jobs at \textit{stage-out} phase only holds $bb\_out$ burst buffer. 
+The compute nodes will be released after all the output data are moved into $bb\_out$ from main memory.
+The job at \textit{stage-out} phase only holds $bb\_out$ burst buffer. 
 Once all the output data are drained out to the external storage,  
 $bb\_out$ is released.
-
-
 
 
 \begin{table}[!htbp] 
@@ -196,6 +197,4 @@ $bb\_out$ is released.
                 \hline
         \end{tabular}
 \end{table}
-
-
 
