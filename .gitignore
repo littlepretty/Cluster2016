@@ -3,13 +3,10 @@
 *.egg-info
 *eps-converted-to.pdf
 *.pdf
-*.graffle
 *.aux
 *.bbl
 *.blg
 *.dvi
 *.ps
 tags
-
-
 
