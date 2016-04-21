@@ -513,8 +513,9 @@ naive first come first serve policy for this objective.
 The other objective is to maximize the utilization in every scheduling phase. Cerberus adopts
 the optimization algorithm presented in section~\ref{Sec:Scheduler}. 
 In the stage-in phase, Cerberus schedules jobs in $Q_I$ and $Q_O$ according to solution given by
-Recursion~\ref{Equ:MaxTransferDataRecursion}. For jobs in $Q_R$, Cerberus makes scheduling decision
-based on the solution given by Recursion~\ref{Equ:MaxProductRecursion}.
+Algorithm~\ref{Alg:MaxBB} %Recursion~\ref{Equ:MaxTransferDataRecursion}.
+For jobs in $Q_R$, Cerberus makes scheduling decision
+based on the solution given by Algorithm~\ref{Alg:MaxCPU}. %Recursion~\ref{Equ:MaxProductRecursion}.
 We denote Cerberus coupled with two scheduling objectives 
 as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus}.
 \TODO{better name? FCFS and MAX-U}
@@ -527,8 +528,6 @@ In contrast, job \#445 takes 376,026 seconds to finish in FCFS Cerberus.
 This is 19.28\% slower than Optimized Cerberus.
 When we consider the overall response time of entire job set,
 we see more than \textit{80\% of the tasks response faster when we do optimization}.
-
-
 
 
 The time duration application waits for running,
@@ -545,7 +544,7 @@ large number of cores but request less running time and larger amount of burst b
 For example, job \#434 requests 163840 cores
 but its expected running time is mere 3600 seconds;
 in addition, it also requests 59 TB burst buffer.
-As a result, Cerberus, according to Equation~\ref{Equ:MaxProductRecursion},
+As a result, Cerberus, according to Algorithm~\ref{Alg:MaxCPU}, %Equation~\ref{Equ:MaxProductRecursion},
 favors the jobs with less request time but larger burst buffer demand.
 This is interesting because it is a potential flaws in the optimization-based policy:
 given the user knows the optimization objective of our scheduler,

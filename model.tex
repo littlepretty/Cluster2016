@@ -43,12 +43,6 @@ Users can require any fractional amount of burst buffer for their jobs.
 
 
 %=============Xu======================
-\begin{figure}[!htbp]
-\centering
-        \includegraphics[width=3.6in]{3PhaseJobFSM}
-        \caption{Event-driven BBsim scheduling model}
-\label{Fig:JobFSM}
-\end{figure}
 
 With the help of burst buffer nodes,
 jobs can pre-fetch data from external storage before running.
@@ -188,11 +182,11 @@ $bb\_out$ is released.
                 $ert_i$ & estimated or expected running time of $job_i$ \\
                 $Q_I, Q_R, Q_O$ & queues for \textit{stage-in, running, stage-out} phase \\
                 $J_{Q_I}, J_{Q_R}, J_{Q_O}$ & set of jobs in corresponding queue \\
-                $S$ & set of jobs selected by scheduler \\
+                $\mathcal{J}_{Q_I}, \mathcal{J}_{Q_R}, \mathcal{J}_{Q_O}$ & selected jobs by Cerberus from corresponding queue\\
                 $v_i$ & value of $job_i \in J_{Q_R}$ defined by Equation~\ref{Equ:DefValue}\\
                 $dp(\cdot)$ & memo used in dynamic programming \\
-                $TS_{s\_x}$ & event timestamps of starting phase $x$ in simulation \\
-                $TS_{f\_x}$ & event timestamps of finishing phase $x$ in simulation \\
+                %$TS_{s\_x}$ & event timestamps of starting phase $x$ in simulation \\
+                %$TS_{f\_x}$ & event timestamps of finishing phase $x$ in simulation \\
                 \hline
         \end{tabular}
 \end{table}
