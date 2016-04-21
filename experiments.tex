@@ -101,7 +101,7 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 
 
 
-\subsection{Q1: BB-enabled system vs. Direct-IO system}
+\subsection{Q1: Is Burst Buffer Helpful?}
 \label{Sec:Sim:DirectIOvsBB}
 % In this section, we demonstrate that by utilizing burst buffer nodes,
 % job scheduler could improve the performance of both applications and system.
@@ -208,7 +208,8 @@ It starts at 1126 seconds but waited 827,241 seconds.
 In contrast, when system installed burst buffer nodes,
 it accomplishes the same workload in 376,443 seconds, and waiting time and response time of job \#1150
 are significantly reduced, 272,741 and 376,026 seconds respectively.
-\NOTE{Xu's suggestion: replace the legend in Fig4,5. 1-Phase IO->Direct IO, Cerberus->BB-enabled}
+\NOTE{Replace the legend in Fig4,5. 1-Phase IO with Direct IO,
+Cerberus with BB-enabled}
 
 
 \begin{figure*}[!t]
@@ -234,9 +235,9 @@ are significantly reduced, 272,741 and 376,026 seconds respectively.
 \end{figure}
 
 
-\subsection{Q2: Demand Granularity Matters?}
+\subsection{Q2: Does Demand Granularity Matter?}
 
-\NOTE{change terms in this section. The logic is we have three job models. 1-phase-1d, 3-phase-1d, and 3-phase-3d. 
+\NOTE{Change legend/term to 1-phase-1d, 3-phase-1d, and 3-phase-3d. 
 For both 3-phase-1d, and 3-phase-3d, Cerberus is used for job scheduling}
 
 In this section we validate our 3-phase model.
@@ -479,7 +480,7 @@ the necessity that user provides data capacity demand for each phase.
 \end{figure*}
 
 
-\subsection{Q3: Cerberus vs. Optimized Cerberus}
+\subsection{Q3: Is Optimization Profitable?}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 %dynamic programming based job scheduler can further reduce jobs' wait time.
 %We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
