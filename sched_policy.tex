@@ -68,6 +68,14 @@ Cerberus schedules the jobs in each queue separately,
 rather than being held in a particular queue and waiting for certain resources.
 Cerberus can deploy different optimization algorithms for making scheduling decision
 for jobs waiting in each queue.
+We choose a heuristic strategy to determine the scheduling order when
+Cerberus has to schedule multiple queues at the same time.
+Noticing that jobs finishing \textit{running} and \textit{stage-out} phase
+will fully or partially release taken resources,
+we set the priority of queues to be $Q_O > Q_R > Q_I$.
+This greedy heuristic works well when the demand of jobs in $J_{Q_I}$ is low.
+However, it is possible to make jobs stacking up at the entry of the system.
+We plan to investigate more on this problem in the future.
 
 
 % \subsection{Optimize Stage-in Phase}

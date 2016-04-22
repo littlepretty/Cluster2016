@@ -26,12 +26,6 @@ waiting to be scheduled in job queue $Q_I$.
 The scheduler checks $j_i$ resource demand and 
 dispatches it to run when enough resources become available.
 
-\begin{figure}[!htbp]
-\centering
-        \includegraphics[width=3.6in]{3PhaseJobFSM}
-        \caption{Event-driven BBsim scheduling model}
-\label{Fig:JobFSM}
-\end{figure}
 
 % Whenever job enters one of its 3 phases, system resources are allocated:
 % \begin{itemize}
@@ -137,4 +131,10 @@ BBSim also supports simulating job scheduling on HPC systems without burst buffe
 Besides, it is easy to integrate any scheduling policies into BBsim. 
 In the follow section, we present our novel batch scheduler, 
 Cerberus, which is dedicated to schedule the three-phase modeled jobs on burst buffer enabled systems. 
+\begin{figure}[!htbp]
+\centering
+        \includegraphics[width=3.6in]{3PhaseJobFSM}
+        \caption{Event-driven BBsim scheduling model}
+\label{Fig:JobFSM}
+\end{figure}
 
