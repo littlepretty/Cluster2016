@@ -103,7 +103,7 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 
 
 % \subsection{BB-Enabled System v.s. IO-Node-Only System}
-\subsection{Direct IO v.s. Utilizing BB}
+\subsection{Utilizing BB v.s. Direct IO}
 \label{Sec:Sim:DirectIOvsBB}
 % In this section, we demonstrate that by utilizing burst buffer nodes,
 % job scheduler could improve the performance of both applications and system.
@@ -232,7 +232,7 @@ are significantly reduced, 272,741 and 376,026 seconds respectively.
                 \includegraphics[width=2.5in]{IOvsBBFigures/1000jobs_direct_vs_bb_throughput}
                 \label{Fig:DirectIOvsBBThroughput}
         }
-        \caption{Direct IO vs. Utilizing Burst Buffer}
+        \caption{Utilizing Burst Buffer v.s. Direct IO}
         \label{Fig:DirectIOPerformance}
 \end{figure*}
 
@@ -489,7 +489,7 @@ the necessity that user provides data capacity demand for each phase.
                 \includegraphics[width=2.5in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_throughput}
                 \label{Fig:DPvsFIFOThroughput}
         }
-        \caption{Optimized Cerberus vs. FCFS Cerberus}
+        \caption{Optimized Cerberus v.s. FCFS Cerberus}
         \label{Fig:DPvsFIFOPerformance}
 \end{figure*}
 
@@ -582,9 +582,6 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
 23.87\% higher average throughput (1.951 jobs / 500 seconds).}
 
 
-
-
-
 %Table~\ref{Tab:OptimizationTime} demonstrate that 
 % % Memoization technique helps optimized Cerberus be able to schedule jobs online,
 % % though solving the optimization problem is theoretically NP-hard.
@@ -610,10 +607,9 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
         %\end{tabular}
 %\end{table}
 
-Though solving the optimization problem is theoretically NP-hard, 
-memoization technique can reduce the computation cost for optimized Cerberus.
-In our simulation, it takes about 0.04 second for the optimized 
-Cerberus to make one scheduling decision, which means optimized Cerberus 
-is capable of scheduling jobs online.  
+Memoization technique helps optimized Cerberus be capable to schedule jobs online,
+though solving the optimization problem is theoretically NP-hard.
+In our simulation, it takes averagely about 0.04 second for the optimized 
+Cerberus to make one scheduling decision.
 
 

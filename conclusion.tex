@@ -2,7 +2,7 @@
 \label{Sec:Conclusion}
 
 In this study we explore the way HPC workload scheduler allocates burst buffer,
-a new storage resources that absorb 3 general types of IO operations:
+a new kind of storage resource that absorbs 3 general types of IO operations:
 data staging in, application checkpointing, and data staging out.
 We propose a 3-phase job model specially
 tailored to burst buffer's typical usage scenarios.
@@ -18,9 +18,9 @@ Since the burst buffer enabled system is not ready for the massive
 use by the community, 
 there is no study about the burst buffer demand of the typical scientific workloads.
 We plan to conduct comprehensive sensitivity study about the performance of Cerberus
-when scheduling workloads with diversified resource demands. Such study could provide
-valuable insight for both computing facilities configure their burst buffer subsystem.
-HPC systems users can also benefit from such study by utilizing burst buffer for developing
+when scheduling workloads with diverse resource demands. Such study could provide
+valuable insight for computing facilities configuring their burst buffer subsystem.
+HPC system users can also benefit by utilizing burst buffer for developing
 their scientific applications.
 In the future, we also plan to integrate other optimization algorithms into Cerberus
 to satisfy various scheduling objectives from the community. 
