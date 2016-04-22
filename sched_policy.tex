@@ -176,7 +176,7 @@ $J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
 
 
 \subsection{Scheduling in Running Phase}
-Running jobs require not only compute nodes, but burst buffer to ensure performance and correctness.
+Running jobs require not only compute nodes, but also burst buffer to ensure performance.
 Cerberus schedules jobs in $Q_R$ based on the $c$ and $bb\_run$.
 To maximize the utilization of compute nodes and burst buffer, 
 the scheduling objective is modeled as a knapsack problem by defining the \textbf{value} of the $j_i$ as

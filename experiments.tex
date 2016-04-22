@@ -42,7 +42,7 @@ We select three evaluation metrics, job's \textit{response time}, \textit{wait t
 \textit{system throughput}, when evaluating our design.
 Response time is the time duration from job submission to its fully completion,
 which is the major concern from user's perspective.
-Wait time is the aggregated time a job waits in each phase.
+Wait time is the aggregated time a job waits in each queue.
 System throughput, defined as the number of jobs finished in
 a fixed time period (500 seconds), measures the performance of the system.
 
@@ -71,7 +71,7 @@ and at least 9500 Intel Xeon Phi nodes.
 There are 576 burst buffer nodes with aggregated 3.7 PB storage capacity, 
 which are globally accessible as intermediate storage.
 Sequential read/write speed of burst buffer nodes is 8.0 GBps.
-Bandwidth between CPU node and non-burst-buffer IO node is set to 2.5 GBps.
+Bandwidth between CPU node and IO node is set to 2.5 GBps.
 
 % % trace
 % Job trace is from ANL's Blue Gene Intrepid system,
@@ -102,7 +102,8 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 
 
 
-\subsection{BB-Enabled System v.s. IO-Node-Only System}
+% \subsection{BB-Enabled System v.s. IO-Node-Only System}
+\subsection{Direct IO v.s. Utilizing BB}
 \label{Sec:Sim:DirectIOvsBB}
 % In this section, we demonstrate that by utilizing burst buffer nodes,
 % job scheduler could improve the performance of both applications and system.
@@ -116,8 +117,14 @@ $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 
 
 %=============XY==============
-In this section, we compare the overall performance on burst buffer enabled system
-against the traditional system without burst buffer (Direct IO).
+
+PFS is mounted by all compute nodes in the Trinity architecture, thus applications have the
+option to bypass the burst buffer and use the file system directly for their IO operations. 
+We refer this scenario as \textit{Direct IO}. Apparently, the performance of \textit{Direct IO}
+is limited by the low dandwidth of IO nodes. However, applications will be exempted from 
+waiting in the stage-in/out phases in the case of \textit{Direct IO} rather than utilizing burst buffer.
+In this section, we compare the performance of applications utilizing burst buffer
+against \textit{Direct IO}.
 Based on the comparison, we answer question \textbf{Q1}: by utilizing burst buffer nodes,
 both the performance of jobs and system can be greatly improved. 
 
@@ -140,7 +147,7 @@ Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of jobs response
 time by on burst buffer enabled system and the traditional system (Direct IO).
 When running on system with burst buffer,
 jobs response time is bounded by 376,443.12 seconds.
-However, the worst case of Direct-IO is catastrophic.
+However, the worst case of Direct IO is catastrophic.
 There are jobs that takes 889,239.20 seconds to finish,
 which is 2.36 times slow as the most non-responsive job
 in system equipped with burst buffer.
@@ -204,7 +211,7 @@ It totally takes 889,239 seconds for the system without burst buffer nodes to
 complete the workload.
 We pick a specific job, job with ID \#1150 from the workload, to observe its
 waiting time in both cases.
-Job \#1150 request 4096 cores and 59 TB data space.
+Job \#1150 request 256 compute nodes and 59 TB data space.
 It starts at 1126 seconds but waited 827,241 seconds.
 In contrast, when system installed burst buffer nodes,
 it accomplishes the same workload in 376,443 seconds, and waiting time and response time of job \#1150
@@ -225,7 +232,7 @@ are significantly reduced, 272,741 and 376,026 seconds respectively.
                 \includegraphics[width=2.5in]{IOvsBBFigures/1000jobs_direct_vs_bb_throughput}
                 \label{Fig:DirectIOvsBBThroughput}
         }
-        \caption{IO Node Only System vs. Burst Buffer System}
+        \caption{Direct IO vs. Utilizing Burst Buffer}
         \label{Fig:DirectIOPerformance}
 \end{figure*}
 
@@ -241,7 +248,7 @@ are significantly reduced, 272,741 and 376,026 seconds respectively.
 In this section we validate our 3-phase model by answering question \textbf{Q2}.
 Simulation results demonstrate that jobs performance are improved 
 when the scheduler makes scheduling decision in each phase separately.
-thus encouraging users to provide detailed burst buffer demand in each phase for her job.
+Thus users are encouraged to provide detailed burst buffer demand in each phase for their jobs.
 
 % In Figure~\ref{Fig:3Pvs1PResponse}, we plot 3 different scheduling results by 3 FCFS scheduler.
 % \begin{itemize}
@@ -265,7 +272,7 @@ thus encouraging users to provide detailed burst buffer demand in each phase for
 % %Response time of system without burst buffer devices are also plotted for comparison.
 
 %========XY========================
-In Figure~\ref{Fig:3Pvs1PResponse}, the results of scheduling jobs based on three models
+In Figure~\ref{Fig:3Pvs1PResponse}, the scheduling results based on three models
 are presented:
 \begin{itemize}
         \item \textbf{1-Phase-1D}: Jobs are submitted with total burst buffer demand, 
@@ -283,7 +290,7 @@ We assume the overall burst buffer demand in 1-Phase-1D and 3-Phase-1D is
 $\max \{data\_in, data\_out, data\_run\}$.
 Notice that 1-phase BB scheduler must subject to burst buffer capacity constraint.
 Cerberus is responsible for scheduling jobs in 3-Phase-1D and 3-Phase-3D model.
-Scheduling policy used in this experiment is simple "first come first server".
+Scheduling policy used in this experiment is simple first-come first-server.
 
 % 
 % %Unsurprisingly, jobs' response time is improving as long as they could utilizing burst buffer.
@@ -543,12 +550,12 @@ is plotted in Figure~\ref{Fig:DPvsFIFOWaitRun}.
 The tail of Optimized Cerberus shows that it holds a couple of jobs waiting
 in its running queue for a very long time.
 We figure out the reason of this long delay once we examine the detail of these jobs.
-First they are submitted at early middle phase (Job \#435 waits 268,322 seconds).
-Second, these jobs are requesting huge amount of compute nodes (163840 cores)
+First they are submitted at early middle phase (job \#435 waits 268,322 seconds).
+Second, these jobs are requesting huge amount (10240) of compute nodes
 but comparably less burst buffer (7 TB for job \#435)
 The third and the most important reason is that there are jobs requesting similarly
 large number of cores but request less running time and larger amount of burst buffer.
-For example, job \#434 requests 163840 cores
+For example, job \#434 requests 10240 compute nodes
 but its expected running time is mere 3600 seconds;
 in addition, it also requests 59 TB burst buffer.
 As a result, Cerberus, according to Algorithm~\ref{Alg:MaxCPU}, %Equation~\ref{Equ:MaxProductRecursion},
@@ -579,12 +586,12 @@ as bar chart in Figure~\ref{Fig:DPvsFIFOThroughput}.
 
 
 %Table~\ref{Tab:OptimizationTime} demonstrate that 
-Memoization technique helps optimized Cerberus be able to schedule jobs online,
-though solving the optimization problem is theoretically NP-hard.
-For Optimized Cerberus, it solved about 8400 Problem~\ref{Equ:MaxTransferData} and
-Problem~\ref{Equ:MaxProduct} when scheduling all the jobs in workload,
-taking less than 370 seconds.
-The time overhead of solving each optimization is about 0.04 seconds per time.
+% % Memoization technique helps optimized Cerberus be able to schedule jobs online,
+% % though solving the optimization problem is theoretically NP-hard.
+% % For Optimized Cerberus, it solved about 8400 Problem~\ref{Equ:MaxTransferData} and
+% % Problem~\ref{Equ:MaxProduct} when scheduling all the jobs in workload,
+% % taking less than 370 seconds.
+% % The time overhead of solving each optimization is about 0.04 seconds per time.
 
 %\begin{table}[!t] 
         %\renewcommand{\arraystretch}{1.3}
@@ -603,5 +610,10 @@ The time overhead of solving each optimization is about 0.04 seconds per time.
         %\end{tabular}
 %\end{table}
 
+Though solving the optimization problem is theoretically NP-hard, 
+memoization technique can reduce the computation cost for optimized Cerberus.
+In our simulation, it takes about 0.04 second for the optimized 
+Cerberus to make one scheduling decision, which means optimized Cerberus 
+is capable of scheduling jobs online.  
 
 
