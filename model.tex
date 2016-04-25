@@ -1,4 +1,4 @@
-\section{Scheduling Framework}
+\section{BB Aware Job Model}
 \label{Sec:Model}
 
 % % \subsection{System Resources}
@@ -11,7 +11,7 @@
 % % BB are able to be shared by applications with any fractional amount.
 
 %============XY==========
-
+\subsection{Motivation}
 When users submit their jobs to burst buffer enabled systems, they can specify the 
 demand of compute nodes, burst buffer and expected running time for each job.
 The batch scheduler makes scheduling decision for each job based on its demand while trying to 
@@ -82,7 +82,7 @@ While burst buffer has been utilized during all three phases,
 compute nodes are only required during the \textit{running} phase. 
 
 
-\subsection{Three-Phase Resource Demand}
+\subsection{Three-Phase Resource Demand Model}
 % Users typically provide their resource demand for their jobs.
 % This is the most important information scheduler could get from the users.
 % Therefore, each job is associated with a demand vector in the form of $(c, rt)$
