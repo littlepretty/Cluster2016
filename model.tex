@@ -11,7 +11,6 @@
 % % BB are able to be shared by applications with any fractional amount.
 
 %============XY==========
-\subsection{Motivation}
 When users submit their jobs to burst buffer enabled systems, they can specify the 
 demand of compute nodes, burst buffer and expected running time for each job.
 The batch scheduler makes scheduling decision for each job based on its demand while trying to 
@@ -22,11 +21,10 @@ a fine granularity job model based on the possible usage cases of burst buffer.
 In our scheduling framework, 
 the system resources that scheduler targets for making scheduling decision are
 compute nodes and burst buffer.
-Jobs' resource demand could change in different execution phases and the batch scheduler 
-would make scheduling decision in each phase.
+Jobs' resource demand varies in different execution phases;
+correspondingly, batch scheduler make scheduling decision in each phase.
 
 
-\subsection{Three-Phase Job Model}
 % Users request the system to run their applications as jobs.
 % We define $J = (job_1, job_2, \ldots, job_n)$ to be the set of all unfinished jobs in the system.
 % To fully utilizing burst buffer, we divide jobs into 3 different phases.
@@ -46,7 +44,7 @@ would make scheduling decision in each phase.
 
 
 %=============Xu======================
-
+\subsection{Three-Phase Job Model}
 With the help of burst buffer nodes,
 jobs can pre-fetch data from external storage before running.
 When jobs start running on compute nodes,
@@ -184,7 +182,7 @@ $bb\_out$ is released.
                 $Q_I, Q_R, Q_O$ & queues for \textit{stage-in, running, stage-out} phase \\
                 $J_{Q_I}, J_{Q_R}, J_{Q_O}$ & set of jobs in corresponding queue \\
                 $\mathcal{J}_{Q_I}, \mathcal{J}_{Q_R}, \mathcal{J}_{Q_O}$ & selected jobs by Cerberus from corresponding queue\\
-                $v_i$ & value of $job_i \in J_{Q_R}$ defined by Equation~\ref{Equ:DefValue}\\
+                $p_i$ & profit of $job_i \in J_{Q_R}$ defined by Equation~\ref{Equ:GeneralProfit}\\
                 $dp(\cdot)$ & memo used in dynamic programming \\
                 \hline
         \end{tabular}

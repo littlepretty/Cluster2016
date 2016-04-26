@@ -28,10 +28,10 @@
 %==============XY====================
 \section{Optimization Enhancement}
 
-Cerberus can be further enhanced with different optimization algorithms when making scheduling decision
+Cerberus can be further enhanced with different optimizations when making scheduling decision
 for jobs waiting in each queue.
 
-\subsection{Scheduling Optimization in Stage-in Phase}
+\subsection{Scheduling Optimization in Stage-In/Out Phase}
 
 In the stage-in phase, jobs require only for burst buffer.
 Cerberus schedule jobs in $Q_I$ based on their burst buffer demand $bb\_in$.
@@ -58,7 +58,7 @@ one can schedule jobs according to the following optimization:
         %%\right.
 %\end{align*}
 where $J_{Q_I}$ stands for all jobs in input queue,
-$\mathcal{J} = \{x_i|x_i = 1, \text{ } \forall i \in J_{Q_I}\}$ is the set of job selected by Cerberus,
+$\mathcal{J} = \{x_i|x_i = 1, \text{ } \forall i \in J_{Q_I}\}$ is the set of jobs selected by Cerberus,
 $bb\_in_i$ is the burst buffer demand of job $job_i$,
 $BB_{available}$ is system's currently available amount of burst buffer.
 
@@ -66,9 +66,6 @@ Stage-out phase scheduling are made based on the value of $bb\_out$ of jobs in $
 Optimization formula for stage-out phase are almost the same as
 Problem 1, except that $bb\_in$ is replaced with $bb\_out$,
 $J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
-
-
-
 
 
 % \subsection{Optimize Running Phase}
@@ -115,7 +112,7 @@ Here we take a more general strategy.
 We define the \textbf{profit} of $job_i$ in $Q_R$ as it is using $c$ compute nodes and $bb\_run$ amount of BB
 \begin{equation}
         p_i = f(c_i, bb\_run_i, ert_i)
-\label{Equ:GeneralValue}
+\label{Equ:GeneralProfit}
 \end{equation}
 where $ert_i$ is the expected running time of $j_i$.
 Then the objective is to maximize the total profit of jobs in running queue, formularized as

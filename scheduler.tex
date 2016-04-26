@@ -70,14 +70,34 @@ Cerberus schedules the jobs in each queue separately,
 rather than being held in a particular queue and waiting for certain resources.
 
 \subsection{Coordination Among Three Phases}
+There are few things to notice.
+First, for a given job, its three phases are temporally dependent.
+That is, only after finishing stage-in phase can a job be ready for running;
+similarly, only when finishing running phase can a job waiting or entering stage-out phase.
+This is reflected in the lifetime of a job's execution.
+
+Secondly, for any job,
+its requested burst buffer can only be used for 1 purpose.
+For example, a running-phase job cannot hold its already taken burst buffer
+and use them to enter stage-out phase upon finishing running,
+no matter whether $bb\_run > bb\_out$ or $bb\_run < bb\_out$.
+In Cerberus, resource release must be done mandatorily as specified in section~\ref{Sec:Model},
+We believe frequent release provides more opportunities to make scheduler involved in each phase of the jobs.
+
+At last, it is possible that all 3 queues are not empty at the moment of scheduling.
 We choose a heuristic strategy to determine the scheduling order when
-Cerberus has to schedule multiple queues at the same time.
+Cerberus has to handle multiple queues at the same time.
 Noticing that jobs finishing \textit{running} and \textit{stage-out} phase
 will fully or partially release taken resources,
-we set the priority of queues to be $Q_O > Q_R > Q_I$.
+we set the priority of queues to be $priority(Q_O) > priority(Q_R) > priority(Q_I)$.
 This greedy heuristic works well when the demand of jobs in $J_{Q_I}$ is low.
 However, it is possible to make jobs stacking up at the entry of the system.
 We plan to investigate more on this problem in the future.
 
-
+\begin{figure}[!htbp]
+\centering
+        \includegraphics[width=3.6in]{3PhaseJobFSM}
+        \caption{Event-driven BBsim scheduling model}
+\label{Fig:JobFSM}
+\end{figure}
 
