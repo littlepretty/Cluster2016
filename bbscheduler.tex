@@ -339,6 +339,9 @@
 
 \addtolength{\jot}{0.4em}
 
+\let\oldref\ref
+\renewcommand{\ref}[1]{(\oldref{#1})}
+
 \begin{document}
 %
 % paper title
@@ -347,7 +350,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Cerberus: A 3-Phase Based Burst Buffer Aware Batch Scheduler for HPC System}
+\title{Cerberus: A 3-Phase Burst Buffer Aware Batch Scheduler for HPC Systems}
 
 
 % author names and affiliations
@@ -440,7 +443,7 @@ Email: \{dong.jin, lan\}@iit.edu
 %2) our 3-phase model and dynamic programming solutions further
 %improve burst buffer equipped system.
 
-Burst buffer nodes(BB) are drastically improving
+Burst buffer (BB) is drastically improving
 the performance of computational application by providing high perceived IO bandwidth.
 However, traditional batch scheduler either barely knows BB's existence
 or cannot fully utilize them in practice.

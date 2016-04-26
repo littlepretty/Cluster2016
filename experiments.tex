@@ -535,9 +535,9 @@ In this section we answer question \textbf{Q3} by showing that
 adopting optimizations in each scheduling phase brings further improvement,
 comparing with the naive first come first server (FCFS) policy adopted in previous experiments.
 Specifically, in the stage-in and stage-out phase, Cerberus schedules jobs in $Q_I$ and $Q_O$
-according to solution given by Algorithm~\ref{Alg:MaxBB};
+according to solution given by \ref{Equ:MaxTransferDataRecursion};
 for jobs in $Q_R$, Cerberus makes scheduling decision
-based on the solution given by Algorithm~\ref{Alg:MaxCPU}.
+based on the solution given by \ref{Equ:MaxProductRecursion}. %Algorithm~\ref{Alg:MaxCPU}.
 We denote Cerberus coupled with two scheduling methodologies 
 as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus} respectively.
 
@@ -565,7 +565,7 @@ large number of cores but request less running time and larger amount of burst b
 For example, job \#434 requests 10240 compute nodes
 but its expected running time is mere 3600 seconds;
 in addition, it also requests 59 TB burst buffer.
-As a result, Cerberus, according to Algorithm~\ref{Alg:MaxCPU}, %Equation~\ref{Equ:MaxProductRecursion},
+As a result, Cerberus, according to \ref{Equ:MaxProductRecursion},
 favors the jobs with less request time but larger burst buffer demand.
 This is interesting because it is a potential flaws in the optimization-based policy:
 given the user knows the optimization objective of our scheduler,

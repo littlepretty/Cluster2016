@@ -114,7 +114,7 @@ We define the \textbf{profit} of $job_i$ in $Q_R$ as it is using $c$ compute nod
         p_i = f(c_i, bb\_run_i, ert_i)
 \label{Equ:GeneralProfit}
 \end{equation}
-where $ert_i$ is the expected running time of $j_i$.
+where $ert_i$ is the expected running time of $job_i$.
 Then the objective is to maximize the total profit of jobs in running queue, formularized as
 \begin{align*}
         \mathbf{Problem} & \text{ } \mathbf{2} \\
@@ -133,11 +133,11 @@ $CN_{available}$ and $BB_{available}$ represent the amount of system's currently
 
 As an example, in this paper we measure the value of a job based on how efficient it utilize its resource:
 \begin{equation}
-        v_i = \frac{c_i / CN}{ert_i} \times \frac{bb\_run_i / BB}{ert_i}
+        p_i = \frac{c_i / CN}{ert_i} \times \frac{bb\_run_i / BB}{ert_i}
         \label{Equ:DefValue}
 \end{equation}
 where efficiency is measured as the ratio of resource demand to expected running time.
-Specializing Problem 2 using $v_i$ favors tasks that claim to take up resources with short duration.
+Specializing Problem 2 using \ref{Equ:DefValue} favors tasks that claim to take up resources with short duration.
 %\begin{align*}
         %& \max \sum_{i \in S}\frac{c_i}{ert_i} * \frac{bb\_run_i}{ert_i} \\
         %& s.t. \left\{
@@ -201,148 +201,148 @@ Specializing Problem 2 using $v_i$ favors tasks that claim to take up resources 
 % This will give us only the partial optimal solution
 % in exchange of less computation complexity.
 
-It is trivial to show that optimization problem~\ref{Equ:MaxTransferData}
+It is trivial to show that optimization Problem 1
 is equivalent to 0-1 knapsack problem.
-Problem~\ref{Equ:MaxProduct} can be informally treat as 2-dimension 0-1 knapsack problem.
+Problem 2 can be informally treat as 2-dimension 0-1 knapsack problem.
 We expect all of them to be NP-hard problems.
 Dynamic programming is adopted to solve them in pseudo polynomial time.
 Applying memorization could also help accelerate the solving process.
 In addition, we are not interested in the optimal result of
-problem~\ref{Equ:MaxTransferData} and problem~\ref{Equ:MaxProduct}
+Problem 1 and Problem 2,
 but in a combination of jobs $\mathcal{J}$ that yields the optimal solution,
 which, fortunately, can also be tracked back down
 using the memorizations kept during dynamic programming.
-How to fill in memo and track back optimal $\mathcal{J}$ are shown in Algorithm~\ref{Alg:MaxBB}
-and Algorithm~\ref{Alg:MaxCPU} for Problem~\ref{Equ:MaxTransferData}
-and Problem~\ref{Equ:MaxProduct} respectively.
-The time complexity of Algorithm~\ref{Alg:MaxBB} is $O(n\times BB)$.
-The time complexity of solving Algorithm~\ref{Alg:MaxCPU} is $O(n\times CN\times BB)$.
-%For Problem~\ref{Equ:MaxTransferData}, the recursive relationship is
-%given by Recursion~\ref{Equ:MaxTransferDataRecursion}.
-%For Problem~\ref{Equ:MaxProduct}, the recursive relationship is
-%given by Recursion~\ref{Equ:MaxProductRecursion}.
-%The time complexity of solving Recursion~\ref{Equ:MaxTransferDataRecursion} is $O(n\times BB)$.
-%The time complexity of solving Recursion~\ref{Equ:MaxProductRecursion}
-%is $O(n\times CN\times BB)$.
+%How to fill in memo and track back optimal $\mathcal{J}$ are shown in Algorithm~\ref{Alg:MaxBB}
+%and Algorithm~\ref{Alg:MaxCPU} for Problem 1
+%and Problem 2 respectively.
+%The time complexity of Algorithm~\ref{Alg:MaxBB} is $O(n\times BB)$.
+%The time complexity of solving Algorithm~\ref{Alg:MaxCPU} is $O(n\times CN\times BB)$.
+For Problem 1, the recursive relationship is
+given by \ref{Equ:MaxTransferDataRecursion}.
+The recursion that solves Problem 2 is given by \ref{Equ:MaxProductRecursion}.
+Solving \ref{Equ:MaxTransferDataRecursion} and
+backtracking $\mathcal{J}_{Q_I}$ or $\mathcal{J}_{Q_O}$ in total takes time proportional to $n\times BB$.
+Similarly, solving \ref{Equ:MaxProductRecursion} and selecting $\mathcal{J}_{Q_R}$ using memo
+are $O(n\times CN\times BB)$.
 
-%\begin{strip}
-        %\begin{align}
-                %dp(i, w) = & 
-                %\left\{
-                        %\begin{array}{l}
-                                %0, \text{ if $i=0$ } \\ [0.4em]
-                                %dp(i-1, w), \text{ if $bb\_in_i > w$} \\ [0.4em]
-                                %\max \{ dp(i-1, w), dp(i-1, w-bb\_in_i) + bb\_in_i \}, \text{ if $bb\_in_i \leq w$}
-                        %\end{array} 
-                %\right.
-                %\label{Equ:MaxTransferDataRecursion} 
-        %\end{align}
-%\end{strip}
+\begin{strip}
+        \begin{align}
+                dp(i, w) = & 
+                \left\{
+                        \begin{array}{l}
+                                0, \text{ if $i=0$ } \\ [0.4em]
+                                dp(i-1, w), \text{ if $bb\_in_i > w$} \\ [0.4em]
+                                \max \{ dp(i-1, w), dp(i-1, w-bb\_in_i) + bb\_in_i \}, \text{ if $bb\_in_i \leq w$}
+                        \end{array} 
+                \right.
+                \label{Equ:MaxTransferDataRecursion} 
+        \end{align}
+\end{strip}
 
-%\begin{strip}
-        %\begin{align}
-                %dp(i, c, w) = &
-                %\left\{
-                        %\begin{array}{l}
-                                %0, \text{ if $i=0$ } \\ [0.4em]
-                                %dp(i-1, c, w), \text{ if $c_i > c$ or $bb\_run_i > w$} \\ [0.4em]
-                                %\max \{ dp(i-1, c, w), dp(i-1, c - c_i, w - bb\_run_i) + v_i \}, \text{ if $c_i \leq c$ and $bb\_run_i \leq w$}
-                        %\end{array} 
-                %\right.
-                %\label{Equ:MaxProductRecursion}
-        %\end{align}
-%\end{strip}
+\begin{strip}
+        \begin{align}
+                dp(i, c, w) = &
+                \left\{
+                        \begin{array}{l}
+                                0, \text{ if $i=0$ } \\ [0.4em]
+                                dp(i-1, c, w), \text{ if $c_i > c$ or $bb\_run_i > w$} \\ [0.4em]
+                                \max \{ dp(i-1, c, w), dp(i-1, c - c_i, w - bb\_run_i) + p_i \}, \text{ if $c_i \leq c$ and $bb\_run_i \leq w$}
+                        \end{array} 
+                \right.
+                \label{Equ:MaxProductRecursion}
+        \end{align}
+\end{strip}
 
 
-\algrenewcommand{\algorithmiccomment}[1]{\hskip1em$/*$ #1 $*/$}
+%\algrenewcommand{\algorithmiccomment}[1]{\hskip1em$/*$ #1 $*/$}
 
-\begin{algorithm}[t]
-\caption{Maximize Data Transfer of Jobs in $Q_I$ or $Q_O$}
-\label{Alg:MaxBB}
-\begin{algorithmic}[1]
-        \State $\boldsymbol{bb} \gets $ burst buffer demands of $J_Q = (j_1, j_2,\ldots, j_N)$
-        \State $\boldsymbol{dp} \gets \boldsymbol{0}_{(N+1) \times (BB+1)}$
-        \State $\mathcal{J} \gets \emptyset$\Comment{scheduling result}
-        \\
-        \Function{FillInMemo}{ }
-                \For{$i \gets 1, N$}
-                        \For{$w \gets 1, BB$}
-                                \If{$w \geq bb_i$}
-                                        \State $dp_1 = dp(i-1, w-bb_i)+bb_i$
-                                        \State $dp_2 = dp(i-1, w)$
-                                        \State $dp(i, w) \gets \max\{dp_1, dp_2\}$
-                                \Else
-                                        \State $dp(i,w) \gets dp(i-1,w)$
-                                \EndIf
-                        \EndFor
-                \EndFor
-                \State \Call{TrackBackJobs}{$N, BB$}
-        \EndFunction
-        \\
-        \Function{TrackBackJobs}{$i, w$}
-                \If{$i > 0$}
-                        \If{$w \geq bb_i$}
-                                \State $dp_1 = dp(i-1, w-bb_i)+bb_i$
-                                \State $dp_2 = dp(i-1, w)$
-                                \If{$dp_1 \geq dp_2$}
-                                        \State $\mathcal{J} = \mathcal{J} \cup j_i$
-                                        \State \Call{TrackBackJobs}{$i-1, w-bb_i$}
-                                \Else
-                                        \State \Call{TrackBackJobs}{$i-1, w$}
-                                \EndIf
-                        \Else
-                                \State \Call{TrackBackJobs}{$i-1, w$}
-                        \EndIf
-                \EndIf
-        \EndFunction
-\end{algorithmic}
-\end{algorithm}
+%\begin{algorithm}[t]
+%\caption{Maximize Data Transfer of Jobs in $Q_I$ or $Q_O$}
+%\label{Alg:MaxBB}
+%\begin{algorithmic}[1]
+        %\State $\boldsymbol{bb} \gets $ burst buffer demands of $J_Q$
+        %\State $\boldsymbol{dp} \gets \boldsymbol{0}_{(N+1) \times (BB+1)}$
+        %\State $\mathcal{J} \gets \emptyset$\Comment{scheduling result}
+        %\\
+        %\Function{FillInMemo}{ }
+                %\For{$i \gets 1, N$}
+                        %\For{$w \gets 1, BB$}
+                                %\If{$w \geq bb_i$}
+                                        %\State $dp_1 = dp(i-1, w-bb_i)+bb_i$
+                                        %\State $dp_2 = dp(i-1, w)$
+                                        %\State $dp(i, w) \gets \max\{dp_1, dp_2\}$
+                                %\Else
+                                        %\State $dp(i,w) \gets dp(i-1,w)$
+                                %\EndIf
+                        %\EndFor
+                %\EndFor
+                %\State \Call{TrackBackJobs}{$N, BB$}
+        %\EndFunction
+        %\\
+        %\Function{TrackBackJobs}{$i, w$}
+                %\If{$i > 0$}
+                        %\If{$w \geq bb_i$}
+                                %\State $dp_1 = dp(i-1, w-bb_i)+bb_i$
+                                %\State $dp_2 = dp(i-1, w)$
+                                %\If{$dp_1 \geq dp_2$}
+                                        %\State $\mathcal{J} = \mathcal{J} \cup job_i$
+                                        %\State \Call{TrackBackJobs}{$i-1, w-bb_i$}
+                                %\Else
+                                        %\State \Call{TrackBackJobs}{$i-1, w$}
+                                %\EndIf
+                        %\Else
+                                %\State \Call{TrackBackJobs}{$i-1, w$}
+                        %\EndIf
+                %\EndIf
+        %\EndFunction
+%\end{algorithmic}
+%\end{algorithm}
 
-\begin{algorithm}[t]
-\caption{Maximize Profit of Jobs in $Q_R$}
-\label{Alg:MaxCPU}
-\begin{algorithmic}[1]
-        \State $\boldsymbol{bb} \gets $ burst buffer demands of $J_Q = (j_1, j_2,\ldots, j_N)$
-        \State $\boldsymbol{cn} \gets $ compute nodes demands of $j \in J_Q$
-        \State $\boldsymbol{dp} \gets \boldsymbol{0}_{(N+1) \times (CN) \times (BB+1)}$
-        \State $\boldsymbol{v} \gets$ values of $j \in J_Q$
-        \State $\mathcal{J} \gets \emptyset$\Comment{scheduling result} 
-        \\
-        \Function{FillInMemo}{ }
-                \For{$i \gets 1, N$}
-                        \For{$c \gets 1, CN$} 
-                                \For{$w \gets 1, BB$}
-                                        \If{$c \geq cpu_i$ and $w \geq bb_i$}
-                                                \State $dp_1 = dp(i-1, c-cn_i, w-bb_i)+v_i$
-                                                \State $dp_2 = dp(i-1, c, w)$
-                                                \State $dp(i, c, w) \gets \max\{dp_1, dp_2\}$
-                                        \Else
-                                                \State $dp(i,c,w) \gets dp(i-1,c,w)$
-                                        \EndIf
-                                \EndFor
-                        \EndFor
-                \EndFor
-                \State \Call{TrackBackJobs}{$N, CN, BB$}
-        \EndFunction
-        \\
-        \Function{TrackBackJobs}{$i, c, w$}
-                \If{$i > 0$}
-                        \If{$c \geq cpu_i$ and $w \geq bb_i$}
-                                \State $dp_1 = dp(i-1, c-cn_i, w-bb_i)+v_i$
-                                \State $dp_2 = dp(i-1, c, w)$
-                                \If{$dp_1 \geq dp_2$}
-                                        \State $\mathcal{J} = \mathcal{J} \cup j_i$
-                                        \State \Call{TrackBackJobs}{$i-1, c-cpu_i, w-bb_i$}
-                                \Else
-                                        \State \Call{TrackBackJobs}{$i-1, c, w$}
-                                \EndIf
-                        \Else
-                                \State \Call{TrackBackJobs}{$i-1, c, w$}
-                        \EndIf
-                \EndIf
-        \EndFunction
-\end{algorithmic}
-\end{algorithm}
+%\begin{algorithm}[t]
+%\caption{Maximize Profit of Jobs in $Q_R$}
+%\label{Alg:MaxCPU}
+%\begin{algorithmic}[1]
+        %\State $\boldsymbol{bb} \gets $ burst buffer demands of $J_Q$
+        %\State $\boldsymbol{cn} \gets $ compute nodes demands of $j \in J_Q$
+        %\State $\boldsymbol{dp} \gets \boldsymbol{0}_{(N+1) \times (CN) \times (BB+1)}$
+        %\State $\boldsymbol{v} \gets$ values of $j \in J_Q$
+        %\State $\mathcal{J} \gets \emptyset$\Comment{scheduling result} 
+        %\\
+        %\Function{FillInMemo}{ }
+                %\For{$i \gets 1, N$}
+                        %\For{$c \gets 1, CN$} 
+                                %\For{$w \gets 1, BB$}
+                                        %\If{$c \geq cpu_i$ and $w \geq bb_i$}
+                                                %\State $dp_1 = dp(i-1, c-cn_i, w-bb_i)+v_i$
+                                                %\State $dp_2 = dp(i-1, c, w)$
+                                                %\State $dp(i, c, w) \gets \max\{dp_1, dp_2\}$
+                                        %\Else
+                                                %\State $dp(i,c,w) \gets dp(i-1,c,w)$
+                                        %\EndIf
+                                %\EndFor
+                        %\EndFor
+                %\EndFor
+                %\State \Call{TrackBackJobs}{$N, CN, BB$}
+        %\EndFunction
+        %\\
+        %\Function{TrackBackJobs}{$i, c, w$}
+                %\If{$i > 0$}
+                        %\If{$c \geq cpu_i$ and $w \geq bb_i$}
+                                %\State $dp_1 = dp(i-1, c-cn_i, w-bb_i)+v_i$
+                                %\State $dp_2 = dp(i-1, c, w)$
+                                %\If{$dp_1 \geq dp_2$}
+                                        %\State $\mathcal{J} = \mathcal{J} \cup job_i$
+                                        %\State \Call{TrackBackJobs}{$i-1, c-cpu_i, w-bb_i$}
+                                %\Else
+                                        %\State \Call{TrackBackJobs}{$i-1, c, w$}
+                                %\EndIf
+                        %\Else
+                                %\State \Call{TrackBackJobs}{$i-1, c, w$}
+                        %\EndIf
+                %\EndIf
+        %\EndFunction
+%\end{algorithmic}
+%\end{algorithm}
 
 % \subsection{Cerberus Simulation}
 % \label{Sec:Simulation}
