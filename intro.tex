@@ -56,14 +56,13 @@
 
 %================XY====================
 The performance of supercomputers is no longer only throttled by computation capability,
-but also perceived I/O rate between
-numerous amount of compute nodes and 
+but also perceived I/O rate between numerous amount of compute nodes and 
 petabyte volume of storage equipments.
 The IO nodes reside between the compute nodes and external storage, 
 serving as IO gateways for the data communication. 
-They can deliver 810 GB/s IO performance for applications running on the early-stage Trinity system~\cite{TrinitySystem}, 
-but still far from the target of 60 TB/s
-for extra-scale computing platform\cite{Shalf:HPCCS:2010}.
+They can deliver 810 GB/s IO performance for applications
+running on the early-stage Trinity system~\cite{TrinitySystem}, 
+but still far from the target of 60 TB/s for extra-scale computing platform\cite{Shalf:HPCCS:2010}.
 %2. Challenge to current IO architecture and burst buffer come to resuce.
 The challenge roots in the missing gap in supercomputers' memory hierarchy.
 The IO rate ratio of memory to external storage 
@@ -87,36 +86,20 @@ bandwidth are significantly improved on the burst buffer enabled system.
 Given its usefulness, we expect user will explicitly request for
 this new resource upon job submission.
 
-%===============================================
 
 %4. Our work, a new batch scheduler
-% In this paper, we propose Cerberus\footnote{In Greek mythology,
-% Cerberus is a monstrous multi-headed dog (3-phase scheduling scheme),
-% who guards the gates of the underworld to earth (HPC system),
-% preventing the dead (jobs) from leaving (running).},
-% a novel batch scheduler for burst buffer enabled HPC systems. 
-% We propose a 3-phase model for user job 
-% based on two of the most important usage cases of burst buffer: 
-% application checkpoint restart and data pre-fetch/cache for stage in/out. 
-% The lifetime of user job is divided into \textit{stage in} phase, 
-% \textit{running} phase, and \textit{stage-out} phase. 
-% Unlike existing batch schedulers that 
-% make the one-off scheduling decision for a job upon its submission, 
-% Cerberus re-evaluates the job's requirement at each phase 
-% and makes the optimal scheduling decisions respectively.
-
-%=============XY=================
 In this paper, we propose Cerberus\footnote{In Greek mythology,
-Cerberus is a monstrous 3-headed dog,
-who guards the gates of the underworld. In this paper, we personify our 3-phase batch scheduler
-in the form of this mythological character.
-},
+Cerberus is a monstrous 3-headed dog (3-phase scheduler),
+who guards the gates of the underworld to earth (HPC system),
+preventing the dead (jobs) from leaving (running).},
 a novel batch scheduler for burst buffer enabled HPC systems. 
 We propose a 3-phase model for user job 
 based on the most important usage cases of burst buffer: 
 application checkpoint restart and staging in/out data. 
-The lifetime of user job is divided into \textit{stage in} phase, 
-\textit{running} phase, and \textit{stage-out} phase. 
+The lifetime of user job is divided into 3 ordered phases:
+\textit{stage in} phase, \textit{running} phase, and \textit{stage-out} phase.
+While only running phase requires compute nodes, burst buffer are used for different
+purpose in all three phases.
 Unlike existing batch schedulers that 
 make the one-off scheduling decision for a job upon its submission, 
 Cerberus re-evaluates the job's requirement at each phase 
