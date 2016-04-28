@@ -448,15 +448,15 @@ the performance of computational application by providing high perceived IO band
 However, traditional batch scheduler either barely knows BB's existence
 or cannot fully utilize them in practice.
 In this paper, we model the execution of typical scientific applications
-that generates tens of TBytes of data on super computer equipped with BB.
-We characterize generic applications to 3 phases:
-\textit{data stage-in}, \textit{running}, and \textit{data stage-out} phase.
+that generates tens of TBytes of data on supercomputer equipped with BB.
+We characterize the lifetime of generic applications into three phases:
+\textit{stage-in}, \textit{running}, and \textit{stage-out}.
 We develop a novel 3-phase BB aware batch scheduler \textit{Cerberus}
-managing resources in different phases separately.
-In both data stage input and output phase, Cerberus
+managing resources allocation in different phases.
+In both stage input and output phase, Cerberus
 allocates BB resources so that data transfer throughput
 between BB and external storage system is maximized.
-In the running phase, it maximizes the profit of scheduled tasks.
+\TODO{In the running phase, it maximizes the predefined profit of scheduled jobs.}
 Simulation results of Cerberus scheduling the
 BB-enabled supercomputer platform demonstrates that
 1) comparing to non-BB system, 
