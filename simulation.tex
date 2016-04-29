@@ -17,7 +17,9 @@
 
 We develop an event-driven simulator, named \textbf{BBSim},
 to simulate Cerberus scheduling jobs on the burst buffer enabled HPC system.
-Figure~\ref{Fig:JobFSM} illustrates the BBSim flow chart and the event-driven approach in the simulation.
+Aside from demonstrating the lifetime of a job scheduled by Cerberus, 
+Figure~\ref{Fig:JobFSM} also illustrates the various events in BBSim and how to handle
+them in a event-driven-simulation approach.
 The \textit{state} of the job changes depending on current status and
 happening \textit{events}, along with triggered \textit{action}.
 For example, when $job_i$ is submitted to the system, 
