@@ -28,14 +28,16 @@ needs to pre-fetch data from external storage to burst buffer.
 The running queue $Q_R$ holds jobs
 waiting for compute nodes and burst buffer used for checkpointing.
 Jobs waiting to drain out output data to external permanent storage are in output queue $Q_O$.
+The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that
+burst buffer fills in the memory gap between memory on compute nodes and disk storage.
 
 To see how Cerberus schedules a particular job with 3 queues,
 we have drawn a job's transition diagram in Figure~\ref{Fig:JobFSM}.
-Upon submission, the job is enqueued into $Q_I$ to wait for stage-in-purpose burst buffer($bb\_in$).
+Upon submission, the job is enqueued into $Q_I$ to wait for stage-in-purpose burst buffer ($bb\_in$).
 When selected by Cerberus, job will be removed from $Q_I$ and
 start to stage in data using allocated $bb\_in$.
 After finishing stage-in phase, the job is enqueued to $Q_R$, where it waits for
-compute nodes and \textit{new} burst buffer specific for checkpointing($bb\_run$).
+compute nodes and \textit{new} burst buffer specific for checkpointing ($bb\_run$).
 Notice that right now, $bb\_in$ is still hold by this job.
 At some time, Cerberus choose this job from $Q_R$.
 Now the job is in running phase.
@@ -45,7 +47,7 @@ are data exchanges between memory and burst buffer $bb\_run$.
 Once job execution finishes, $bb\_run$ can be immediately released since
 output data are still available on the compute nodes.
 Keeping holding these compute nodes, job enters $Q_O$ and waits for a certain amount of burst
-buffer $bb\_out$ for staging out its data.
+buffer for staging out its data ($bb\_out$).
 Upon job being chosen by Cerberus, its data first flow from main memory to burst buffer
 in the drain-out phase, after which all compute nodes can be released;
 then burst buffer nodes is responsible for transfer output data to external storage system.
@@ -54,6 +56,13 @@ and $bb\_out$ are returned to system.
 As indicated by Figure~\ref{Fig:JobFSM}, resource release at anytime will trigger Cerberus
 scheduling jobs in possible multiple queues.
 
+The 3-phase job model divides job to generic phases with specific resource demands.
+Cerberus conquers the scheduling problem in each phase.
+The finer scheduling granularity make it possible to fully utilize burst buffer for different purpose.
+The consequential divide-conquer approach provides a framework that various scheduling
+policy can be applied for each individual phase.
+Both as demonstration of this framework and enhancement to Cerberus,
+we propose and solve 2 optimizations targeting $Q_I/Q_O$ and $Q_R$ in Section~\ref{Sec:Opt}
 
 \subsection{Coordination Among Three Phases}
 The three phases of jobs, together with corresponding queues, are not entirely independent.
@@ -63,12 +72,13 @@ similarly, only when finishing running phase can a job waiting or entering stage
 This is reflected in the lifetime of a job's execution.
 
 Secondly, for any job,
-its requested burst buffer can only be used for 1 purpose.
+its burst buffer requested before entering a individual phase can only be used for a single purpose.
 For example, a running-phase job cannot hold its already taken burst buffer
 and use them to enter stage-out phase upon finishing running,
 no matter whether $bb\_run > bb\_out$ or $bb\_run < bb\_out$.
-In Cerberus, resource release must be done mandatorily as specified in section~\ref{Sec:Model},
-We believe frequent release provides more opportunities to make scheduler involved in each phase of the jobs.
+In Cerberus, resource release must be done mandatorily as specified in Figure~\ref{Fig:JobFSM},
+We believe frequent release provides more opportunities to make
+scheduler involve in each phase of scheduling the jobs.
 
 At last, it is possible that all 3 queues are not empty at the moment of scheduling.
 We choose a heuristic strategy to determine the scheduling order when
