@@ -1,6 +1,14 @@
 \section{BB Aware Job Model}
 \label{Sec:Model}
 
+\begin{figure}[htp]
+        \centering
+        \includegraphics[width=3.6in]{CerberusBBSystem}
+        \caption{Scheduling Workflow of Burst Buffer Aware Cerberus}
+        \label{Fig:CerberusQueues}
+\end{figure}
+
+
 % % \subsection{System Resources}
 % % The system contains resources like compute nodes, main memory, burst buffer,
 % % IO nodes and external storage.
@@ -45,14 +53,15 @@ correspondingly, batch scheduler make scheduling decision in each phase.
 
 %=============Xu======================
 \subsection{Three-Phase Job Model}
-With the help of burst buffer nodes,
-jobs can pre-fetch data from external storage before running.
+Applications can benefit from burst buffer in 3 major ways\cite{BBUseCase}.
+Before execution, job pre-fetch data from external storage to burst buffer.
 When jobs start running on compute nodes,
 they could burst the checkpoint data to burst buffer at high speed.
-Upton jobs completion, the output data can be staged out to burst buffer,
-then drained out to external storage for the purpose of earlier releasing of compute node.
-Therefore,
-the job lifetime is divided up to three different phases in our scheduling framework.
+Upon jobs completion, useful output data are staged out to burst buffer,
+for the purpose of earlier releasing of compute node.
+Therefore we divide the job lifetime into three different phases to
+fit in burst buffer's 3 usage cases,
+as shown in Figure~\ref{Fig:CerberusQueues}.
 
 \textbf{Stage-In}: After the job being submitted to the system,
          it needs to pre-fetch data, such as configuration files and input data,
