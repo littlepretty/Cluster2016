@@ -339,8 +339,8 @@
 
 \addtolength{\jot}{0.4em}
 
-\let\oldref\ref
-\renewcommand{\ref}[1]{(\oldref{#1})}
+
+\newcommand{\equref}[1]{(\ref{#1})}
 
 \begin{document}
 %

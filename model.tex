@@ -177,12 +177,12 @@ $bb\_out$ is released.
                 $bb\_in_i$ & burst buffer demand of $job_i$ at \textit{stage-in} phase \\
                 $bb\_run_i$ & burst buffer demand of $job_i$ at \textit{running} phase \\
                 $bb\_out_i$ & burst buffer demand of $job_i$ at \textit{stage-out} phase \\
-                % $rt_i$ & running time of $job_i$ \\
+                $rt_i$ & running time of $job_i$ recorded in log trace \\
                 $ert_i$ & estimated or expected running time of $job_i$ \\
-                $Q_I, Q_R, Q_O$ & queues for \textit{stage-in, running, stage-out} phase \\
-                $J_{Q_I}, J_{Q_R}, J_{Q_O}$ & set of jobs in corresponding queue \\
-                $\mathcal{J}_{Q_I}, \mathcal{J}_{Q_R}, \mathcal{J}_{Q_O}$ & selected jobs by Cerberus from corresponding queue\\
-                $p_i$ & profit of $job_i \in J_{Q_R}$ defined by Equation~\ref{Equ:GeneralProfit}\\
+                $Q_I, Q_R, Q_O$ & queues for \textit{stage-in, running, stage-out} phases \\
+                $J_{Q_I}, J_{Q_R}, J_{Q_O}$ & set of jobs in corresponding queues \\
+                $\mathcal{J}_{Q_I}, \mathcal{J}_{Q_R}, \mathcal{J}_{Q_O}$ & selected jobs from corresponding queues\\
+                $p_i$ & profit of $job_i \in J_{Q_R}$ \\
                 $dp(\cdot)$ & memo used in dynamic programming \\
                 \hline
         \end{tabular}
