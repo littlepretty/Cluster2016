@@ -1,11 +1,18 @@
 \section{Cerberus: BB Aware Batch Scheduler}
 \label{Sec:Scheduler}
 
-\begin{figure}[!htbp]
+\begin{figure}[htp]
         \centering
         \includegraphics[width=3.6in]{CerberusBBSystem}
         \caption{Scheduling Workflow of Burst Buffer Aware Cerberus}
         \label{Fig:CerberusQueues}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+        \includegraphics[width=3.6in]{3PhaseJobFSM}
+        \caption{Event-driven BBsim scheduling model}
+\label{Fig:JobFSM}
 \end{figure}
 
 \subsection{Scheduling Process}
@@ -33,26 +40,26 @@ burst buffer fills in the memory gap between memory on compute nodes and disk st
 
 To see how Cerberus schedules a particular job with 3 queues,
 we have drawn a job's transition diagram in Figure~\ref{Fig:JobFSM}.
-Upon submission, the job is enqueued into $Q_I$ to wait for stage-in-purpose burst buffer ($bb\_in$).
+Upon submission, the job is enqueued into $Q_I$ to wait for stage-in-purpose burst buffer ($BB_{in}$).
 When selected by Cerberus, job will be removed from $Q_I$ and
-start to stage in data using allocated $bb\_in$.
+start to stage in data using allocated $BB_{in}$.
 After finishing stage-in phase, the job is enqueued to $Q_R$, where it waits for
-compute nodes and \textit{new} burst buffer specific for checkpointing ($bb\_run$).
-Notice that right now, $bb\_in$ is still hold by this job.
+compute nodes and \textit{new} burst buffer specific for checkpointing ($BB_{run}$).
+Notice that right now, $BB_{in}$ is still hold by this job.
 At some time, Cerberus choose this job from $Q_R$.
 Now the job is in running phase.
-The first thing is to release $bb\_in$ after fetching in data to memory on the acquired compute nodes.
+The first thing is to release $BB_{in}$ after fetching in data to memory on the acquired compute nodes.
 During executing, checkpointing and application restart may happen frequently, which in essential
-are data exchanges between memory and burst buffer $bb\_run$.
-Once job execution finishes, $bb\_run$ can be immediately released since
+are data exchanges between memory and burst buffer $BB_{run}$.
+Once job execution finishes, $BB_{run}$ can be immediately released since
 output data are still available on the compute nodes.
 Keeping holding these compute nodes, job enters $Q_O$ and waits for a certain amount of burst
-buffer for staging out its data ($bb\_out$).
+buffer for staging out its data ($BB_{out}$).
 Upon job being chosen by Cerberus, its data first flow from main memory to burst buffer
 in the drain-out phase, after which all compute nodes can be released;
 then burst buffer nodes is responsible for transfer output data to external storage system.
 The lifetime of a job concludes when all useful data results are stored
-and $bb\_out$ are returned to system.
+and $BB_{out}$ are returned to system.
 As indicated by Figure~\ref{Fig:JobFSM}, resource release at anytime will trigger Cerberus
 scheduling jobs in possible multiple queues.
 
@@ -75,7 +82,7 @@ Secondly, for any job,
 its burst buffer requested before entering a individual phase can only be used for a single purpose.
 For example, a running-phase job cannot hold its already taken burst buffer
 and use them to enter stage-out phase upon finishing running,
-no matter whether $bb\_run > bb\_out$ or $bb\_run < bb\_out$.
+no matter whether holding burst buffer is enough to do so.
 In Cerberus, resource release must be done mandatorily as specified in Figure~\ref{Fig:JobFSM},
 We believe frequent release provides more opportunities to make
 scheduler involve in each phase of scheduling the jobs.
@@ -90,10 +97,4 @@ This greedy heuristic works well when the demand of jobs in $J_{Q_I}$ is low.
 However, it is possible to make jobs stacking up at the entry of the system.
 We plan to investigate more on this problem in the future.
 
-\begin{figure}[!htbp]
-\centering
-        \includegraphics[width=3.6in]{3PhaseJobFSM}
-        \caption{Event-driven BBsim scheduling model}
-\label{Fig:JobFSM}
-\end{figure}
 

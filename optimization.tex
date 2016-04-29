@@ -137,7 +137,7 @@ As an example, in this paper we measure the value of a job based on how efficien
         \label{Equ:DefValue}
 \end{equation}
 where efficiency is measured as the ratio of resource demand to expected running time.
-Specializing Problem 2 using \ref{Equ:DefValue} favors tasks that claim to take up resources with short duration.
+Specializing Problem 2 using \equref{Equ:DefValue} favors tasks that claim to take up resources with short duration.
 %\begin{align*}
         %& \max \sum_{i \in S}\frac{c_i}{ert_i} * \frac{bb\_run_i}{ert_i} \\
         %& s.t. \left\{
@@ -218,11 +218,11 @@ using the memorizations kept during dynamic programming.
 %The time complexity of Algorithm~\ref{Alg:MaxBB} is $O(n\times BB)$.
 %The time complexity of solving Algorithm~\ref{Alg:MaxCPU} is $O(n\times CN\times BB)$.
 For Problem 1, the recursive relationship is
-given by \ref{Equ:MaxTransferDataRecursion}.
-The recursion that solves Problem 2 is given by \ref{Equ:MaxProductRecursion}.
-Solving \ref{Equ:MaxTransferDataRecursion} and
+given by \equref{Equ:MaxTransferDataRecursion}.
+The recursion that solves Problem 2 is given by \equref{Equ:MaxProductRecursion}.
+Solving \equref{Equ:MaxTransferDataRecursion} and
 backtracking $\mathcal{J}_{Q_I}$ or $\mathcal{J}_{Q_O}$ in total takes time proportional to $n\times BB$.
-Similarly, solving \ref{Equ:MaxProductRecursion} and selecting $\mathcal{J}_{Q_R}$ using memo
+Similarly, solving \equref{Equ:MaxProductRecursion} and selecting $\mathcal{J}_{Q_R}$ using memo
 are $O(n\times CN\times BB)$.
 
 
