@@ -76,7 +76,7 @@ and the needs of subsequent data processing.
 
 
 %3. Very high level intro to burst buffer
-Burst Buffer, an innovative cache tier utilizing SSD and in-memory flash, 
+Burst Buffer, an innovative cache tier utilizing solid-state disks and in-memory flash, 
 bridges the gap between computational resources and external storage.
 This new cache tier is capable of absorbing and spreading out 
 the ``bursty" application I/O pattern\cite{Bent:HBP:2011, Grider:EXA:2010}.
@@ -96,7 +96,7 @@ We propose a 3-phase model for user job
 based on the most important usage cases of burst buffer: 
 application checkpoint restart and staging in/out data. 
 The lifetime of a user job is divided into three ordered phases:
-\textit{stage in} phase, \textit{running} phase, and \textit{stage-out} phase.
+\textit{stage in}, \textit{running}, and \textit{stage-out}.
 While only running phase requires compute nodes, burst buffer are used for different
 purpose in all three phases.
 Unlike existing batch schedulers that 
@@ -137,6 +137,7 @@ system throughput also gets boosted.
 %                 %It help us simulate and compare the scheduling results of
 %                 %Trinity, a systems with both traditional IO nodes and burst buffer nodes.
 % \end{enumerate}
+
 %===========XY==========
 Our contributions in this paper are summarized as follows:
 \begin{enumerate}
@@ -161,7 +162,7 @@ Our contributions in this paper are summarized as follows:
 \end{enumerate}
 
 
-In the reminder of this paper,
+In the remainder of this paper,
 the next section talks about the status quo of burst buffer and
 the motivation of our work.
 Section~\ref{Sec:Model} begins elaborating the 3-phase model,
@@ -169,7 +170,7 @@ after which Cerberus is introduced.
 Core events in simulating Cerberus and execution logic of BBSim are
 briefly discussed in Section~\ref{Sec:Simulation}.
 The details of formulating and solving scheduling problems with
-dynamic programming at each job phase are enumerated in Section~\ref{Sec:Scheduler}.
+dynamic programming at each phase are enumerated in Section~\ref{Sec:Scheduler}.
 We validate Cerberus by simulating the burst buffer enabled
 Trinity supercomputing platform on BBSim (Section~\ref{Sec:Experiments}).
 Related works are discussed in Section~\ref{Sec:RelatedWorks}.
