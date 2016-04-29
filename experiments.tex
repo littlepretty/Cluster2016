@@ -74,9 +74,9 @@ which are globally accessible as intermediate storage.
 Sequential read/write speed of burst buffer nodes is 8.0 GBps.
 Bandwidth between CPU node and IO node is set to 2.5 GBps.
 
-\begin{figure}[!t]
+\begin{figure}[htp]
         \centering
-        \includegraphics[width= 3.5in]{BBArchitecturewithBandwidth}
+        \includegraphics[width=3.5in]{BBArchitecturewithBandwidth}
         \caption{Overview of Simulated System: A Burst Buffer Enabled Supercomputer Inspired by Trinity}
         \label{Fig:BBArchitecture}
 \end{figure}
@@ -225,7 +225,7 @@ it accomplishes the same workload in 376,443 seconds, and waiting time and respo
 are significantly reduced, 272,741 and 376,026 seconds respectively.
 
 
-\begin{figure*}[!t]
+\begin{figure*}[htp]
         \centering
         \subfloat[Job Response Time] {
                 \includegraphics[width=2.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_response}
@@ -448,7 +448,7 @@ the necessity that user provides data capacity demand for each phase.
 
 
 
-\begin{figure*}[!t]
+\begin{figure*}[htp]
         \centering
         \subfloat[Job Response Time] {
                 \includegraphics[width=2.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_response}
@@ -482,7 +482,7 @@ the necessity that user provides data capacity demand for each phase.
         %\label{Fig:3Pvs1PThroughput}
 %\end{figure}
 
-\begin{figure*}[!t]
+\begin{figure*}[htp]
         \centering
         \subfloat[Job Response Time] {
                 \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_response}
@@ -535,9 +535,9 @@ In this section we answer question \textbf{Q3} by showing that
 adopting optimizations in each scheduling phase brings further improvement,
 comparing with the naive first come first server (FCFS) policy adopted in previous experiments.
 Specifically, in the stage-in and stage-out phase, Cerberus schedules jobs in $Q_I$ and $Q_O$
-according to solution given by \ref{Equ:MaxTransferDataRecursion};
+according to solution given by \equref{Equ:MaxTransferDataRecursion};
 for jobs in $Q_R$, Cerberus makes scheduling decision
-based on the solution given by \ref{Equ:MaxProductRecursion}. %Algorithm~\ref{Alg:MaxCPU}.
+based on the solution given by \equref{Equ:MaxProductRecursion}. %Algorithm~\ref{Alg:MaxCPU}.
 We denote Cerberus coupled with two scheduling methodologies 
 as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus} respectively.
 
@@ -565,7 +565,7 @@ large number of cores but request less running time and larger amount of burst b
 For example, job \#434 requests 10240 compute nodes
 but its expected running time is mere 3600 seconds;
 in addition, it also requests 59 TB burst buffer.
-As a result, Cerberus, according to \ref{Equ:MaxProductRecursion},
+As a result, Cerberus, according to \equref{Equ:MaxProductRecursion},
 favors the jobs with less request time but larger burst buffer demand.
 This is interesting because it is a potential flaws in the optimization-based policy:
 given the user knows the optimization objective of our scheduler,
