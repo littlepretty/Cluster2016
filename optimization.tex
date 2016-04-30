@@ -66,6 +66,7 @@ We denote the set of jobs that achieve the maximum data transfer throughput as
 $\mathcal{J} = \{x_i|x_i = 1, \text{ } \forall i \in J_{Q_I}\}$.
 
 
+
 % \subsection{Optimize Running Phase}
 % Running jobs require not only compute nodes, but burst buffer to ensure performance and correctness.
 % Scheduling are accordingly made based on the value of $c$ and $bb\_run$ of jobs in $Q_R$.
@@ -107,7 +108,7 @@ $\mathcal{J} = \{x_i|x_i = 1, \text{ } \forall i \in J_{Q_I}\}$.
 \subsection{Scheduling Optimization in Running Phase}
 Running jobs require not only compute nodes, but also like to utilize burst buffer to enhance performance.
 Here we take a general strategy by defining the \textbf{profit} of $job_i$
-in $Q_R$ as it is using $c$ compute nodes and $bb\_run$ amount of burst buffer
+in $Q_R$ as it is using $c_i$ compute nodes and $bb\_run_i$ amount of burst buffer
 \begin{equation}
         p_i = f(c_i, bb\_run_i, ert_i)
 \label{Equ:GeneralProfit}
@@ -156,7 +157,7 @@ Specializing Problem 2 using \equref{Equ:DefValue} in fact favors tasks that cla
 
 Stage-out phase scheduling are made based on the value of $bb\_out$ of jobs in $Q_O$.
 Optimization formula for stage-out phase are almost the same as
-Problem 1, except that $bb\_in$ is replaced with $bb\_out$,
+Problem 1, except that $bb\_in_i$ is replaced with $bb\_out_i$,
 $J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
 
 
