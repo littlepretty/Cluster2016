@@ -8,7 +8,7 @@
 \label{Fig:JobFSM}
 \end{figure}
 
-\subsection{Scheduling Process}
+\subsection{Scheduling Three-Phase Jobs}
 
 The traditional batch scheduler on system without burst buffer only
 takes job size (required number of nodes) and expected runtime into scheduling decision making. 
@@ -41,7 +41,7 @@ compute nodes and \textit{new} burst buffer specific for checkpointing ($BB_{run
 Notice that right now, $BB_{in}$ is still hold by this job.
 At some time, Cerberus choose this job from $Q_R$.
 Now the job is in running phase.
-The first thing is to release $BB_{in}$ after fetching in data to memory on the acquired compute nodes.
+The first thing is to release $BB_{in}$ after \textbf{fetching in} data to memory on the acquired compute nodes.
 During executing, checkpointing and application restart may happen frequently, which in essential
 are data exchanges between memory and burst buffer $BB_{run}$.
 Once job execution finishes, $BB_{run}$ can be immediately released since
@@ -49,9 +49,9 @@ output data are still available on the compute nodes.
 Keeping holding these compute nodes, job enters $Q_O$ and waits for a certain amount of burst
 buffer for staging out its data ($BB_{out}$).
 Upon job being chosen by Cerberus, its data first flow from main memory to burst buffer
-in the drain-out phase, after which all compute nodes can be released;
+in the \textbf{drain-out} phase, after which all compute nodes can be released;
 then burst buffer nodes is responsible for transfer output data to external storage system.
-The lifetime of a job concludes when all useful data results are stored
+The lifetime of a job concludes when all useful data results are staged out
 and $BB_{out}$ are returned to system.
 As indicated by Figure~\ref{Fig:JobFSM}, resource release at anytime will trigger Cerberus
 scheduling jobs in possible multiple queues.

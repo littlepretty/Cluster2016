@@ -156,22 +156,22 @@ as job's burst buffer demand in the whole lifetime.
 % when \textit{stage-out} phase, as well as the entire lifetime of job, concludes.
 
 
-%==========XY=====================
-The resource releasing for the 3-phase modeled jobs is nontrivial. 
-For a job at \textit{stage-in} phase, compute nodes is not allocated to it yet. 
-The job can stage in data from external storage to burst buffer without the involvement of compute nodes.
-When scheduler allocates compute nodes to the job, the job enters the \textit{running} phase 
-and starts to read the pre-fetched data from burst buffer into the main memory, 
-$bb\_in$ will be released after all the data are moved into main memory. 
-When the job finishes computation and exits \textit{running} phase, 
-$bb\_run$ are released while compute nodes are still hold by the job. 
-The compute nodes will be released after all the output data are moved into $bb\_out$ from main memory.
-The job at \textit{stage-out} phase only holds $bb\_out$ burst buffer. 
-Once all the output data are drained out to the external storage,  
-$bb\_out$ is released.
+
+%The resource releasing for the 3-phase modeled jobs is nontrivial. 
+%For a job at \textit{stage-in} phase, compute nodes is not allocated to it yet. 
+%The job can stage in data from external storage to burst buffer without the involvement of compute nodes.
+%When scheduler allocates compute nodes to the job, the job enters the \textit{running} phase 
+%and starts to read the pre-fetched data from burst buffer into the main memory, 
+%$bb\_in$ will be released after all the data are moved into main memory. 
+%When the job finishes computation and exits \textit{running} phase, 
+%$bb\_run$ are released while compute nodes are still hold by the job. 
+%The compute nodes will be released after all the output data are moved into $bb\_out$ from main memory.
+%The job at \textit{stage-out} phase only holds $bb\_out$ burst buffer. 
+%Once all the output data are drained out to the external storage,  
+%$bb\_out$ is released.
 
 
-\begin{table}[!htbp] 
+\begin{table}[ht] 
         \renewcommand{\arraystretch}{1.3}
         \caption{Summary of Symbols}
         \label{Tab:Symbols}

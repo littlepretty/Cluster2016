@@ -30,8 +30,10 @@
 
 Cerberus can be further enhanced with different optimizations when making scheduling decision
 for jobs waiting in each queue.
+This section defines two types of optimization problems used for scheduling jobs in one of its 3 phases,
+both of which are solved by dynamic programming.
 
-\subsection{Scheduling Optimization in Stage-In/Out Phase}
+\subsection{Scheduling Optimization in Stage-In Phase}
 
 In the stage-in phase, jobs require only for burst buffer.
 Cerberus schedule jobs in $Q_I$ based on their burst buffer demand $bb\_in$.
@@ -58,14 +60,10 @@ one can schedule jobs according to the following optimization:
         %%\right.
 %\end{align*}
 where $J_{Q_I}$ stands for all jobs in input queue,
-$\mathcal{J} = \{x_i|x_i = 1, \text{ } \forall i \in J_{Q_I}\}$ is the set of jobs selected by Cerberus,
-$bb\_in_i$ is the burst buffer demand of job $job_i$,
-$BB_{available}$ is system's currently available amount of burst buffer.
-
-Stage-out phase scheduling are made based on the value of $bb\_out$ of jobs in $Q_O$.
-Optimization formula for stage-out phase are almost the same as
-Problem 1, except that $bb\_in$ is replaced with $bb\_out$,
-$J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
+$bb\_in_i$ is the burst buffer demand of $job_i$,
+$BB_{available}$ is system's currently available capacity of burst buffer.
+We denote the set of jobs that achieve the maximum data transfer throughput as
+$\mathcal{J} = \{x_i|x_i = 1, \text{ } \forall i \in J_{Q_I}\}$.
 
 
 % \subsection{Optimize Running Phase}
@@ -107,15 +105,17 @@ $J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
 
 
 \subsection{Scheduling Optimization in Running Phase}
-Running jobs require not only compute nodes, but also likes to utilize burst buffer to enhance performance.
-Here we take a more general strategy.
-We define the \textbf{profit} of $job_i$ in $Q_R$ as it is using $c$ compute nodes and $bb\_run$ amount of BB
+Running jobs require not only compute nodes, but also like to utilize burst buffer to enhance performance.
+Here we take a general strategy by defining the \textbf{profit} of $job_i$
+in $Q_R$ as it is using $c$ compute nodes and $bb\_run$ amount of burst buffer
 \begin{equation}
         p_i = f(c_i, bb\_run_i, ert_i)
 \label{Equ:GeneralProfit}
 \end{equation}
 where $ert_i$ is the expected running time of $job_i$.
-Then the objective is to maximize the total profit of jobs in running queue, formularized as
+
+Similar to 0-1 knapsack problem, the objective is to maximize the total profit
+of jobs in running queue, formularized as
 \begin{align*}
         \mathbf{Problem} & \text{ } \mathbf{2} \\
         \max &\sum_{i \in J_{Q_R}} p_i \cdot x_i \\
@@ -128,16 +128,19 @@ Then the objective is to maximize the total profit of jobs in running queue, for
         \right.
 \end{align*}
 where $J_{Q_R}$ is the set of jobs in running queue,
-$\mathcal{J}  = \{x_i|x_i=1, \text{ } \forall i \in J_{Q_R}\}$ stands for jobs selected by scheduler,
 $CN_{available}$ and $BB_{available}$ represent the amount of system's currently available resources.
+We denote the set of jobs who gives the maximum profit as
+$\mathcal{J}  = \{x_i|x_i=1, \text{ } \forall i \in J_{Q_R}\}$.
 
 As an example, in this paper we measure the value of a job based on how efficient it utilize its resource:
 \begin{equation}
         p_i = \frac{c_i / CN}{ert_i} \times \frac{bb\_run_i / BB}{ert_i}
         \label{Equ:DefValue}
 \end{equation}
-where efficiency is measured as the ratio of resource demand to expected running time.
-Specializing Problem 2 using \equref{Equ:DefValue} favors tasks that claim to take up resources with short duration.
+Here, efficiency is measured as the ratio of job's resource demand size to its expected running time,
+where the share of requested compute nodes ($c_i/CN$) and burst buffer ($bb\_run/BB$) are used to
+represent demand size.
+Specializing Problem 2 using \equref{Equ:DefValue} in fact favors tasks that claim to take up resources with short duration, as we shall see in Section~\ref{Sec:Experiments}.
 %\begin{align*}
         %& \max \sum_{i \in S}\frac{c_i}{ert_i} * \frac{bb\_run_i}{ert_i} \\
         %& s.t. \left\{
@@ -149,6 +152,12 @@ Specializing Problem 2 using \equref{Equ:DefValue} favors tasks that claim to ta
         %\right.
 %\end{align*}
 
+\subsection{Scheduling Optimization in Stage-Out Phase}
+
+Stage-out phase scheduling are made based on the value of $bb\_out$ of jobs in $Q_O$.
+Optimization formula for stage-out phase are almost the same as
+Problem 1, except that $bb\_in$ is replaced with $bb\_out$,
+$J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
 
 
 \subsection{Solving the Optimization Problems}
