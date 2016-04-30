@@ -17,6 +17,8 @@
 
 We develop an event-driven simulator, named \textbf{BBSim},
 to simulate Cerberus scheduling jobs on the burst buffer enabled HPC system.
+Codebase of BBsim and Cerberus are public to the community
+\footnote{Available at https://github.com/urlplaceholder}.
 Aside from demonstrating the lifetime of a job scheduled by Cerberus, 
 Figure~\ref{Fig:JobFSM} also illustrates the various events in BBSim and how to handle
 them in a event-driven-simulation approach.
@@ -27,7 +29,6 @@ it enters \textit{Waiting Stage-in} state,
 waiting to be scheduled in job queue $Q_I$. 
 The scheduler checks $job_i$'s resource demand and 
 dispatches it to run when enough resources become available.
-
 
 % Whenever job enters one of its 3 phases, system resources are allocated:
 % \begin{itemize}

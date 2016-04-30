@@ -17,17 +17,13 @@
 %==============XY===================
 This section evaluate Cerberus by answering 3 key questions.
 \begin{itemize}
-        \item \textbf{Q1}: Will utilizing burst buffer nodes 
-        improve both jobs and system performance?
-        \item \textbf{Q2}: Will job demand on burst buffer affect Cerberus?
-                Why bother to divide the job execution into 3 phases?
+        \item \textbf{Q1}: Does the use of burst buffer 
+                improve both system and job performance?
+        \item \textbf{Q2}: What is the benefit of using three phase scheduling? 
         \item \textbf{Q3}: Can dynamic programming based optimization
                 makes Cerberus even better?
 \end{itemize}
-We integrate Cerberus into our newly developed event-driven simulator, 
-BBSim, and evaluate Cerberus against the traditional FCFS/EASY backfilling scheduler.
-Codebase of BBsim and Cerberus are public to the community
-\footnote{Available at https://github.com/urlplaceholder}.
+
 % metric
 
 % We select two evaluation metrics, job's \textit{response time} and 
@@ -507,7 +503,7 @@ the necessity that user provides data capacity demand for each phase.
         %\label{Fig:DPvsFIFOThroughput}
 %\end{figure}
 
-\subsection{Optimized Cerberus v.s. FCFS Cerberus}
+\subsection{Optimization v.s. FCFS}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 %dynamic programming based job scheduler can further reduce jobs' wait time.
 %We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
