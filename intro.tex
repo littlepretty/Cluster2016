@@ -58,12 +58,15 @@
 The performance of supercomputers is no longer throttled only by computation capability,
 but also the ever-increasing I/O gap 
 between computational resources and disk-based storage technologies. 
-The I/O nodes reside between the compute nodes and external storage, 
-serving as I/O gateways, 
-can deliver 810 GB/s aggregated I/O bandwidth for applications
-running on the early-stage Trinity system~\cite{TrinitySystem}, 
-but still far from the target of 60 TB/s for 
-extra-scale computing platform\cite{Shalf:HPCCS:2010}.
+% The I/O nodes reside between the compute nodes and external storage, 
+% serving as I/O gateways, 
+% can deliver 810 GB/s aggregated I/O bandwidth for applications
+% running on the early-stage Trinity system~\cite{TrinitySystem}, 
+% but still far from the target of 60 TB/s for 
+% extra-scale computing platform\cite{Shalf:HPCCS:2010}.
+For example, on the early-state Trinity system~\cite{TrinitySystem}, the I/O nodes between 
+the compute nodes and external storage can deliver data at  the speed of 810 GB/s, 
+which is still far from the target of 60 TB/s for extra-scale computing platform\cite{Shalf:HPCCS:2010}.
 %2. Challenge to current IO architecture and burst buffer come to resuce.
 % The challenge roots in the missing gap in supercomputers' memory hierarchy.
 % The IO rate ratio of memory to external storage 
@@ -73,13 +76,20 @@ Such a gap makes difference because scientific applications are exposed to
 resulting from application's
 defensive I/O strategy\cite{Latham:CSD:2012, Naik:ICPPW:2009, Dennis:CUG:2009}
 and the needs of subsequent data processing.
+When multiple applications try to access the storage system simultaneously, 
+the I/O bandwidth is very likely to be saturated and then severe performance degradation incurs.
 
 
 %3. Very high level intro to burst buffer
+There have been various research on the topic of improving I/O performance on HPC systems from
+both hardware and software layers.
+Recent years have witnessed a tremendously growing popularity grained by flash memory  based storage.
 Burst Buffer, an innovative cache tier utilizing solid-state disks and in-memory flash, 
-bridges the gap between computational resources and external storage.
-This new cache tier is capable of absorbing and spreading out 
+is developed to bridge the gap between computational resources and external storage.
+This new storage component works as a cache tier to absorb and spread out the  
 the ``bursty" application I/O pattern\cite{Bent:HBP:2011, Grider:EXA:2010}.
+% This new cache tier is capable of absorbing and spreading out 
+% the ``bursty" application I/O pattern\cite{Bent:HBP:2011, Grider:EXA:2010}.
 Researchers\cite{Liu:MSST:2012} have demonstrated that the perceived applications I/O
 bandwidth are significantly improved on the burst buffer enabled system.
 Due to the benefit of utilizing burst buffer,
@@ -92,22 +102,24 @@ Cerberus is a monstrous 3-headed dog (3-phase scheduler),
 who guards the gates of the underworld to earth (HPC system),
 preventing the dead (jobs) from leaving (running).},
 a novel batch scheduler for burst buffer enabled HPC systems. 
-We propose a 3-phase model for user job 
+We propose a 3-phase model for user jobs
 based on the most important usage cases of burst buffer: 
 application checkpoint restart and staging in/out data. 
-The lifetime of a user job is divided into three ordered phases:
+The lifetime of a user job is typically divided into three ordered phases:
 \textit{stage in}, \textit{running}, and \textit{stage-out}.
-While only running phase requires compute nodes, burst buffer are used for different
+While only the running phase requires compute nodes, burst buffer are used for different
 purpose in all three phases.
 Unlike existing batch schedulers that 
 make the scheduling decision only once for each job upon its submission, 
-Cerberus re-evaluates the job's requirement at each phase 
-and makes the optimal scheduling decisions respectively.
+Cerberus participates in all three phases and makes the most optimal
+scheduling decision at each phase respectively based on the evaluation of the job's requirement.
+% Cerberus re-evaluates the job's requirement at each phase 
+% and makes the optimal scheduling decisions respectively.
 
 %5. The advantage of Cerberus.
 Both the system and user jobs can benefit from Cerberus 3-phase scheduling.
 System responsiveness can be greatly improved and
-user jobs suffer less wait time. 
+user jobs can expect less wait time. 
 The resources become highly available as the allocation and deallocation of
 both burst buffer and compute nodes are performed in fine granularity. 
 % The burst buffer and compute nodes will be released immediately
