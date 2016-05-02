@@ -56,15 +56,15 @@
 
 %================XY====================
 The performance of supercomputers is no longer throttled only by computation capability,
-but also the ever-increasing I/O gap 
-between computational resources and disk-based storage technologies. 
+but also the ever-increasing I/O gap
+between computational resources and disk-based storage technologies.
 % The I/O nodes reside between the compute nodes and external storage, 
 % serving as I/O gateways, 
 % can deliver 810 GB/s aggregated I/O bandwidth for applications
 % running on the early-stage Trinity system~\cite{TrinitySystem}, 
 % but still far from the target of 60 TB/s for 
 % extra-scale computing platform\cite{Shalf:HPCCS:2010}.
-For example, on the early-state Trinity system~\cite{TrinitySystem}, the I/O nodes between 
+For example, on the early-state Trinity system~\cite{TrinitySystem}, the I/O nodes between
 the compute nodes and external storage can deliver data at  the speed of 810 GB/s, 
 which is still far from the target of 60 TB/s for extra-scale computing platform\cite{Shalf:HPCCS:2010}.
 %2. Challenge to current IO architecture and burst buffer come to resuce.
@@ -76,7 +76,7 @@ Such a gap makes difference because scientific applications are exposed to
 resulting from application's
 defensive I/O strategy\cite{Latham:CSD:2012, Naik:ICPPW:2009, Dennis:CUG:2009}
 and the needs of subsequent data processing.
-When multiple applications try to access the storage system simultaneously, 
+When multiple applications try to access the storage system simultaneously,
 the I/O bandwidth is very likely to be saturated and then severe performance degradation incurs.
 
 
@@ -86,7 +86,7 @@ both hardware and software layers.
 Recent years have witnessed a tremendously growing popularity grained by flash memory  based storage.
 Burst Buffer, an innovative cache tier utilizing solid-state disks and in-memory flash, 
 is developed to bridge the gap between computational resources and external storage.
-This new storage component works as a cache tier to absorb and spread out the  
+This new storage component works as a cache tier to absorb and spread out
 the ``bursty" application I/O pattern\cite{Bent:HBP:2011, Grider:EXA:2010}.
 % This new cache tier is capable of absorbing and spreading out 
 % the ``bursty" application I/O pattern\cite{Bent:HBP:2011, Grider:EXA:2010}.
@@ -118,8 +118,8 @@ scheduling decision at each phase respectively based on the evaluation of the jo
 
 %5. The advantage of Cerberus.
 Both the system and user jobs can benefit from Cerberus 3-phase scheduling.
-System responsiveness can be greatly improved and
-user jobs can expect less wait time. 
+System responsiveness can be greatly improved in that
+user jobs expect less wait time. 
 The resources become highly available as the allocation and deallocation of
 both burst buffer and compute nodes are performed in fine granularity. 
 % The burst buffer and compute nodes will be released immediately
