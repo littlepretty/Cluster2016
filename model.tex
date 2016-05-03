@@ -20,15 +20,16 @@
 % % BB are able to be shared by applications with any fractional amount.
 
 %============XY==========
-When users submit their jobs to burst-buffer-enabled systems, they can specify the 
+When users submit their jobs to burst-buffer-enabled systems, they can specify the
 demand of compute nodes and burst buffer and the expected running time for each job.
-The batch scheduler makes scheduling decisions for each job based on its demand while attempting to 
-minimize the overall job response time and maximize the system throughput. 
+The batch scheduler makes scheduling decisions for each job based on its demand while attempting to
+minimize the overall job response time and maximize the system throughput.
 However, jobs requiring more than one resource could result in possible deadlocks and starvation.
 In order to improve the overall resource utilization and the system responsiveness, we propose
-a fine granularity job model based on the possible use cases of burst buffer.  
+a fine granularity job model based on the possible use cases of burst buffer.
 In our scheduling framework, the system resources include compute nodes and burst buffer.
-The job resource demand varies in different execution phases; Correspondingly, the batch scheduler makes scheduling decisions in each phase.
+The job resource demand varies in different execution phases;
+Correspondingly, the batch scheduler makes scheduling decisions in each phase.
 
 
 % Users request the system to run their applications as jobs.
@@ -108,23 +109,23 @@ fit in the three use cases of burst buffer, as shown in Figure~\ref{Fig:Cerberus
 % \textit{1-phase modeled jobs} thereafter.
 
 %=========XY===============
-Jobs are submitted to the system with the specified resource demand. 
-Each job is associated with a demand vector in the form of $(c, ert)$, 
+Jobs are submitted to the system with the specified resource demand.
+Each job is associated with a demand vector in the form of $(c, ert)$,
 where $c$ is the number of needed compute nodes in the running phase,
-$ert$ is the expected runtime. 
+$ert$ is the expected runtime.
 In a burst-buffer-enabled system, the demand vector should be augmented
 with fields defining user's requests on the burst buffer capacity.
 We consider two possible ways that users provide the burst buffer demand.
 For the users with accurate speculation about their job's burst buffer demand in each phase,
 they may provide a \textit{burst buffer triple} in the form of $(bb\_in, bb\_run, bb\_out)$,
 where $bb\_in$ is the volume of burst buffer for staging in data files,
-$bb\_run$ is for checkpointing during the execution, and 
+$bb\_run$ is for checkpointing during the execution, and
 $bb\_out$ is for staging out the output data.
 % A job that providing demand vector augmented with
 % burst buffer triple is called a \textit{3-phase modeled job}.
 We will show the benefits of providing the job burst buffer demand in the form of \textit{burst buffer triple} in the next section.
-Alternatively, a user may just use the $\max\{bb\_in, bb\_run, bb\_out\}$ 
-as the job's burst buffer demand in the whole lifetime. 
+Alternatively, a user may just use the $\max\{bb\_in, bb\_run, bb\_out\}$
+as the job's burst buffer demand in the whole lifetime.
 % We refer this augmentation as
 % \textit{1-phase modeled jobs} thereafter.
 
