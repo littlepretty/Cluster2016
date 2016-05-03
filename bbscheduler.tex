@@ -443,23 +443,23 @@ Email: \{dong.jin, lan\}@iit.edu
 %2) our 3-phase model and dynamic programming solutions further
 %improve burst buffer equipped system.
 
-Burst buffer (BB) drastically improves the performance of computational applications by providing high perceived IO bandwidth.
-However, traditional batch schedulers have not embraced the full potential of BB technology in practice. 
+Burst buffer drastically improves the performance of computational applications by providing high perceived IO bandwidth.
+However, traditional batch schedulers have not embraced the full potential of burst buffer technology in practice. 
 %either barely knows BB's existence or cannot fully utilize them in practice.
 In this paper, we model the execution of typical scientific applications
 that generate tens of TB of data on a supercomputer equipped with BB.
 We characterize the lifetime of generic applications into three phases:
 \textit{stage-in}, \textit{running}, and \textit{stage-out}.
-We develop a novel 3-phase BB aware batch scheduler \textit{Cerberus} to 
+We develop a novel burst-buffer-aware batch scheduler \textit{Cerberus} to 
 manage resource allocation in different phases.
 In both stage-in and stage-out phases, Cerberus
-allocates the BB resources to achieve the maximum data transfer throughput
-between BB and the external storage system.
+allocates the burst buffer resources to achieve the maximum data transfer throughput
+between burst buffer and the external storage system.
 In the running phase, Cerberus maximizes the predefined profit of the scheduled jobs.
 The simulation results %of Cerberus scheduling the BB-enabled supercomputer platform 
 demonstrate that
-1) compared to non-BB systems, Cerberus accelerates the execution pipeline of all tasks and reduces the response time of 99\% jobs;
-2) on BB-enabled systems, the 3-phase Cerberus and the BB oriented optimization increase the average system throughput by 62.31\%.
+1) compared to non-burst-buffer systems, Cerberus accelerates the execution pipeline of all tasks and reduces the response time of 99\% jobs;
+2) on burst-buffer-enabled systems, the three-phase Cerberus and the burst buffer oriented optimization increase the average system throughput by 62.31\%.
 \end{abstract}
 
 % no keywords
