@@ -78,7 +78,7 @@ resulting from application's
 defensive I/O strategy\cite{Latham:CSD:2012, Naik:ICPPW:2009, Dennis:CUG:2009}
 and the needs of subsequent data processing.
 When multiple applications attempt to access the storage system simultaneously,
-the I/O bandwidth is very likely to be saturated leading to severe performance degradation.
+the I/O bandwidth is very likely to be saturated, leading to severe performance degradation.
 
 
 %3. Very high level intro to burst buffer
@@ -94,7 +94,7 @@ the ``bursty" application I/O pattern\cite{Bent:HBP:2011, Grider:EXA:2010}.
 Researchers\cite{Liu:MSST:2012} have demonstrated that the perceived application I/O
 bandwidth is significantly improved on the burst buffer enabled system.
 %Because of the benefits of utilizing burst buffer,
-Users are also encouraged to explicitly request BB resources to achieve high application performance on burst buffer enabled systems \cite{apex-workflow}.
+Users are also encouraged to explicitly request BB resources to achieve high application performance on burst buffer enabled systems\cite{apex-workflow}.
 
 %4. Our work, a new batch scheduler
 In this paper, we propose Cerberus\footnote{In Greek mythology,
@@ -118,8 +118,7 @@ scheduling decision at each phase based on the evaluation of the job's requireme
 
 %5. The advantage of Cerberus.
 Both the system and user jobs can benefit from the Cerberus 3-phase scheduling.
-System responsiveness can be greatly improved in that
-user jobs expect less wait time (\textbf{consider revise this sentence}). 
+System responsiveness is greatly improved as Cerberus reduces the waiting time of most of the user jobs.
 The resources become highly available as the allocation and deallocation of
 both burst buffer and compute nodes are performed in fine granularity. 
 % The burst buffer and compute nodes will be released immediately
@@ -167,7 +166,7 @@ Our contributions are summarized as follows:
                 in practice.
         \item   We develop BBSim, an event-driven simulator for scheduling
                 burst buffer enabled HPC systems.
-                BBSim is motivated by simulating Cerberus and scheduling 
+                BBSim is motivated by simulating Cerberus and scheduling
                 3-phase modeled jobs with burst buffer requirement,
                 it also supports various types of batch schedulers.
 \end{enumerate}

@@ -17,9 +17,8 @@
 % % For example, they may be deployed at local computer nodes, board in cabinet or IO nodes.
 % % We may also use burst buffer as intermediate storage system.
 
-%==========XY===========
 %1. The appear of burst buffer
-Burst buffer enabled I/O architecture can help to alleviate
+Burst buffer enabled I/O architecture can help alleviate
 the ever-increasing I/O pressure on HPC systems.
 Burst buffer nodes debut as a rescue by utilizing various new storage technologies,
 such as non-volatile random-access memory (NVRAM) and solid state drive (SSD).
@@ -122,7 +121,7 @@ the allocation of these precious I/O resources.
 This naturally falls into the responsibility of the batch scheduler.
 Unfortunately, existing schedulers
 either have not yet been aware to burst buffer\cite{Moab, Cobalt}
-or just use straight forward allocation policy, such as first-come first-served\cite{SlurmBBGuide}.
+or just use straightforward allocation policy, such as first-come first-served\cite{SlurmBBGuide}.
 This paper tries to bridge two isolated fields of HPC architecture,
 the novel burst buffer equipped HPC IO subsystem and
 traditional batch job queueing subsystem.
