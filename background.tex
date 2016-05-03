@@ -23,15 +23,15 @@ the ever-increasing I/O pressure on HPC systems.
 Burst buffer nodes debut as a rescue by utilizing various new storage technologies,
 such as non-volatile random-access memory (NVRAM) and solid state drive (SSD).
 In practice, burst buffer suits up with DataWarp I/O accelerator\cite{DataWarp}.
-Figure \ref{Fig:BBArchitecture} illustrates one possible burst buffer enabled architecture,
+Figure \ref{Fig:BBArchitecture} illustrates one burst-buffer-enabled architecture,
 adopted by the Trinity System\cite{TrinitySystem}.
 %The volume of data read/write may affect the architecture model of burst buffer.
 In Trinity, the burst buffer node is composed of one I/O node and 2 PCIe SSD cards,
 connected via 16 PCIe 3.0 interfaces.
-Alternatively, many researchers proposed to distribute burst buffer 
+Alternatively, many researchers have proposed to distribute burst buffer 
 on multiple layers of the memory hierarchy\cite{Romanus:CORR:15}.
-For example, they may be deployed on local computer nodes, board in the cabinet or I/O nodes.
-Burst buffer may also be utilized as intermediate storage systems.
+For example, they may be deployed on the local compute nodes, the board in the cabinet or the I/O nodes.
+Burst buffer may also be utilized as the intermediate storage systems.
 
 % % %2. Use cases of burst buffer
 % % Regardless of the specific implementation, burst buffer nodes essentially augment
@@ -65,21 +65,21 @@ the I/O stack with an intermediate productive offloading layer,
 which can benefit jobs in multiple ways.
 As discussed in some preliminary surveys\cite{BBUseCase, apex-workflow} ,
 jobs' latest checkpoints can be pre-staged
-before previous job terminates;
+before the previous job terminates;
 jobs can burst checkpoint to burst buffer
 with extremely high speed (4.4-17.8 TB/s on Trinity);
 upon termination, jobs are also able to drain off output data
 asynchronously to the external parallel file system.
-The bursty I/O operations can thus be aggregated and absorbed into burst buffers,
-making it possible to shift computations that follows I/O bursts to an earlier moment
+The bursty I/O operations can thus be aggregated and absorbed into the burst buffer,
+which could shift the computation that follows the I/O bursts to an earlier moment,
 while burst buffer nodes take charge of moving potentially TB-level volumes of data.
 There are more use cases for burst buffer nodes.
-Among them \textit{data cache} could be equally important to enhance the responsiveness
+Among them, \textit{data cache} could be equally important to enhance the responsiveness
 of applications by improving the perceived I/O bandwidth\cite{BBUseCase}.
 Shared object library or read-only configuration files could be
 cached into burst buffer;
-Lists of input files specific to a group of computing nodes allocated to
-a particular job could be loaded into burst buffer prior to execution;
+The list of input files specific to a group of compute nodes allocated to
+a particular job could be loaded into burst buffer prior to the execution;
 Economical solid-state disks as a tier of burst buffer could also be used as
 out-of-core complement to insufficient main memory\cite{Romanus:CORR:15},
 working place for data analysis (reductions, feature extraction compression etc.)
@@ -114,30 +114,22 @@ and visualization\cite{BBUseCase}.
 %===========XY=============================
 %3. Motivate burst buffer aware scheduler
 Given the critical role of burst buffer in future HPC systems,
-users are encouraged to explicitly request this new resource for
-improving their jobs' performance\cite{apex-workflow}.
-Inspired by this requirement, it is necessary, or even urgent, to holistically manage
+users are encouraged to explicitly request this new resource for performance enhancement\cite{apex-workflow}.
+Inspired by this requirement, it is necessary to holistically manage
 the allocation of these precious I/O resources.
 This naturally falls into the responsibility of the batch scheduler.
-Unfortunately, existing schedulers
-either have not yet been aware to burst buffer\cite{Moab, Cobalt}
-or just use straightforward allocation policy, such as first-come first-served\cite{SlurmBBGuide}.
-This paper tries to bridge two isolated fields of HPC architecture,
-the novel burst buffer equipped HPC IO subsystem and
+Unfortunately, existing schedulers are not aware of the burst buffer\cite{Moab, Cobalt}
+or they simply use the straightforward allocation policy, such as first-come first-served\cite{SlurmBBGuide}.
+This paper aims to bridge the two isolated fields of HPC architecture,
+the novel burst buffer equipped HPC IO subsystem and the
 traditional batch job queueing subsystem.
-The bridge builds upon a 3-phase job model that motivated by the most
-important usage cases of burst buffer:
-application checkpoint restart and data pre-fetch/cache.
+The bridge builds upon a 3-phase job model that is motivated by critical use cases of burst buffer, i.e., application checkpoint restart and data pre-fetch/cache.
 
 In this work, we demonstrate that when burst buffer is intelligently allocated 
-by our novel batch scheduler,
-the benefit will be more than just higher transfer bandwidth.
-The job execution will be expedited by having their bursty checkpoint-purpose I/O requests 
-absorbed by burst buffer.
-The job waiting time will be reduced via
-contracted input/output stage in the scheduling pipeline.
-To our best knowledge, this is the first attempt to holistically 
-schedule jobs running on the new burst buffer enabled HPC system.
+by our novel batch scheduler, the benefit is far beyond the higher transfer bandwidth.
+The job execution is expedited by having their bursty checkpoint-purpose I/O requests 
+absorbed by burst buffer. The job waiting time is reduced via the contracted input/output stage in the scheduling pipeline.
+To our best knowledge, this is the first attempt to holistically schedule jobs running on the new burst-buffer-enabled HPC systems.
 
 
 
