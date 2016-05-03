@@ -1,25 +1,18 @@
-\section{Conclusion and Future Works}
+\section{Conclusion and Future Work}
 \label{Sec:Conclusion}
 
-In this study we explore batch scheduler allocates burst buffer,
-a new storage resource that absorbs 3 general types of IO operations:
+We explore how the batch scheduler can efficiently allocate burst buffer to absorb three general types of IO operations:
 data staging in, application checkpointing, and data staging out.
-We propose a 3-phase job model tailored to burst buffer's typical usage scenarios.
-Buffer aware Cerberus is presented on the basis of the 3-phase job model.
-We divide the scheduling problem into 3 sub-phases
-and conquer them separately using dynamic programming based optimization.
-Simulation results show that
-Cerberus could improve both application's and system's performance significantly.
-
+We propose a 3-phase job model which is tailored to burst buffer's typical use cases.
+Burst-buffer-aware Cerberus is developed on the basis of the 3-phase job model.
+We divide the scheduling problem into three sub-phases, and conquer them independently using dynamic programming based optimization.
+Simulation results show that Cerberus significantly improves both the application-level and the system-level performance.
 
 %Since the burst buffer enabled system is not ready for the massive 
 %use by the community, 
 %there is no study about the burst buffer demand of the typical scientific workloads.
-We plan to study how well Cerberus could schedule workloads with diverse resource demands,
-which provides valuable insight for computing facilities
-configuring their burst buffer subsystem.
-Other optimization algorithm can be integrated into Cerberus
-to satisfy various scheduling objectives.
-We also plan to make Cerberus more versatile
-to deal with other new schedulable system resources.
+We plan to study the optimal workload scheduling in Cerberus with diverse resource demands,
+which would provide useful insight for computing facilities to configure their burst buffer subsystems.
+We will also integrate optimization algorithms to Cerberus to satisfy various scheduling objectives.
+We also plan to make Cerberus more versatile to deal with new schedulable system resources.
 
