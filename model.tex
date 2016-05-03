@@ -1,4 +1,5 @@
-\section{BB Aware Job Model}
+%\section{BB Aware Job Model}
+\section{Burst Buffer Aware Job Modeling}
 \label{Sec:Model}
 
 \begin{figure}[htp]
@@ -21,16 +22,16 @@
 %============XY==========
 When users submit their jobs to burst buffer enabled systems, they can specify the 
 demand of compute nodes, burst buffer and expected running time for each job.
-The batch scheduler makes scheduling decision for each job based on its demand while trying to 
+The batch scheduler makes scheduling decisions for each job based on its demand while trying to 
 minimize overall job response time and maximize system throughput. 
-However, jobs require for more than one resources could result in possible deadlock and starvation.
+However, jobs require for more than one resource could result in possible deadlock and starvation.
 In order to improve the overall resource utilization and system responsiveness, we propose
 a fine granularity job model based on the possible usage cases of burst buffer.  
 In our scheduling framework, 
 the system resources that scheduler targets for making scheduling decision are
 compute nodes and burst buffer.
 Jobs' resource demand varies in different execution phases;
-correspondingly, batch scheduler make scheduling decision in each phase.
+correspondingly, the batch scheduler makes scheduling decisions in each phase.
 
 
 % Users request the system to run their applications as jobs.
@@ -57,9 +58,8 @@ Applications can benefit from burst buffer in 3 major ways\cite{BBUseCase}.
 Before execution, job pre-fetch data from external storage to burst buffer.
 When jobs start running on compute nodes,
 they could burst the checkpoint data to burst buffer at high speed.
-Upon jobs completion, useful output data are staged out to burst buffer,
-for the purpose of earlier releasing of compute node.
-Therefore we divide the job lifetime into three different phases to
+Upon the job completion, useful output data are staged out to the burst buffer in order to release compute node early.
+Therefore, we divide the job lifetime into three different phases to
 fit in burst buffer's 3 usage cases,
 as shown in Figure~\ref{Fig:CerberusQueues}.
 
@@ -70,18 +70,18 @@ as shown in Figure~\ref{Fig:CerberusQueues}.
          Users are encouraged to specify the amount of burst buffer required in the \textit{stage-in} phase.
          The job is ready to run when the data is pre-fetched into burst buffer.
  
-\textbf{Running}: The scheduler will allocate the job with required
+\textbf{Running}: The scheduler allocates the job with the required
          number of compute nodes and the amount of burst buffer. 
-         It will then dispatch the job to the system for running.
+         It then dispatches the job to the system for running.
          This is referred as \textit{running} phase.
          During the running phase, there could be frequent data exchange
          between compute node and burst buffer.
          These interactions are mainly due to fault tolerance reasons, like check-pointing. 
  
 \textbf{Stage-out}: When the job finishes computation and
-         exit the \textit{running} phase, its output data needs to be drained out
+         exits the \textit{running} phase, its output data need to be drained out
          to external storage from the on-node memory. We refer this as \textit{stage-out} phase.
-         The job can release its compute nodes when the output data is staged out
+         The job can release its compute nodes when the output data are staged out
          into burst buffer at high speed. The burst buffer plays as an efficient
          IO broker for the compute nodes and drain the output data out to the external storage.
 
