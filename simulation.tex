@@ -12,7 +12,7 @@
 % at the meanwhile, $job_i$ is enqueued to $Q_I$ and scheduler is triggered to do scheduling.
 
 %=========XY===========
-\section{BBSim for Cerberus}
+\section{BBSim: An Event Driven Simulator of Cerberus}
 \label{Sec:Simulation}
 
 We develop an event-driven simulator, named \textbf{BBSim},
@@ -106,7 +106,7 @@ The allocated resources are released at the following time points:
 
 
 %==========XY============
-
+\NOTE{The timestamp listed below showing the way the evaluation metrics are calculated.}
 The timestamps of all the \textit{finish} events are calculated as follows:
 \begin{align}
         & TS_{f\_stagein} = TS_{s\_stagein} + \frac{bb\_in}{BW_{io\_to\_bb}}\label{Equ:FinIn} \\
@@ -122,6 +122,5 @@ BBSim does not simulate the data transfer between IO nodes and PFS through the n
 Though targeting on burst buffer enabled systems,
 BBSim also supports simulating job scheduling on HPC systems without burst buffer.
 Besides, it is easy to integrate other scheduling policies into BBsim.
-The codebase of BBsim and Cerberus are made public to the community
-\footnote{Available at https://github.com/url\_placeholder}.
+The codebase of BBsim and Cerberus are made public to the community\cite{bbsim-github}.
 
