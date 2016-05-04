@@ -55,128 +55,84 @@
 
 
 %================XY====================
-The performance of supercomputers is no longer throttled only by computation capability,
-but also the ever-increasing I/O gap
+In the field of high performance computing (HPC), 
+system performance is no longer throttled only by computation capability,
+but also by the ever-increasing I/O gap
 between computational resources and disk-based storage technologies.
-% The I/O nodes reside between the compute nodes and external storage, 
-% serving as I/O gateways, 
-% can deliver 810 GB/s aggregated I/O bandwidth for applications
-% running on the early-stage Trinity system~\cite{TrinitySystem}, 
-% but still far from the target of 60 TB/s for 
-% extra-scale computing platform\cite{Shalf:HPCCS:2010}.
 For example, on the early-state Trinity system~\cite{TrinitySystem}, the I/O nodes between
 the compute nodes and the external storage can deliver data at  the speed of 810 GB/s,
-which is still far from the target of 60 TB/s for the extra-scale computing platform\cite{Shalf:HPCCS:2010}.
-%2. Challenge to current IO architecture and burst buffer come to resuce.
-% The challenge roots in the missing gap in supercomputers' memory hierarchy.
-% The IO rate ratio of memory to external storage 
-% is 100 to 10,000 cycles\cite{TrinitySystem}.
-%Such a gap makes difference 
-The gap is critical because scientific applications are exposed to
-``bursty" I/O patterns\cite{Carns:MSST:2011, Kim:PDSW:2010},
-resulting from application's
-defensive I/O strategy\cite{Latham:CSD:2012, Naik:ICPPW:2009, Dennis:CUG:2009}
-and the needs of subsequent data processing.
-When multiple applications attempt to access the storage system simultaneously, it is easy to saturate
+which is still far from the target of 60 TB/s for the exascale computers\cite{Shalf:HPCCS:2010}.
+The gap is critical because scientific applications typically exhibit
+``bursty" I/O patterns,
+resulting from application's defensive I/O strategy
+and and the need  for subsequent data processing\cite{Carns:MSST:2011, Kim:PDSW:2010, Latham:CSD:2012, Naik:ICPPW:2009, Dennis:CUG:2009}. 
+When multiple applications attempt to access the storage system simultaneously, 
+it is easy to saturate
 the I/O bandwidth, leading to severe performance degradation.
 
 
 %3. Very high level intro to burst buffer
 Extensive research have been conducted to improve I/O performance on HPC systems from
 both hardware and software layers.
-We have witnessed a tremendously growing popularity grained by flash memory based storage in recent years.
-Burst Buffer, an innovative cache tier utilizing solid-state disks and in-memory flash, 
-is developed to bridge the gap between the computational resources and the external storage.
-This new storage component works as a cache tier to absorb and spread out
+We have witnessed a tremendously growing use of flash memory based storage in recent years.
+Recently, burst buffer (i.e., a solid state disk based or flash based cache tier)
+is proposed to absorb and spread out
 the ``bursty" application I/O patterns\cite{Bent:HBP:2011, Grider:EXA:2010}.
 % This new cache tier is capable of absorbing and spreading out 
 % the ``bursty" application I/O pattern\cite{Bent:HBP:2011, Grider:EXA:2010}.
-Researchers\cite{Liu:MSST:2012} have demonstrated that the perceived I/O
-bandwidth is significantly improved on the burst-buffer-enabled system.
-%Because of the benefits of utilizing burst buffer,
-Users are in fact encouraged to explicitly request burst buffer resources to achieve
-high application performance on burst-buffer-enabled systems\cite{apex-workflow}.
+Studies have demonstrated that the perceived I/O
+bandwidth can be significantly improved on burst-buffer-enabled systems\cite{Liu:MSST:2012}.
+As such, HPC users are encouraged to explicitly request burst buffer resources at job submission 
+on burst-buffer-enabled systems\cite{apex-workflow}.
 
 %4. Our work, a new batch scheduler
-In this paper, we propose Cerberus\footnote{In Greek mythology,
+In this paper, we propose \textit{Cerberus}\footnote{In Greek mythology,
 Cerberus is a monstrous three-headed dog (three-phase scheduler),
 who guards the gate of the underworld to the earth (HPC system),
 preventing the dead (jobs) from leaving (running).},
-a novel batch scheduler for burst-buffer-enabled HPC systems. 
-We propose a three-phase model for user jobs based on the critical use cases of burst buffer, including
-application checkpoint restart and staging in/out data. 
-The lifetime of a user job is typically divided into three ordered phases:
+a novel batch scheduler for HPC systems equipped with burst buffer. 
+We propose a three-phase model for user jobs. 
+%based on the critical use cases of burst buffer, including
+%application checkpoint restart and staging in/out data. 
+The lifetime of a user job is divided into three phases:
 \textit{stage in}, \textit{running}, and \textit{stage-out}.
-While only the running phase requires compute nodes, burst buffer is used for different
-purposes in all the three phases.
-Unlike existing batch schedulers that make only one scheduling decision for each job upon its submission,
-Cerberus participates in all three phases and makes the optimal scheduling decision
-at each phase based on the evaluation of the job's requirement.
-% Cerberus re-evaluates the job's requirement at each phase 
-% and makes the optimal scheduling decisions respectively.
-
-%5. The advantage of Cerberus.
-Both the system and user jobs can benefit from the Cerberus 3-phase scheduling.
-The system responsiveness is greatly improved as Cerberus reduces the waiting time of most of the user jobs.
-The resources become highly available as the allocation and deallocation of
-both burst buffer and compute nodes are performed in a fine granularity.
-% The burst buffer and compute nodes will be released immediately
-% if the job don't need them in the next phase,
-% and become available to the following jobs.
-As Cerberus takes advantage of the parallelism of jobs in different phases, the system throughput also gets boosted.
-%6. Summarize our contribution
-% Our contributions in this paper are summarized as follows:
-% \begin{enumerate}
-%         \item %Explore how HPC workload scheduler allocates burst buffer resources.
-%                 We propose a 3-phase application model tailored the typical
-%                 usage scenarios of burst buffer, that is, checkpoint restart,
-%                 data stage in and stage out.
-%         \item On the basis of 3-phase job model, we present Cerberus,
-%                 a burst buffer aware HPC workload scheduler.
-%                 Dividing the lifetime of user application to different phases,
-%                 Cerberus conquers the scheduling goal separately.
-%         \item We suggest different optimizing goals for each phases.
-%                 Though optimal scheduling problem in each phase is NP-hard,
-%                 dynamic programming with memorization could give precise solutions
-%                 in practice.
-%         \item We develop BBSim, a event-driven simulator for scheduling
-%                 BB enabled HPC system.
-%                 BBSim is motivated by simulating Cerberus
-%                 on burst buffer enabled systems but also supports various kind of job schedulers.
-%                 %It help us simulate and compare the scheduling results of
-%                 %Trinity, a systems with both traditional IO nodes and burst buffer nodes.
-% \end{enumerate}
-
-%===========XY==========
-Our contributions are summarized as follows:
+burst buffer is used for different purposes in these phases.
+Unlike existing batch schedulers that make scheduling decision for each job upon its submission,
+Cerberus participates in all of the job phases.
+By dividing the lifetime of user jobs into three phases,
+Cerberus adopts different optimization strategies for 
+making scheduling decision based on job requirement at different phases. 
+We conduct a series of event driven simulations to evaluate our design. 
+As we will show later on, 
+the preliminary results demonstrate that the 3-phase design of Cerberus 
+can not only boost system responsiveness, but also improve job performance. 
+Specifically,
+Cerberus accelerates job execution, reduces job response time 
+and improves the average system throughput by 62.31\%.
+In this work, we make three key contributions: 
 \begin{enumerate}
-        \item %Explore how HPC workload scheduler allocates burst buffer resources.
-                We propose a three-phase job model, i.e.,  checkpoint restart,
-                data stage in and stage out, which enriches the typical usage of burst buffer.
-        \item   We present Cerberus,
-                a burst-buffer-aware batch scheduler for three-phase modeled jobs.
-                Dividing the lifetime of a user job to different phases, and
-                Cerberus can make the holistically optimal scheduling decisions 
-                for a job through each phase.
-        \item   We suggest different optimizing goals in each phase.
-                While the optimal scheduling problem in each phase is NP-hard,
-                our dynamic programming based approach generates precise solutions
-                in practice.
-        \item   We develop BBSim, an event-driven simulator for scheduling
-                burst-buffer-enabled HPC systems.
-                BBSim is motivated by simulating Cerberus and scheduling
-                three-phase modeled jobs with the burst buffer requirements.
-                BBSim also supports various types of batch schedulers.
+        \item    We propose a 3-phrase job model (i.e., stage-in, running, and stage-out) 
+        to describe user jobs and further to facilitate job scheduling in a fine granularity.
+        
+        \item    We present Cerberus, 
+        a 3-phase burst buffer aware scheduler for HPC systems equipped with burst buffer. 
+        Our design consists of several key optimization strategies for 
+        improving the performance of user jobs throughout different job phases.
+        
+        \item    We develop an event driven simulator called BBSim 
+        for simulating and evaluating Cerberus on the Trinity 
+        supercomputer at LANL\cite{TrinitySystem}. 
+        The simulator is open source and freely available to the community\cite{bbsim-github}.
 \end{enumerate}
 
 
-In the remainder of this paper, Section 2 presents the status quo of burst buffer and
-the motivation.
-Section~\ref{Sec:Model} elaborates the 3-phase model, and Section~\ref{Sec:Scheduler} overviews Cerberus.
-Section~\ref{Sec:Opt} illustrates the details of formulating and solving the scheduling problem at each phase.
-Section~\ref{Sec:Simulation} describes the core events of simulating Cerberus and the execution logic of BBSim.
-Section~\ref{Sec:Experiments} validates Cerberus by simulating the burst-buffer-enabled
-Trinity supercomputing platform on BBSim. Section~\ref{Sec:RelatedWorks} discusses the related works.
-Section~\ref{Sec:Conclusion} concludes the paper with future works.
+In the remainder of this paper, Section 2 presents background and 
+motivation of using burst buffer on HPC systems.
+Section~\ref{Sec:Model} elaborates the 3-phase job model.
+Section~\ref{Sec:Scheduler} and Section~\ref{Sec:Opt} describe the design of Cerberus and the optimization strategies.
+Section~\ref{Sec:Simulation} describes the design of BBsim, the event driven scheduling simulator.
+Section~\ref{Sec:Experiments} presents experiments to evaluate Cerberus under various configurations by using BBSim.
+Section~\ref{Sec:RelatedWorks} discusses the related works, 
+and Section~\ref{Sec:Conclusion} concludes the paper.
 
 
