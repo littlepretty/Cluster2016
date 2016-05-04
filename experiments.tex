@@ -23,7 +23,6 @@ This section evaluates Cerberus by answering three key questions.
         fine-grained 3-Phase scheduling?
         \item \textbf{Q3}: What is the performance gain achieved 
         by Cerberus optimization based scheduling?
-
 \end{itemize}
 
 % metric
@@ -210,7 +209,7 @@ are significantly reduced, i.e., 272,741 and 376,026 seconds respectively.
                 \includegraphics[width=2.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_response}
                 \label{Fig:DirectIOvsBBResponse}
         }
-        \subfloat[Job Waiting Time] {
+        \subfloat[Job Aggregated Wait Time] {
                 \includegraphics[width=2.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_wait}
                 \label{Fig:DirectIOvsBBWait}
         }
@@ -434,7 +433,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 %\label{Fig:3Pvs1PWaitIn}
         %}
         %~
-        \subfloat[Job Waiting Running Time] {
+        \subfloat[Job Aggregated Wait Time] {
                 \includegraphics[width=2.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_wait_run}
                 \label{Fig:3Pvs1PWaitRun}
         }
@@ -459,7 +458,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_response}
                 \label{Fig:DPvsFIFOResponse}
         }
-        \subfloat[Job Wait Run Time] {
+        \subfloat[Job Aggregated Wait Time] {
                 \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_wait_run}
                 \label{Fig:DPvsFIFOWaitRun}
         }
@@ -467,7 +466,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 \includegraphics[width=2.5in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_throughput}
                 \label{Fig:DPvsFIFOThroughput}
         }
-        \caption{ Cerberus v.s. FCFS \TODO{change the legend}}
+        \caption{ Cerberus v.s. FCFS \TODO{change the legend: ``optimized Cerberus" to ``Cerberus"; ``FCFS Cerberus" to ``FCFS". move the avg legend to top}}
         \label{Fig:DPvsFIFOPerformance}
 \end{figure*}
 
@@ -504,12 +503,12 @@ justifies the necessity that a user needs to provide data capacity demand for ea
 %===========XY===============
 In this section, we answer the question \textbf{Q3} by showing that
 adopting optimization in each scheduling phase can bring further improvement,
-compared with the naive first come first server (FCFS) policy adopted in the early experiments.
+compared with a naive first come first server (FCFS) 3-Phase scheduling design.
 Specifically, in the stage-in and stage-out phases, Cerberus schedules the jobs in $Q_I$ and $Q_O$
 according to the solution given by \equref{Equ:MaxTransferDataRecursion};
 for jobs in $Q_R$, Cerberus makes the scheduling decisions
 based on the solution given by \equref{Equ:MaxProductRecursion}. %Algorithm~\ref{Alg:MaxCPU}.
-We denote Cerberus using the two scheduling methodologies
+We denote these two scheduling designs
 as \textbf{FCFS} and \textbf{Cerberus} respectively.
 
 As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, the job response time scheduled by Cerberus is reduced.
