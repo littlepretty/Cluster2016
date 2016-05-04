@@ -18,9 +18,12 @@
 This section evaluates Cerberus by answering three key questions.
 \begin{itemize}
         \item \textbf{Q1}: Does the use of burst buffer 
-                improve both system-level and job-level performance?
-        \item \textbf{Q2}: What are the benefits of using the three phase scheduling?
-        \item \textbf{Q3}: Can dynamic programming based optimization enhance the performance of Cerberus?
+        improve both system-level and job-level performance?\NOTE{keep unchanged}
+        \item \textbf{Q2}: What is the benefit of using 
+        fine-grained 3-Phase scheduling?
+        \item \textbf{Q3}: What is the performance gain achieved 
+        by Cerberus optimization based scheduling?
+
 \end{itemize}
 
 % metric
@@ -37,66 +40,67 @@ We select three evaluation metrics, \textit{job response time}, \textit{job wait
 Job response time is the time duration between the job submission and the job completion. Job waiting time is the total time that a job waits in each queue.
 System throughput is defined as the number of jobs completed in a fixed time period (500 seconds).
 
-
-\subsection{Simulation Settings}
-% % system
-% We consider simulating the full Trinity super computer\cite{TrinitySystem}.
-% The number of compute nodes on Trinity is about 18,936,
-% e.g. 9,436 Intel Haswell nodes
-% and at least 9500 Intel Xeon Phi nodes.
-% There are 16 cores on each processor, thus totally 302,976 cores.
-% In the following experiments, we compare two identical system except that
-% IO nodes are replaced by the same number of burst buffer nodes.
-% Eventually Trinity plans to delivery up to 576 burst buffer nodes of 3.7 PB,
-% consisted of Trinity IO nodes with PCIe SSD card.
-% They are globally accessible as intermediate storage and distributed among cabinets.
-% Sequential read/write speed of burst buffer nodes is 8.0 GBps.
-% Bandwidth between CPU node and non-burst-buffer IO node is set to 2.5 GBps.
-
-
-We simulate a burst-buffer-enabled system as shown in Figure~\ref{Fig:BBArchitecture}.
-This system architecture is inspired by Trinity~\cite{TrinitySystem}, 
-the next generation supercomputer in Los Alamos National Laboratory.
-The parameters used in our simulation are taken from the technical report\cite{BBUseCase}.
-The simulated system consists of 18,936 compute nodes,
-e.g., 9,436 Intel Haswell nodes and 9,500 Intel Xeon Phi nodes.
-There are 576 burst buffer nodes with an aggregated 3.7 PB storage, which are globally accessible as the intermediate storage.
-The sequential read/write speed of burst buffer nodes is 8.0 GBps.
-The bandwidth between a CPU node and an IO node is set to 2.5 GBps.
-
-\begin{figure}[htp]
-        \centering
-        \includegraphics[width=3.5in]{BBArchitecturewithBandwidth}
-        \caption{Overview of the Simulated Burst-Buffer-Enabled Supercomputer System Inspired by Trinity}
-        \label{Fig:BBArchitecture}
-\end{figure}
-
-% % trace
-% Job trace is from ANL's Blue Gene Intrepid system,
-% containing totally 68,936 jobs run during January to September 2009\cite{JobTrace}.
-% We extract two critical fields from this jobs trace: running time and
-% number of cores user requested.
-% In this section we take a window of 1,185 jobs and report their scheduling results.
-% We patched 3 fields to each job's log entry: the amount of input data $data\_in$,
-% the total amount of written data for checkpointings $data\_run$
-% and the amount of output data $data\_out$.
-% We assume $data\_run$ and $data\_out$ follows uniform distribution with
-% lower boundary of 1 TiB and upper boundary of 60 TiB;
-% $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
-% The patches 3 fields may or may not be used in scheduling,
-% depends on both the model of the jobs and the experiment scenario.
-
-
-Since Trinity is not available to use at present, there is no Trinity job log available for our study.
-We use the job log collected from ANL's Blue Gene Intrepid system. The log contains 68,936 jobs
-submitted to the system from January to September 2009~\cite{JobTrace}.
-We patched 3 fields to each job's log entry: the amount of input data $data\_in$,
-the total amount of written data for checkpointings $data\_run$
-and the amount of output data $data\_out$.
-We assume $data\_run$ and $data\_out$ follows the uniform distribution with a
-lower bound of 1 TB and a upper bound of 60 TB;
-$data\_in$ follows the uniform distribution between 1 GB and 30 GB.
-
+%
+%\subsection{Experimental Settings}
+%% % system
+%% We consider simulating the full Trinity super computer\cite{TrinitySystem}.
+%% The number of compute nodes on Trinity is about 18,936,
+%% e.g. 9,436 Intel Haswell nodes
+%% and at least 9500 Intel Xeon Phi nodes.
+%% There are 16 cores on each processor, thus totally 302,976 cores.
+%% In the following experiments, we compare two identical system except that
+%% IO nodes are replaced by the same number of burst buffer nodes.
+%% Eventually Trinity plans to delivery up to 576 burst buffer nodes of 3.7 PB,
+%% consisted of Trinity IO nodes with PCIe SSD card.
+%% They are globally accessible as intermediate storage and distributed among cabinets.
+%% Sequential read/write speed of burst buffer nodes is 8.0 GBps.
+%% Bandwidth between CPU node and non-burst-buffer IO node is set to 2.5 GBps.
+%
+%
+%We simulate a burst-buffer-enabled system as shown in Figure~\ref{Fig:BBArchitecture}.
+%This system architecture is inspired by Trinity~\cite{TrinitySystem}, 
+%the next generation supercomputer in Los Alamos National Laboratory.
+%The parameters used in our simulation are taken from the 
+%Trinity/NERSC-8 Use Case Scenarios technical report\cite{BBUseCase}.
+%The simulated system consists of 18,936 compute nodes,
+%e.g., 9,436 Intel Haswell nodes and 9,500 Intel Xeon Phi nodes.
+%There are 576 burst buffer nodes with an aggregated 3.7 PB storage, which are globally accessible as the intermediate storage.
+%The sequential read/write speed of burst buffer nodes is 8.0 GBps.
+%The bandwidth between a CPU node and an IO node is set to 2.5 GBps.
+%
+%\begin{figure}[htp]
+%        \centering
+%        \includegraphics[width=3.5in]{BBArchitecturewithBandwidth}
+%        \caption{Our simulated burst buffer enabled HPC system inspired by Trinity at LANL\TODO{remove the blue SSD nodes in Fig}}
+%        \label{Fig:BBArchitecture}
+%\end{figure}
+%
+%% % trace
+%% Job trace is from ANL's Blue Gene Intrepid system,
+%% containing totally 68,936 jobs run during January to September 2009\cite{JobTrace}.
+%% We extract two critical fields from this jobs trace: running time and
+%% number of cores user requested.
+%% In this section we take a window of 1,185 jobs and report their scheduling results.
+%% We patched 3 fields to each job's log entry: the amount of input data $data\_in$,
+%% the total amount of written data for checkpointings $data\_run$
+%% and the amount of output data $data\_out$.
+%% We assume $data\_run$ and $data\_out$ follows uniform distribution with
+%% lower boundary of 1 TiB and upper boundary of 60 TiB;
+%% $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
+%% The patches 3 fields may or may not be used in scheduling,
+%% depends on both the model of the jobs and the experiment scenario.
+%
+%
+%Since Trinity is not available to use at present, there is no Trinity job log available for our study.
+%We use the job log collected from ANL's Blue Gene Intrepid system. The log contains 68,936 jobs
+%submitted to the system from January to September 2009~\cite{Tang:IPDPS:2010}.
+%We patched 3 fields to each job's log entry: the amount of input data $data\_in$,
+%the total amount of written data for checkpointings $data\_run$
+%and the amount of output data $data\_out$.
+%We assume $data\_run$ and $data\_out$ follows the uniform distribution with a
+%lower bound of 1 TB and a upper bound of 60 TB;
+%$data\_in$ follows the uniform distribution between 1 GB and 30 GB~\cite{Liu:MSST:2012}.
+%
 % \subsection{BB-Enabled System v.s. IO-Node-Only System}
 \subsection{Utilizing Burst Buffer v.s. Direct IO}
 \label{Sec:Sim:DirectIOvsBB}
