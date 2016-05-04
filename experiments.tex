@@ -370,8 +370,8 @@ correspondingly we have three kinds of job waiting in Cerberus.
 For 1-phase-modeled jobs, there is just one queue;
 Therefore, the waiting time in Figure~\ref{Fig:3Pvs1PWaitRun} is the total waiting time.
 We observe that the jobs did not take much time either in the input queue $Q_I$ nor in the output queue.
-The upper bounds of time spent in the input queue is 
-2,500 seconds for both 3-Phase-1D and 3-Phase-3D modeled jobs.
+\NOTE{The upper bounds of time spent in the input queue is 
+2,500 seconds for both 3-Phase-1D and 3-Phase-3D modeled jobs.}\TODO{Can't get this from Fig5b}
 This is because that the input data are very small (e.g., tens of GB)
 compared to the checkpointing data and the application output (e.g., tens of TB).
 In contrast, in the worst case of 1-Phase-1D, the job waiting time is 443,203 seconds,
