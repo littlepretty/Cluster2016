@@ -467,7 +467,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 \includegraphics[width=2.5in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_throughput}
                 \label{Fig:DPvsFIFOThroughput}
         }
-        \caption{Optimized Cerberus v.s. FCFS Cerberus}
+        \caption{ Cerberus v.s. FCFS \TODO{change the legend}}
         \label{Fig:DPvsFIFOPerformance}
 \end{figure*}
 
@@ -478,7 +478,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
         %\label{Fig:DPvsFIFOThroughput}
 %\end{figure}
 
-\subsection{Optimization v.s. FCFS}
+\subsection{Cerberus v.s. FCFS 3-Phase Scheduling}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 %dynamic programming based job scheduler can further reduce jobs' wait time.
 %We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
@@ -510,19 +510,19 @@ according to the solution given by \equref{Equ:MaxTransferDataRecursion};
 for jobs in $Q_R$, Cerberus makes the scheduling decisions
 based on the solution given by \equref{Equ:MaxProductRecursion}. %Algorithm~\ref{Alg:MaxCPU}.
 We denote Cerberus using the two scheduling methodologies
-as \textbf{FCFS Cerberus} and \textbf{Optimized Cerberus} respectively.
+as \textbf{FCFS} and \textbf{Cerberus} respectively.
 
-As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, the job response time scheduled by Optimized Cerberus is reduced.
-The most non-responsive job for Optimized Cerberus is job \#445, which takes 303,523 seconds to complete.
-In contrast, job \#445 takes 376,026 seconds to finish in FCFS Cerberus.
-This is 19.28\% slower than the Optimized Cerberus.
+As indicated by Figure~\ref{Fig:DPvsFIFOResponse}, the job response time scheduled by Cerberus is reduced.
+The most non-responsive job for Cerberus is job \#445, which takes 303,523 seconds to complete.
+In contrast, job \#445 takes 376,026 seconds to finish in FCFS.
+This is 19.28\% slower than the Cerberus.
 When we consider the overall response time of the entire job set,
-we observe that more than \textit{80\% of the tasks response faster with the optimization}.
+we observe that more than \textit{80\% of the jobs response faster when scheduled by Cerberus}.
 
 
 The time duration that an application is waiting for running
 is plotted in Figure~\ref{Fig:DPvsFIFOWaitRun}.
-The tail of Optimized Cerberus shows that a couple of jobs
+The tail of Cerberus shows that a couple of jobs
 spend very long time in the running queue.
 This is because: First the jobs are submitted at the early middle phase
 (job \#435 waits for 268,322 seconds); Second, these jobs request a huge
@@ -542,14 +542,14 @@ it is possible for a user to cheat the scheduler with false demands.
 
 
 We can see the system throughputs under different scheduling objectives in Figure~\ref{Fig:DPvsFIFOThroughput} .
-Job \#445 decides the finishing time of all 1,185 jobs, i.e., 303,940 seconds, for the Optimized Cerberus.
-The FCFS Cerberus makes system finish its last job, also job \#455, at 376,443 seconds.
-The worst case completion time improvement over the FCFS Cerberus is 19.26\%.
+When scheduled by Cerberus, it takes 303,940 seconds to finish the workload,
+while FCFS takes 376,443 seconds to complete the same workload.
+The worst case completion time improvement of Cerberus over FCFS is 19.26\%.
 When we look at the time sequence of throughput,
-we found that the peak value 9 jobs / 500 seconds is obtained by the Optimized Cerberus.
-The peak throughput of the FCFS Cerberus is also 9 jobs / 500 seconds.
+we found that the peak value 9 jobs / 500 seconds can be finished when scheduled by Cerberus.
+The peak throughput of the FCFS is also 9 jobs / 500 seconds.
 The mean throughputs of these three scheduling methods are plotted in Figure~\ref{Fig:DPvsFIFOThroughput}.
-Compared with the FCFS Cerberus, \textit{the Optimized Cerberus achieves about 23.87\% higher average throughput}
+Compared with the FCFS, \textit{the Cerberus achieves about 23.87\% higher average throughput}
 (1.951 jobs / 500 seconds).
 
 
@@ -580,6 +580,6 @@ Compared with the FCFS Cerberus, \textit{the Optimized Cerberus achieves about 2
 
 Memorization technique helps the Optimized Cerberus to perform online job scheduling,
 though solving the optimization problem is theoretically NP-hard.
-In our simulation, it takes about 0.04 second in average for the Optimized Cerberus to make one scheduling decision.
+In our simulation, it takes about 0.04 second in average for the Cerberus to make a scheduling decision.
 
 
