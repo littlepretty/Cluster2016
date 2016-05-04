@@ -1,32 +1,36 @@
-\section{Cerberus: Burst-buffer-aware Batch Scheduler}
+\section{Design of Cerberus}
 \label{Sec:Scheduler}
 
 \begin{figure}[htp]
 \centering
         \includegraphics[width=3.6in]{3PhaseJobFSM}
-        \caption{State Transitions of Jobs Scheduled by Cerberus}
+        \caption{Job state transition in Cerberus}
 \label{Fig:JobFSM}
 \end{figure}
 
 \subsection{Three-Phase Job Scheduling}
 
-The traditional batch scheduler on a system without burst buffer only considers
-the job with the number of required nodes and the expected runtime for the scheduling decision making process.
-The most commonly used scheduling policy is the First Come First Serve with EASY backfilling~\cite{tsafrir-tpds-2007}.
-However, on burst-buffer-enabled systems,
-the amount of available burst buffer capacity becomes a new scheduling constraint.
-We propose Cerberus, a burst-buffer-aware batch scheduler.
-Cerberus takes the advantage of the most common use cases of burst buffer:
-data stage-in, checkpointing, and data drain-out.
-Cerberus allocates burst buffer in each phase for one of the three use cases
-by maintaining three distinct queues, as shown in Figure~\ref{Fig:CerberusQueues}.
-%Before entering each phase, job must enqueue to the corresponding queue.
-The input queue $Q_I$ contains all the jobs that need to pre-fetch data from the external storage to the burst buffer.
-The running queue $Q_R$ holds the jobs that are waiting for the compute nodes and the burst buffer used for checkpointing.
-Jobs waiting to be drained out to the external permanent storage are in the output queue $Q_O$.
-The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that burst buffer
-can fill in the memory gap between the memory on compute nodes and the hard disk storage.
 
+%\NOTE{This paragraph moved to start of Section 3}The traditional batch scheduler on a system without burst buffer only considers
+%the job with the number of required nodes and the expected runtime for the scheduling decision making process.
+%The most commonly used scheduling policy is the First Come First Serve with EASY backfilling~\cite{tsafrir-tpds-2007}.
+%However, on burst-buffer-enabled systems,
+%the amount of available burst buffer capacity becomes a new scheduling constraint.
+%We propose Cerberus, a burst-buffer-aware batch scheduler.
+%Cerberus takes the advantage of the most common use cases of burst buffer:
+%data stage-in, checkpointing, and data drain-out.
+%Cerberus allocates burst buffer in each phase for one of the three use cases
+%by maintaining three distinct queues, as shown in Figure~\ref{Fig:CerberusQueues}.
+%%Before entering each phase, job must enqueue to the corresponding queue.
+%The input queue $Q_I$ contains all the jobs that need to pre-fetch data from the external storage to the burst buffer.
+%The running queue $Q_R$ holds the jobs that are waiting for the compute nodes and the burst buffer used for checkpointing.
+%Jobs waiting to be drained out to the external permanent storage are in the output queue $Q_O$.
+%The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that burst buffer
+%can fill in the memory gap between the memory on compute nodes and the hard disk storage.
+
+As shown in Figure 1, Cerberus adopts a 3-phase job scheduling strategy. 
+In order to help understand Cerberus design, we illustrate job state transition in Figure 2.
+\TODO{you two should check the paragraph to ensure this part is succinct and precise!--lan\&jin}
 To see how Cerberus schedules a particular job with three queues,
 we present the job transition diagram in Figure~\ref{Fig:JobFSM}.
 After the submission, a job is enqueued into $Q_I$ waiting for the stage-in-purpose burst buffer ($BB_{in}$).
@@ -48,11 +52,11 @@ As indicated by Figure~\ref{Fig:JobFSM}, the resource release at anytime can tri
 to schedule jobs in multiple queues.
 
 The three-phase job model divides the jobs to generic phases with very specific resource demands.
-Cerberus conquers the scheduling problem in each phase.
-The fine scheduling granularity enables the full utilization of burst buffer for different purposes.
-The divide-conquer approach provides a framework that can be extended to various scheduling
-policies for each individual phase.
-We propose and solve two optimizations targeting $Q_I/Q_O$ and $Q_R$ in Section~\ref{Sec:Opt}
+Cerberus conquers the scheduling problem in each phase, and the detailed decision making is described in Section 4.3 - 4.5.
+%The fine scheduling granularity enables the full utilization of burst buffer for different purposes.
+%The divide-conquer approach provides a framework that can be extended to various scheduling
+%policies for each individual phase.
+%We propose and solve two optimizations targeting $Q_I/Q_O$ and $Q_R$ in Section~\ref{Sec:Opt}
 
 \subsection{Three-Phase Coordination}
 The three phases together with the corresponding queues, are not entirely independent.

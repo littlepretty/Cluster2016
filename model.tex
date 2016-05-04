@@ -1,35 +1,51 @@
-%\section{BB Aware Job Model}
-\section{Burst-buffer-aware Job Modeling}
+\section{3-Phase Job Model}
 \label{Sec:Model}
 
 \begin{figure}[htp]
         \centering
         \includegraphics[width=3.6in]{CerberusBBSystem}
-        \caption{Scheduling Workflow of the Burst-buffer-aware Cerberus}
+        \caption{The design of 3-Phase burst buffer aware scheduling. The black arrows indicate 
+        the jobs changing of status; the red, peru and blue arrows in the bottom indicate the data flow in different phases. \TODO{you need to show Q\_I, Q\_R,Q\_O in the figure!!!-lan} }
         \label{Fig:CerberusQueues}
 \end{figure}
 
+The traditional batch scheduler on a system without burst buffer only considers
+the job with the number of required nodes and the expected runtime for the scheduling decision making process.
+The most commonly used scheduling policy is the First Come First Serve with EASY backfilling~\cite{tsafrir-tpds-2007}.
+However, on burst-buffer-enabled systems,
+the amount of available burst buffer capacity becomes a new scheduling constraint.
+We propose Cerberus, a burst-buffer-aware batch scheduler.
+Cerberus takes the advantage of the most common use cases of burst buffer:
+data stage-in, checkpointing, and data drain-out.
+Cerberus allocates burst buffer in each phase for one of the three use cases
+by maintaining three distinct queues, as shown in Figure~\ref{Fig:CerberusQueues}.
+%Before entering each phase, job must enqueue to the corresponding queue.
+The input queue $Q_I$ contains all the jobs that need to pre-fetch data from the external storage to the burst buffer.
+The running queue $Q_R$ holds the jobs that are waiting for the compute nodes and the burst buffer used for checkpointing.
+Jobs waiting to be drained out to the external permanent storage are in the output queue $Q_O$.
+The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that burst buffer
+can fill in the memory gap between the memory on compute nodes and the hard disk storage.
 
-% % \subsection{System Resources}
-% % The system contains resources like compute nodes, main memory, burst buffer,
-% % IO nodes and external storage.
-% % In most system architecture, compute nodes are coupled with main memory.
-% % Since storage capacity at most time is sufficient, we assume IO nodes are always available.
-% % The schedule targets are compute node and burst buffer:
-% % a system with $CN$ compute nodes and $BB$ GB of burst buffer.
-% % BB are able to be shared by applications with any fractional amount.
 
-%============XY==========
-When users submit their jobs to burst-buffer-enabled systems, they can specify the
-demand of compute nodes and burst buffer and the expected running time for each job.
-The batch scheduler makes scheduling decisions for each job based on its demand while attempting to
-minimize the overall job response time and maximize the system throughput.
-However, jobs requiring more than one resource could result in possible deadlocks and starvation.
-In order to improve the overall resource utilization and the system responsiveness, we propose
-a fine granularity job model based on the possible use cases of burst buffer.
-In our scheduling framework, the system resources include compute nodes and burst buffer.
-The job resource demand varies in different execution phases;
-Correspondingly, the batch scheduler makes scheduling decisions in each phase.
+Before we give the details of our Cerberus design, 
+in this section we describe our 3-Phase job model 
+and the corresponding resource demand at each phase. 
+We assume that upon job submission, 
+a user specifies the amount of compute nodes, 
+the expected job runtime, 
+and the amount of burst buffer needed by his/her job. 
+The batch scheduler makes scheduling decisions according to job requirements, 
+with the objective to maximize job performance and system utilization.
+
+%The batch scheduler makes scheduling decisions for 
+%each job based on its demand while attempting to
+%minimize the overall job response time and maximize the system throughput.
+%However, jobs requiring more than one resource could result in possible deadlocks and starvation.
+%In order to improve the overall resource utilization and the system responsiveness, we propose
+%a fine granularity job model based on the possible use cases of burst buffer.
+%In our scheduling framework, the system resources include compute nodes and burst buffer.
+%The job resource demand varies in different execution phases;
+%Correspondingly, the batch scheduler makes scheduling decisions in each phase.
 
 
 % Users request the system to run their applications as jobs.
@@ -51,15 +67,15 @@ Correspondingly, the batch scheduler makes scheduling decisions in each phase.
 
 
 %=============Xu======================
-\subsection{Three-Phase Job Model}
+%\subsection{Three-Phase Job Model}
 Applications can benefit from burst buffer in three major ways\cite{BBUseCase}.
 Before execution, job pre-fetch data from the external storage to the burst buffer.
 When jobs start running on the compute nodes,
 they could burst the checkpoint data to the burst buffer at high speed.
-Upon the job completion, useful output data are staged out to the burst buffer for early releasing the compute nodes.
-Therefore, we divide the job lifetime into three different phases to
-fit in the three use cases of burst buffer, as shown in Figure~\ref{Fig:CerberusQueues}.
-
+Upon the job completion, 
+useful output data are staged out to the burst buffer for early releasing the compute nodes.
+Therefore, we divide the job lifetime into three different phases, as illustrated in Figure~\ref{Fig:CerberusQueues}. \NOTE{I prefer we keep this paragraph. Because it explains why 3-Phase make sense. 3-Phase is based on app's use case of bb.}
+ 
 \textbf{Stage-In}: After submitting the job to the system,
          Cerberus needs to pre-fetch data, such as configuration files and input data,
          from IO nodes to the burst buffer. We define this phase as \textit{stage-in}.
@@ -86,7 +102,7 @@ fit in the three use cases of burst buffer, as shown in Figure~\ref{Fig:Cerberus
 %compute nodes are only required during the \textit{running} phase. 
 
 
-\subsection{Three-Phase Resource Demand Model}
+%\subsection{Three-Phase Resource Demand Model}
 % Users typically provide their resource demand for their jobs.
 % This is the most important information scheduler could get from the users.
 % Therefore, each job is associated with a demand vector in the form of $(c, rt)$
