@@ -78,11 +78,11 @@ and the corresponding resource demand at each phase.
 
  
 \textbf{Stage-In}: After submitting the job to the system,
-         Cerberus needs to pre-fetch data, such as configuration files and input data,
+         Cerberus needs to prefetch data, such as configuration files and input data,
          from IO nodes to the burst buffer. We define this phase as \textit{stage-in}.
          The only resource needed by the job in this phase is the burst buffer.
          Users are encouraged to specify the amount of burst buffer required in the \textit{stage-in} phase.
-         The job is ready to run when the data is pre-fetched into the burst buffer.
+         The job is ready to run when the data is prefetched into the burst buffer.
  
 \textbf{Running}: The scheduler allocates the job with the required
          number of compute nodes and the amount of burst buffer. 

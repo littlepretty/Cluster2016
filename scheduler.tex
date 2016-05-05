@@ -30,26 +30,25 @@
 
 As shown in Figure 1, Cerberus adopts a three-phase job scheduling strategy. 
 In order to help understand Cerberus design, we illustrate job state transition in Figure 2.
-\TODO{you two should check the paragraph to ensure this part is succinct and precise!--lan\&jin}
-To see how Cerberus schedules a particular job with three queues,
+To see how Cerberus schedules a particular job by coordinating three queues,
 we present the job transition diagram in Figure~\ref{Fig:JobFSM}.
-After the submission, a job is enqueued into $Q_I$ waiting for the stage-in-purpose burst buffer ($BB_{in}$).
-Once selected by Cerberus, the job is removed from $Q_I$ and start to stage in data using the allocated $BB_{in}$.
+After the submission, a job enters $Q_I$ waiting for the stage-in-purpose burst buffer ($BB_{in}$).
+Once selected by Cerberus, the job is removed from $Q_I$ and start to stage in data.
 After finishing the stage-in phase, the job is enqueued to $Q_R$,
-where it waits for the compute nodes and the \textit{new} burst buffer for checkpointing ($BB_{run}$).
-Note that $BB_{in}$ still holds the job. When Cerberus chooses the job from $Q_R$, the job is in the running phase.
-The first thing is to release $BB_{in}$ after \textbf{fetching in} data to memory on the acquired compute nodes.
+where it waits for the required compute nodes and the \textit{new} burst buffer for checkpointing purpose ($BB_{run}$).
+Note that $BB_{in}$ still held by the job at this time point. When Cerberus chooses the job from $Q_R$, the job is in the running phase.
+The first thing is to release $BB_{in}$ after \textbf{fetching in} data to memory of the acquired compute nodes.
 During the execution, checkpointing and application restart may occur frequently,
-which essentially means the data exchanges between the memory and the burst buffer $BB_{run}$.
+which essentially means frequent data exchanges between the memory and the burst buffer $BB_{run}$.
 Once the job execution finishes, $BB_{run}$ can be immediately released since
 output data are still available on the compute nodes.
 Without releasing the compute nodes, the job enters $Q_O$ and waits for a certain amount of burst buffer for staging out its data ($BB_{out}$).
 Once a job is chosen by Cerberus, its data flow from the main memory to the burst buffer
 in the \textbf{drain-out} phase, after which all the compute nodes can be released;
-then the burst buffer nodes are responsible for transferring the output data to the external storage system.
-The job completes when all the useful data results are staged out and $BB_{out}$ are returned to system.
+then the burst buffer nodes are responsible for transferring the output data to the external storage.
+The job completes when all its data are staged out and $BB_{out}$ are returned to system.
 As indicated by Figure~\ref{Fig:JobFSM}, the resource release at anytime can trigger Cerberus
-to schedule jobs in multiple queues.
+to schedule jobs in those three queues.
 
 The three-phase job model divides the jobs to generic phases with very specific resource demands.
 Cerberus conquers the scheduling problem in each phase, and the detailed decision making is described in Section~\ref{SubSec:OptStageIn}-\ref{SubSec:OptStageOut}.
