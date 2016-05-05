@@ -14,28 +14,27 @@ the job with the number of required nodes and the expected runtime for the sched
 The most commonly used scheduling policy is the First Come First Serve with EASY backfilling~\cite{tsafrir-tpds-2007}.
 However, on burst-buffer-enabled systems,
 the amount of available burst buffer capacity becomes a new scheduling constraint.
-We propose Cerberus, a burst-buffer-aware batch scheduler.
-Cerberus takes the advantage of the most common use cases of burst buffer:
-data stage-in, checkpointing, and data drain-out.
-Cerberus allocates burst buffer in each phase for one of the three use cases
-by maintaining three distinct queues, as shown in Figure~\ref{Fig:CerberusQueues}.
-%Before entering each phase, job must enqueue to the corresponding queue.
-The input queue $Q_I$ contains all the jobs that need to pre-fetch data from the external storage to the burst buffer.
-The running queue $Q_R$ holds the jobs that are waiting for the compute nodes and the burst buffer used for checkpointing.
-Jobs waiting to be drained out to the external permanent storage are in the output queue $Q_O$.
-The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that burst buffer
-can fill in the memory gap between the memory on compute nodes and the hard disk storage.
 
-
-Before we give the details of our Cerberus design, 
-in this section we describe our 3-Phase job model 
-and the corresponding resource demand at each phase. 
+In this work,
+we propose Cerberus, a burst-buffer-aware batch scheduler.
 We assume that upon job submission, 
 a user specifies the amount of compute nodes, 
 the expected job runtime, 
 and the amount of burst buffer needed by his/her job. 
-The batch scheduler makes scheduling decisions according to job requirements, 
-with the objective to maximize job performance and system utilization.
+Cerberus makes scheduling decisions based on the most common use cases of burst buffer:
+data stage-in, checkpointing, and data drain-out.
+Cerberus can allocate burst buffer to each job with regard to its use cases
+by maintaining three distinct queues, as shown in Figure~\ref{Fig:CerberusQueues}.
+The input queue $Q_I$ contains all the jobs that need to prefetch data from the external storage to the burst buffer.
+The running queue $Q_R$ holds the jobs that are waiting for the compute nodes and the burst buffer used for checkpointing.
+Jobs waiting to be drained out to the external permanent storage are in the output queue $Q_O$.
+The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that burst buffer
+can fill in the memory gap between the memory on compute nodes and the hard disk storage.
+Cerberus coordinates among three queues and makes scheduling decisions according to job requirements in each queue with the objective to maximize job performance and system utilization.
+
+Before we give the details of our Cerberus design, 
+in this section we describe our 3-Phase job model 
+and the corresponding resource demand at each phase. 
 
 %The batch scheduler makes scheduling decisions for 
 %each job based on its demand while attempting to
@@ -68,13 +67,13 @@ with the objective to maximize job performance and system utilization.
 
 %=============Xu======================
 %\subsection{Three-Phase Job Model}
-Applications can benefit from burst buffer in three major ways\cite{BBUseCase}.
-Before execution, job pre-fetch data from the external storage to the burst buffer.
-When jobs start running on the compute nodes,
-they could burst the checkpoint data to the burst buffer at high speed.
-Upon the job completion, 
-useful output data are staged out to the burst buffer for early releasing the compute nodes.
-Therefore, we divide the job lifetime into three different phases, as illustrated in Figure~\ref{Fig:CerberusQueues}. \NOTE{I prefer we keep this paragraph. Because it explains why 3-Phase make sense. 3-Phase is based on app's use case of bb.}
+%Applications can benefit from burst buffer in three major ways\cite{BBUseCase}.
+%Before execution, job pre-fetch data from the external storage to the burst buffer.
+%When jobs start running on the compute nodes,
+%they could burst the checkpoint data to the burst buffer at high speed.
+%Upon the job completion, 
+%useful output data are staged out to the burst buffer for early releasing the compute nodes.
+%Therefore, we divide the job lifetime into three different phases, as illustrated in Figure~\ref{Fig:CerberusQueues}. \NOTE{I prefer we keep this paragraph. Because it explains why 3-Phase make sense. 3-Phase is based on app's use case of bb.}
  
 \textbf{Stage-In}: After submitting the job to the system,
          Cerberus needs to pre-fetch data, such as configuration files and input data,
