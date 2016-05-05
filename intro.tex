@@ -104,18 +104,18 @@ Cerberus adopts different optimization strategies for
 making scheduling decision based on job requirement at different phases. 
 We conduct a series of event driven simulations to evaluate our design. 
 As we will show later on, 
-the preliminary results demonstrate that the 3-phase design of Cerberus 
+the preliminary results demonstrate that the three-phase design of Cerberus 
 can not only boost system responsiveness, but also improve job performance. 
 Specifically,
 Cerberus accelerates job execution, reduces job response time 
 and improves the average system throughput by 62.31\%.
 In this work, we make three key contributions: 
 \begin{enumerate}
-        \item    We propose a 3-phrase job model (i.e., stage-in, running, and stage-out) 
+        \item    We propose a three-phase job model (i.e., stage-in, running, and stage-out) 
         to describe user jobs and further to facilitate job scheduling in a fine granularity.
         
         \item    We present Cerberus, 
-        a 3-phase burst buffer aware scheduler for HPC systems equipped with burst buffer. 
+        a three-phase burst buffer aware scheduler for HPC systems equipped with burst buffer. 
         Our design consists of several key optimization strategies for 
         improving the performance of user jobs throughout different job phases.
         
@@ -128,7 +128,7 @@ and improves the average system throughput by 62.31\%.
 
 In the remainder of this paper, Section 2 presents background and 
 motivation of using burst buffer on HPC systems.
-Section~\ref{Sec:Model} elaborates the 3-phase job model.
+Section~\ref{Sec:Model} elaborates the three-phase job model.
 Section~\ref{Sec:Scheduler} describes the design of Cerberus.
 Section~\ref{Sec:Simulation} describes the design of BBsim, the event driven scheduling simulator.
 Section~\ref{Sec:Experiments} presents experiments to evaluate Cerberus under various configurations by using BBSim.

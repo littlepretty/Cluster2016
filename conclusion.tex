@@ -3,8 +3,8 @@
 
 We explore how the batch scheduler can efficiently allocate burst buffer to absorb three general types of IO operations:
 data staging in, application checkpointing, and data staging out.
-We propose a 3-phase job model which is tailored to burst buffer's typical use cases.
-Burst-buffer-aware Cerberus is developed on the basis of the 3-phase job model.
+We propose a three-phase job model which is tailored to burst buffer's typical use cases.
+Burst-buffer-aware Cerberus is developed on the basis of the three-phase job model.
 We divide the scheduling problem into three sub-phases, and conquer them independently using dynamic programming based optimization.
 Simulation results show that Cerberus significantly improves both the application-level and the system-level performance.
 
