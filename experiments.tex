@@ -359,7 +359,6 @@ specifies data usage demand at each phase, e.g., 3-Phase-3D vs. 3-Phase-1D.}
 % response performance.
 
 
-%==============XY===============
 We now investigate the detailed waiting time to understand why the scheduling results in Cerberus
 are better than the naive integration of the batch scheduler with the burst buffer constraints.
 Figure~\ref{Fig:3Pvs1PWaitRun} shows the waiting running time, how long a job spent in the running queue.
@@ -400,20 +399,18 @@ The differences of the waiting time lead to the difference in response performan
 % We believe this validates the indispensable 3 phase job model and
 % the necessity that user provides data capacity demand for each phase.
 
-%==============XY===============
 Figure~\ref{Fig:3Pvs1PThroughput} describes the system throughputs of the three different job models.
 It helps us to examine the scheduling performance in a time sequence.
 For 1-Phase-1D modeled job, we can see an obvious `throughput gap'
 from 150,000 seconds to 200,000 seconds approximately.
-\textbf{consider revise the following sentences}
 The case of 3-Phase-1D Cerberus is similar.
 3-Phase-3D runs counter to both previous cases.
 Even though there is a throughput between 100,000 to 150,000 seconds,
 the 3-Phase-3D model manages to make the system having a high throughput at the beginning and
 later changes from 150,000 to 300,000 seconds.
 \textit{In average, the throughput of the 3-Phase-3D model is 1.575 jobs / 500 seconds.}
-It is 11.39\% (\textbf{higher than?} of the 1-Phase-1D case (1.414 jobs / 500 seconds) and
-31.03\% higher than the 3-Phase-1D case (1.202 jobs / 500 seconds).
+It is 11.39\% higher than the 3-Phase-1D case (1.414 jobs / 500 seconds) and
+23.68\% higher than the 1-Phase-1D case (1.202 jobs / 500 seconds).
 We believe that the results validate the indispensable 3 phase job model and
 justifies the necessity that a user needs to provide data capacity demand for each phase.
 
