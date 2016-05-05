@@ -265,7 +265,7 @@ are presented:
 	Instead, the scheduler makes scheduling decision only once for each job.
 
         \item \textbf{3-Phase-1D}: Jobs are submitted with the total burst buffer demand,
-        their lifetime are divided into three phases as discussed in Section~\ref{Sec:Model}
+        their lifetime are divided into three phases as discussed in Section~\ref{Sec:Model}.
         
         \item \textbf{3-Phase-3D}: Jobs are submitted with the detailed burst buffer demand for each phase.
                 %the same as Cerberus in section~\ref{Sec:Sim:DirectIOvsBB}
@@ -364,14 +364,15 @@ We now investigate the detailed waiting time to understand why the scheduling re
 are better than the naive integration of the batch scheduler with the burst buffer constraints.
 Figure~\ref{Fig:3Pvs1PWaitRun} shows the waiting running time, how long a job spent in the running queue.
 There are three queues in Cerberus;
-correspondingly we have three kinds of job waiting in Cerberus.
+Correspondingly jobs in Cerberus have three kinds of waiting time: waiting input, waiting running, and waiting output time.
 %Figure~\ref{Fig:3Pvs1PWaitIn} shows the time job spend in inputing queue,
 %Figure~\ref{Fig:3Pvs1PWaitOut} the time job spend in outputing queue.
 For 1-phase-modeled jobs, there is just one queue;
 Therefore, the waiting time in Figure~\ref{Fig:3Pvs1PWaitRun} is the total waiting time.
-We observe that the jobs did not take much time either in the input queue $Q_I$ nor in the output queue.
-\NOTE{The upper bounds of time spent in the input queue is 
-2,500 seconds for both 3-Phase-1D and 3-Phase-3D modeled jobs.}\TODO{Can't get this from Fig5b}
+We observe that (not shown in Figure~\ref{Fig:3Pvs1PWaitRun}) the jobs did not
+take much time either in the input queue $Q_I$ nor in the output queue.
+The upper bounds of time spent in the input queue, e.g. waiting time in $Q_I$, are 
+2,500 seconds for both 3-Phase-1D and 3-Phase-3D modeled jobs.
 This is because that the input data are very small (e.g., tens of GB)
 compared to the checkpointing data and the application output (e.g., tens of TB).
 In contrast, in the worst case of 1-Phase-1D, the job waiting time is 443,203 seconds,
@@ -433,7 +434,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 %\label{Fig:3Pvs1PWaitIn}
         %}
         %~
-        \subfloat[Job Aggregated Wait Time] {
+        \subfloat[Job Waiting Time in $Q_R$] {
                 \includegraphics[width=2.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_wait_run}
                 \label{Fig:3Pvs1PWaitRun}
         }
@@ -458,7 +459,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_response}
                 \label{Fig:DPvsFIFOResponse}
         }
-        \subfloat[Job Aggregated Wait Time] {
+        \subfloat[Job Aggregated Waiting Time in $Q_R$] {
                 \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_wait_run}
                 \label{Fig:DPvsFIFOWaitRun}
         }
