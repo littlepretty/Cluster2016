@@ -20,7 +20,7 @@ This section evaluates Cerberus by answering three key questions.
         \item \textbf{Q1}: Does the use of burst buffer 
         improve both system-level and job-level performance?\NOTE{keep unchanged}
         \item \textbf{Q2}: What is the benefit of using 
-        fine-grained 3-Phase scheduling?
+        fine-grained three-phase scheduling?
         \item \textbf{Q3}: What is the performance gain achieved 
         by Cerberus optimization based scheduling?
 \end{itemize}
@@ -229,8 +229,8 @@ are significantly reduced, i.e., 272,741 and 376,026 seconds respectively.
 %\end{figure}
 
 
-\subsection{3-Phase Model v.s. 1-Phase Model}
-We validate our 3-phase model by answering the question \textbf{Q2}.
+\subsection{Three-Phase Model v.s. One-Phase Model}
+We validate our three-phase model by answering the question \textbf{Q2}.
 Simulation results demonstrate that the job performance is improved 
 when the scheduler makes scheduling decision in each phase separately.
 Therefore, users are encouraged to provide detailed burst buffer demands in each phase for their jobs.
@@ -310,8 +310,8 @@ The scheduling policy used in this experiment is first-come first-serve.
 %==============XY===============
 When comparing the scheduling results of 1-Phase-1D and 3-Phase-1D,
 both of which only have the overall burst buffer demand of each job,
-more than 60\% of the 3-phase-modeled jobs finish faster than the 1-phase-modeled jobs.
-The slowest 3-phase-modeled job takes 418,927 seconds to finish,
+more than 60\% of the three-phase-modeled jobs finish faster than the 1-phase-modeled jobs.
+The slowest three-phase-modeled job takes 418,927 seconds to finish,
 while the slowest 1-phase-modeled job takes about 492,591 seconds to finish.
 The improvement is about 14.95\% in the worst case scenario.
 Here is the explanation: For the 1-phase-modeled jobs, the burst buffer nodes will be exclusively
@@ -322,11 +322,11 @@ In addition, if benign users can provide fine-grain information of data/IO deman
 Cerberus can program each queue separately and achieve better scheduling result.
 For the 3-Phase-3D model, Cerberus knows each job's demand during the different phases,
 the worst absolute response time is less than 379,026 seconds.
-This is about 10.24\% improvement to 3-phase-modeled jobs.
+This is about 10.24\% improvement to three-phase-modeled jobs.
 When Cerberus only knows the upper bound of data demand,
 it is 23.66\% better than the slowest 1-phase-modeled job.
-In average, \textit{more than 80\% of the jobs
-modeled by 3-phase-3D finish earlier than 1-phase-modeled jobs.}
+In average, \textit{more than 80\% of the three-phase-modeled jobs
+finish earlier than 1-phase-modeled jobs.}
 Meanwhile, \textit{more than 60\% of the jobs take less time if user
 specifies data usage demand at each phase, e.g., 3-Phase-3D vs. 3-Phase-1D.}
 
@@ -439,7 +439,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 \includegraphics[width=2.5in]{3Pvs1PFigures/1000jobs_3p_vs_1p_throughput}
                 \label{Fig:3Pvs1PThroughput}
         }
-        \caption{3-Phase Model vs. 1-Phase Model}
+        \caption{Three-Phase Model vs. One-Phase Model}
         \label{Fig:3Pvs1PPerformance}
 \end{figure*}
 
@@ -475,7 +475,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
         %\label{Fig:DPvsFIFOThroughput}
 %\end{figure}
 
-\subsection{Cerberus v.s. FCFS 3-Phase Scheduling}
+\subsection{Cerberus v.s. FCFS Three-Phase Scheduling}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 %dynamic programming based job scheduler can further reduce jobs' wait time.
 %We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
@@ -501,7 +501,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
 %===========XY===============
 In this section, we answer the question \textbf{Q3} by showing that
 adopting optimization in each scheduling phase can bring further improvement,
-compared with a naive first come first server (FCFS) 3-Phase scheduling design.
+compared with a naive first come first server (FCFS) three-phase scheduling design.
 Specifically, in the stage-in and stage-out phases, Cerberus schedules the jobs in $Q_I$ and $Q_O$
 according to the solution given by \equref{Equ:MaxTransferDataRecursion};
 for jobs in $Q_R$, Cerberus makes the scheduling decisions

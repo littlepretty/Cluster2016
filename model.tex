@@ -1,10 +1,10 @@
-\section{3-Phase Job Model}
+\section{Three-Phase Job Model}
 \label{Sec:Model}
 
 \begin{figure}[htp]
         \centering
         \includegraphics[width=3.6in]{CerberusBBSystem}
-        \caption{The design of 3-Phase burst buffer aware scheduling. The black arrows indicate 
+        \caption{The design of Three-Phase burst buffer aware scheduling. The black arrows indicate 
         the jobs changing of status; the red, peru and blue arrows in the bottom indicate the data flow in different phases.}
         \label{Fig:CerberusQueues}
 \end{figure}
@@ -28,7 +28,7 @@ can fill in the memory gap between the memory on compute nodes and the hard disk
 
 
 Before we give the details of our Cerberus design, 
-in this section we describe our 3-Phase job model 
+in this section we describe our three-phase job model 
 and the corresponding resource demand at each phase. 
 We assume that upon job submission, 
 a user specifies the amount of compute nodes, 
@@ -74,7 +74,7 @@ When jobs start running on the compute nodes,
 they could burst the checkpoint data to the burst buffer at high speed.
 Upon the job completion, 
 useful output data are staged out to the burst buffer for early releasing the compute nodes.
-Therefore, we divide the job lifetime into three different phases, as illustrated in Figure~\ref{Fig:CerberusQueues}. \NOTE{I prefer we keep this paragraph. Because it explains why 3-Phase make sense. 3-Phase is based on app's use case of bb.}
+Therefore, we divide the job lifetime into three different phases, as illustrated in Figure~\ref{Fig:CerberusQueues}. \NOTE{I prefer we keep this paragraph. Because it explains why three-phase make sense. 3-Phase is based on app's use case of bb.}
  
 \textbf{Stage-In}: After submitting the job to the system,
          Cerberus needs to pre-fetch data, such as configuration files and input data,
