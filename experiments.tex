@@ -457,8 +457,10 @@ Therefore, users are encouraged to provide detailed burst buffer demands in each
 %we see more than \textit{80\% of the tasks response faster when we do optimization}.
 
 %===========XY===============
+Cerberus can adopt various algorithms when scheduling jobs in each queue. 
+The optimization algorithms presented in section \ref{SubSec:OptStageIn} and \ref{SubSec:OptRunning} are integrated in Cerberus. 
 In this section, we answer the question \textbf{Q3} by showing that
-adopting optimization in each scheduling phase can bring further improvement,
+adopting optimization in each scheduling phase can bring further improvement when
 compared with a naive first come first server (FCFS) three-phase scheduling design.
 Specifically, in the stage-in and stage-out phases, Cerberus schedules the jobs in $Q_I$ and $Q_O$
 according to the solution given by \equref{Equ:MaxTransferDataRecursion};
@@ -532,9 +534,13 @@ Compared with the FCFS, \textit{the Cerberus achieves about 23.87\% higher avera
                 %\hline
         %\end{tabular}
 %\end{table}
-
-Memorization technique helps Cerberus to perform online job scheduling,
-though solving the optimization problem is theoretically NP-hard.
+The results in Figure \ref{Fig:DPvsFIFOPerformance} answer question \textbf{Q3}: 
+when Cerberus adopts optimization algorithms to schedule jobs,
+the execution of 80\% jobs can be expedited, their wait time is also greatly reduced.
+In the meanwhile, system throughput is boosted by as much as 23.87\%.
+It is important to point out that
+though solving the optimization problem is theoretically NP-hard,
+memorization technique enables Cerberus to perform online job scheduling,
 In our simulation, it takes about 0.04 second in average for Cerberus to make a scheduling decision.
 
 
