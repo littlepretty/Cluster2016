@@ -48,7 +48,7 @@ Burst buffer may also be utilized as the intermediate storage systems.
 % % while burst buffer takes charge of moving potentially TB-level volumes of data.
 % % There are more use cases for burst buffer nodes.
 % % Among them \textit{data cache} could be equally important to enhance the responsiveness
-% % of applications by improving the perceived IO bandwidth\cite{BBUseCase}.
+% % of applications by improving the perceived IO bandwidth\cite{TrinitySystem}.
 % % For example, shared object library or read-only configuration files could be
 % % cached on burst buffer nodes;
 % % lists of input files specific to a group of compute nodes allocated to
@@ -56,14 +56,14 @@ Burst buffer may also be utilized as the intermediate storage systems.
 % % Economical solid-state disks as a tier of burst buffer could also be used as
 % % out-of-core complement to insufficient main memory\cite{Romanus:CORR:15},
 % % working place for data analysis (reductions, feature extraction compression etc.)
-% % and visualization\cite{BBUseCase}.
+% % and visualization\cite{TrinitySystem}.
 
 
 %2. Use cases of burst buffer
 Regardless of the specific implementation, burst buffer nodes essentially augment
 the I/O stack with an intermediate productive offloading layer, 
 which can benefit jobs in multiple ways.
-As discussed in some preliminary surveys\cite{BBUseCase, apex-workflow} ,
+As discussed in some preliminary surveys\cite{apex-workflow} ,
 jobs' latest checkpoints can be pre-staged
 before the previous job terminates;
 jobs can burst checkpoint to burst buffer
@@ -75,7 +75,7 @@ which could shift the computation that follows the I/O bursts to an earlier mome
 while burst buffer nodes take charge of moving potentially TB-level volumes of data.
 There are more use cases for burst buffer nodes.
 Among them, \textit{data cache} could be equally important to enhance the responsiveness
-of applications by improving the perceived I/O bandwidth\cite{BBUseCase}.
+of applications by improving the perceived I/O bandwidth\cite{TrinitySystem}.
 Shared object library or read-only configuration files could be
 cached into burst buffer;
 The list of input files specific to a group of compute nodes allocated to
@@ -83,7 +83,7 @@ a particular job could be loaded into burst buffer prior to the execution;
 Economical solid-state disks as a tier of burst buffer could also be used as
 out-of-core complement to insufficient main memory\cite{Romanus:CORR:15},
 working place for data analysis (reductions, feature extraction compression etc.)
-and visualization\cite{BBUseCase}.
+and visualization\cite{TrinitySystem}.
 
 
 % % %3. Motivate burst buffer aware scheduler
