@@ -55,10 +55,10 @@ a fixed time period (500 seconds), measures the system performance.
 \subsection{Utilizing Burst Buffer Versus Direct IO}
 \label{Sec:Sim:DirectIOvsBB}
 
-
-%=============XY==============
-
-Since PFS is mounted by all the compute nodes in the Trinity architecture, 
+In this section, we examine the scheduling performance when 
+jobs perform I/O operation in two different ways, 
+namely, \textit{utilizing burst buffer} and \textit{Direct IO}.
+In the Trinity architecture, PFS is mounted by all the compute nodes,
 applications have the option to bypass the burst buffer 
 and to use the file system directly for their I/O operations.
 We refer this scenario as \textit{Direct IO}. 
@@ -66,9 +66,8 @@ Apparently, the performance of \textit{Direct IO}
 is limited by the low bandwidth of the I/O nodes. 
 However, applications will be exempted from
 waiting in the stage-in and stage-out phases in 
-the case of \textit{Direct IO} rather than utilizing the burst buffer.
-In this section, we compare the performance of applications utilizing the burst buffer
-against \textit{Direct IO}.
+the case of \textit{Direct IO} rather than utilizing the burst buffer
+for I/O operations.
 
 
 % Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of the response time of 1185 jobs.
@@ -172,10 +171,12 @@ are significantly reduced, i.e., 272,741 and 376,026 seconds respectively.
         %\label{Fig:DirectIOvsBBThroughput}
 %\end{figure}
 
-Based on the comparison, we can answer question \textbf{Q1}: by utilizing burst buffer nodes,
+Based on the above comparison, we can answer question \textbf{Q1}: 
+\textit{by utilizing burst buffer nodes,
 both the job-level and system-level performance can be significantly improved.
-The execution of 99\% jobs will be expedited, 80\% of jobs will suffer less wait time and the 
-average system throughput will be improved as much as 136\%.
+The execution of 99\% jobs will be expedited, 
+80\% of jobs will suffer less wait time,
+and the average system throughput will be improved as much as 136\%.}
 
 
 
