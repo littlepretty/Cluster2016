@@ -148,6 +148,12 @@ The bandwidth between a CPU node and an IO node is set to 2.5 GBps.
 \NOTE{The time spent for job's I/O operation in our simulation is simply calculated by
 dividing the amount of transferred data by the corresponding bandwidth.}
 
+Our Python implementation of BBSim is written in 1395 lines of code.
+There are four major modules.
+The \texttt{simulator} module drives the event-driven simulation process.
+Various job models, job demands, and schedulers are in \texttt{scheduler} module.
+The \texttt{dp\_solver} module provides dynamic programming solution for
+the Cerberus scheduler in \texttt{scheduler}.
 Though targeting on burst buffer enabled systems,
 BBSim also supports simulating job scheduling on HPC systems without burst buffer.
 Besides, it is easy to integrate other scheduling policies into BBSim.
