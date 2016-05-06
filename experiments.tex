@@ -18,7 +18,7 @@
 This section evaluates Cerberus by answering three key questions.
 \begin{itemize}
         \item \textbf{Q1}: Does the use of burst buffer 
-        improve both system-level and job-level performance?\NOTE{keep unchanged}
+        improve both system-level and job-level performance?
         \item \textbf{Q2}: What is the benefit of using 
         fine-grained three-phase scheduling?
         \item \textbf{Q3}: What is the performance gain achieved 
@@ -36,7 +36,8 @@ This section evaluates Cerberus by answering three key questions.
 
 %==============XY===================
 We select three evaluation metrics, \textit{job response time}, \textit{job waiting time} and \textit{system throughput}.
-Job response time is the time duration between the job submission and the job completion. Job waiting time is the total time that a job waits in each queue.
+Job response time is the time duration between the job submission and the job completion. 
+Job waiting time is the aggregated wait time that a job stays in each queue.
 System throughput is defined as the number of jobs completed in a fixed time period (500 seconds).
 
 %
@@ -101,7 +102,7 @@ System throughput is defined as the number of jobs completed in a fixed time per
 %$data\_in$ follows the uniform distribution between 1 GB and 30 GB~\cite{Liu:MSST:2012}.
 %
 % \subsection{BB-Enabled System v.s. IO-Node-Only System}
-\subsection{Utilizing Burst Buffer v.s. Direct IO}
+\subsection{Utilizing Burst Buffer Versus Direct IO}
 \label{Sec:Sim:DirectIOvsBB}
 % In this section, we demonstrate that by utilizing burst buffer nodes,
 % job scheduler could improve the performance of both applications and system.
@@ -116,15 +117,13 @@ System throughput is defined as the number of jobs completed in a fixed time per
 
 %=============XY==============
 
-PFS is mounted by all the compute nodes in the Trinity architecture, thus applications have the
-option to bypass the burst buffer and to use the file system directly for their IO operations.
+Since PFS is mounted by all the compute nodes in the Trinity architecture, applications have the
+option to bypass the burst buffer and to use the file system directly for their I/O operations.
 We refer this scenario as \textit{Direct IO}. Apparently, the performance of \textit{Direct IO}
-is limited by the low bandwidth of the IO nodes. However, applications will be exempted from
+is limited by the low bandwidth of the I/O nodes. However, applications will be exempted from
 waiting in the stage-in and stage-out phases in the case of \textit{Direct IO} rather than utilizing the burst buffer.
 In this section, we compare the performance of applications utilizing the burst buffer
 against \textit{Direct IO}.
-Based on the comparison, we answer question \textbf{Q1}: by utilizing burst buffer nodes,
-both the job-level and system-level performance can be significantly improved.
 
 
 % Figure~\ref{Fig:DirectIOvsBBResponse} compares CDF of the response time of 1185 jobs.
@@ -147,7 +146,7 @@ For the burst-buffer-enabled system, the job response time is bounded by 376,443
 However, the worst case of Direct IO is catastrophic, i.e., a job takes 889,239.20 seconds to finish, which is 2.36 times slower than the slowest non-responsive job
 in the burst-buffer-enabled system.
 In average, \textit{nearly 99\%} of the jobs scheduled on the burst-buffer-enabled system
-response faster than the traditional system without burst buffer, since the burst buffer can mitigate the IO gap between IO nodes and compute nodes.
+response faster than the traditional system without burst buffer, since the burst buffer can mitigate the I/O gap between I/O nodes and compute nodes.
 
 
 % Figure~\ref{Fig:DirectIOvsBBWait} reveals the total waiting time for both cases.
@@ -174,7 +173,7 @@ slower than the worst case in the burst-buffer-enabled system;
 the upper bound of the waiting duration for the burst buffer systems is about 285,254 seconds.
 Because burst buffer has better ability to absorb checkpoint operations and data moving in/out,
 the execution pipeline of job series is significantly fast.
-Statistically, \textit{more than 80\% jobs have less waiting time if they can access burst buffer.}
+Statistically, \textit{more than 80\% jobs have less waiting time if they utilize burst buffer.}
 
 % Using the collected completion time, we calculate system's throughput over time sequence.
 % Figure~\ref{Fig:DirectIOvsBBThroughput} shows the system throughput for
@@ -203,7 +202,7 @@ In contrast, for the burst-buffer-enabled system, the same job accomplished the 
 are significantly reduced, i.e., 272,741 and 376,026 seconds respectively.
 
 
-\begin{figure*}[htp]
+\begin{figure*}[t]
         \centering
         \subfloat[Job Response Time] {
                 \includegraphics[width=2.2in]{IOvsBBFigures/1000jobs_direct_vs_bb_response}
@@ -217,7 +216,7 @@ are significantly reduced, i.e., 272,741 and 376,026 seconds respectively.
                 \includegraphics[width=2.5in]{IOvsBBFigures/1000jobs_direct_vs_bb_throughput}
                 \label{Fig:DirectIOvsBBThroughput}
         }
-        \caption{Utilizing Burst Buffer v.s. Direct IO}
+        \caption{The comparison of scheduling performance between job utilizing burst buffer and conducting Direct I/O. In (c), on the left, the system throughput is presented in time sequence; the average system throughput is presented on the right. }
         \label{Fig:DirectIOPerformance}
 \end{figure*}
 
@@ -228,12 +227,15 @@ are significantly reduced, i.e., 272,741 and 376,026 seconds respectively.
         %\label{Fig:DirectIOvsBBThroughput}
 %\end{figure}
 
+Based on the comparison, we can answer question \textbf{Q1}: by utilizing burst buffer nodes,
+both the job-level and system-level performance can be significantly improved.
+The execution of 99\% jobs will be expedited, 80\% of jobs will suffer less wait time and the 
+average system throughput will be improved as much as 136\%.
+
+
+
 
 \subsection{Three-Phase Model v.s. One-Phase Model}
-We validate our three-phase model by answering the question \textbf{Q2}.
-Simulation results demonstrate that the job performance is improved 
-when the scheduler makes scheduling decision in each phase separately.
-Therefore, users are encouraged to provide detailed burst buffer demands in each phase for their jobs.
 
 % In Figure~\ref{Fig:3Pvs1PResponse}, we plot 3 different scheduling results by 3 FCFS scheduler.
 % \begin{itemize}
@@ -257,6 +259,7 @@ Therefore, users are encouraged to provide detailed burst buffer demands in each
 % %Response time of system without burst buffer devices are also plotted for comparison.
 
 %========XY========================
+We validate our three-phase model by answering the question \textbf{Q2}.
 In Figure~\ref{Fig:3Pvs1PResponse}, the scheduling results based on three models
 are presented:
 \begin{itemize}
@@ -270,7 +273,7 @@ are presented:
         \item \textbf{3-Phase-3D}: Jobs are submitted with the detailed burst buffer demand for each phase.
                 %the same as Cerberus in section~\ref{Sec:Sim:DirectIOvsBB}
 \end{itemize}
-We simulate three cases with one set of randomly generated data volume sequences.
+%We simulate three cases with one set of randomly generated data volume sequences.
 We assume the overall burst buffer demand in 1-Phase-1D and 3-Phase-1D is
 $\max \{data\_in, data\_out, data\_run\}$.
 Notice that 1-phase BB scheduler must subject to the burst buffer capacity constraint.
@@ -318,8 +321,8 @@ Here is the explanation: For the 1-phase-modeled jobs, the burst buffer nodes wi
 taken by the scheduled jobs throughout their lifetime. In contrast, Cerberus reclaims the burst buffer multiple times;
 It also releases the burst buffer nodes and the CPU resources at the earliest possible time, which allows Cerberus to schedule more system resources.
 %Finally, when comparing the cases of 3-Phase-3D with 3-Phase-1D, we find another advantage of our 3-phase model.
-In addition, if benign users can provide fine-grain information of data/IO demands,
-Cerberus can program each queue separately and achieve better scheduling result.
+In addition, if users can provide fine-grain information of data/IO demands,
+Cerberus can coordinate three queues and make scheduling decision separately to achieve better scheduling result.
 For the 3-Phase-3D model, Cerberus knows each job's demand during the different phases,
 the worst absolute response time is less than 379,026 seconds.
 This is about 10.24\% improvement to three-phase-modeled jobs.
@@ -416,7 +419,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
 
 
 
-\begin{figure*}[htp]
+\begin{figure*}[t]
         \centering
         \subfloat[Job Response Time] {
                 \includegraphics[width=2.2in]{3Pvs1PFigures/1000jobs_3p_vs_1p_response}
@@ -439,7 +442,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 \includegraphics[width=2.5in]{3Pvs1PFigures/1000jobs_3p_vs_1p_throughput}
                 \label{Fig:3Pvs1PThroughput}
         }
-        \caption{Three-Phase Model vs. One-Phase Model}
+        \caption{The comparison of scheduling performance between using 3-phase model and 1-phase model. In (c), on the left, the system throughput is presented in time sequence; the average system throughput is presented on the right.}
         \label{Fig:3Pvs1PPerformance}
 \end{figure*}
 
@@ -450,7 +453,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
         %\label{Fig:3Pvs1PThroughput}
 %\end{figure}
 
-\begin{figure*}[htp]
+\begin{figure*}[t]
         \centering
         \subfloat[Job Response Time] {
                 \includegraphics[width=2.2in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_response}
@@ -464,7 +467,7 @@ justifies the necessity that a user needs to provide data capacity demand for ea
                 \includegraphics[width=2.5in]{DPvsFIFOFigures/1000jobs_dp_vs_fifo_throughput}
                 \label{Fig:DPvsFIFOThroughput}
         }
-        \caption{Cerberus v.s. FCFS}
+        \caption{The comparison of scheduling performance obtained by Cerberus and a naive first-come, first-serve scheduling. In (c), on the left, the system throughput is presented in time sequence; the average system throughput is presented on the right.}
         \label{Fig:DPvsFIFOPerformance}
 \end{figure*}
 
@@ -475,7 +478,12 @@ justifies the necessity that a user needs to provide data capacity demand for ea
         %\label{Fig:DPvsFIFOThroughput}
 %\end{figure}
 
-\subsection{Cerberus v.s. FCFS Three-Phase Scheduling}
+Simulation results demonstrate that the job performance is improved 
+when Cerberus makes scheduling decision in each phase separately.
+Therefore, users are encouraged to provide detailed burst buffer demands in each phase for their jobs.
+
+
+\subsection{Cerberus vs. FCFS Three-Phase Scheduling}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 %dynamic programming based job scheduler can further reduce jobs' wait time.
 %We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
@@ -575,8 +583,8 @@ Compared with the FCFS, \textit{the Cerberus achieves about 23.87\% higher avera
         %\end{tabular}
 %\end{table}
 
-Memorization technique helps the Optimized Cerberus to perform online job scheduling,
+Memorization technique helps Cerberus to perform online job scheduling,
 though solving the optimization problem is theoretically NP-hard.
-In our simulation, it takes about 0.04 second in average for the Cerberus to make a scheduling decision.
+In our simulation, it takes about 0.04 second in average for Cerberus to make a scheduling decision.
 
 
