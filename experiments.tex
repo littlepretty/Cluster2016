@@ -15,7 +15,8 @@
 % the Trinity system described later.
 
 %==============XY===================
-This section evaluates Cerberus by answering three key questions.
+We evaluate Cerberus through a series of experiments with BBSim.
+The experimental results give answers to the following three key questions.
 \begin{itemize}
         \item \textbf{Q1}: Does the use of burst buffer 
         improve both system-level and job-level performance?
@@ -25,103 +26,47 @@ This section evaluates Cerberus by answering three key questions.
         by Cerberus optimization based scheduling?
 \end{itemize}
 
+%traces
+Our experiments are based on trace-driven simulation.
+The Trinity system simulated by BBSim can be driven 
+by workload trace collected from production systems.
+However Trinity is not available to use at present, 
+there is no workload traces from Trinity available for our study.
+Instead, we use the trace log collected from the Intrepid, a IBM Blue Gene/P system. 
+The trace file contains 68,936 jobs
+submitted to the system from January to September in 2009~\cite{Tang:IPDPS:2010}.
+For each job, its log contains information such as submitted time, expected runtime, wait time, user ID, group ID, etc.
+We patched three fields to each job's log entry: the amount of input data $data\_in$,
+the total amount of written data for checkpointing $data\_run$
+and the amount of output data $data\_out$.
+We assume $data\_run$ and $data\_out$ follows the uniform distribution with a
+lower bound of 1 TB and a upper bound of 60 TB;
+$data\_in$ follows the uniform distribution between 1 GB and 30 GB~\cite{Liu:MSST:2012}.
+
 % metric
-
-% We select two evaluation metrics, job's \textit{response time} and 
-% \textit{system throughput}, when evaluating our design.
-% Response time is the time duration from job submission to its fully completion,
-% which is the major concern from user's perspective.
-% On the other hands, system throughput, defined as the number of jobs finished in
-% a fixed time period (500 seconds), measures the performance of computing system.
-
-%==============XY===================
 We select three evaluation metrics, \textit{job response time}, \textit{job waiting time} and \textit{system throughput}.
-Job response time is the time duration between the job submission and the job completion. 
+Job response time is the time duration between the job submission and its completion,
+which is the major concern from user's perspective. 
 Job waiting time is the aggregated wait time that a job stays in each queue.
-System throughput is defined as the number of jobs completed in a fixed time period (500 seconds).
+On the other hands, system throughput, defined as the number of jobs finished in
+a fixed time period (500 seconds), measures the system performance.
 
-%
-%\subsection{Experimental Settings}
-%% % system
-%% We consider simulating the full Trinity super computer\cite{TrinitySystem}.
-%% The number of compute nodes on Trinity is about 18,936,
-%% e.g. 9,436 Intel Haswell nodes
-%% and at least 9500 Intel Xeon Phi nodes.
-%% There are 16 cores on each processor, thus totally 302,976 cores.
-%% In the following experiments, we compare two identical system except that
-%% IO nodes are replaced by the same number of burst buffer nodes.
-%% Eventually Trinity plans to delivery up to 576 burst buffer nodes of 3.7 PB,
-%% consisted of Trinity IO nodes with PCIe SSD card.
-%% They are globally accessible as intermediate storage and distributed among cabinets.
-%% Sequential read/write speed of burst buffer nodes is 8.0 GBps.
-%% Bandwidth between CPU node and non-burst-buffer IO node is set to 2.5 GBps.
-%
-%
-%We simulate a burst-buffer-enabled system as shown in Figure~\ref{Fig:BBArchitecture}.
-%This system architecture is inspired by Trinity~\cite{TrinitySystem}, 
-%the next generation supercomputer in Los Alamos National Laboratory.
-%The parameters used in our simulation are taken from the 
-%Trinity/NERSC-8 Use Case Scenarios technical report\cite{BBUseCase}.
-%The simulated system consists of 18,936 compute nodes,
-%e.g., 9,436 Intel Haswell nodes and 9,500 Intel Xeon Phi nodes.
-%There are 576 burst buffer nodes with an aggregated 3.7 PB storage, which are globally accessible as the intermediate storage.
-%The sequential read/write speed of burst buffer nodes is 8.0 GBps.
-%The bandwidth between a CPU node and an IO node is set to 2.5 GBps.
-%
-%\begin{figure}[htp]
-%        \centering
-%        \includegraphics[width=3.5in]{BBArchitecturewithBandwidth}
-%        \caption{Our simulated burst buffer enabled HPC system inspired by Trinity at LANL\TODO{remove the blue SSD nodes in Fig}}
-%        \label{Fig:BBArchitecture}
-%\end{figure}
-%
-%% % trace
-%% Job trace is from ANL's Blue Gene Intrepid system,
-%% containing totally 68,936 jobs run during January to September 2009\cite{JobTrace}.
-%% We extract two critical fields from this jobs trace: running time and
-%% number of cores user requested.
-%% In this section we take a window of 1,185 jobs and report their scheduling results.
-%% We patched 3 fields to each job's log entry: the amount of input data $data\_in$,
-%% the total amount of written data for checkpointings $data\_run$
-%% and the amount of output data $data\_out$.
-%% We assume $data\_run$ and $data\_out$ follows uniform distribution with
-%% lower boundary of 1 TiB and upper boundary of 60 TiB;
-%% $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
-%% The patches 3 fields may or may not be used in scheduling,
-%% depends on both the model of the jobs and the experiment scenario.
-%
-%
-%Since Trinity is not available to use at present, there is no Trinity job log available for our study.
-%We use the job log collected from ANL's Blue Gene Intrepid system. The log contains 68,936 jobs
-%submitted to the system from January to September 2009~\cite{Tang:IPDPS:2010}.
-%We patched 3 fields to each job's log entry: the amount of input data $data\_in$,
-%the total amount of written data for checkpointings $data\_run$
-%and the amount of output data $data\_out$.
-%We assume $data\_run$ and $data\_out$ follows the uniform distribution with a
-%lower bound of 1 TB and a upper bound of 60 TB;
-%$data\_in$ follows the uniform distribution between 1 GB and 30 GB~\cite{Liu:MSST:2012}.
-%
-% \subsection{BB-Enabled System v.s. IO-Node-Only System}
+
 \subsection{Utilizing Burst Buffer Versus Direct IO}
 \label{Sec:Sim:DirectIOvsBB}
-% In this section, we demonstrate that by utilizing burst buffer nodes,
-% job scheduler could improve the performance of both applications and system.
-% We compare two systems:
-% \begin{itemize}
-%         \item \textbf{1-Phase IO}: system without burst buffer nodes
-%                 scheduled by FCFS policy
-%         \item \textbf{Cerberus}: system with burst buffer 
-%                 scheduled by our proposed Cerberus
-% \end{itemize}
 
 
 %=============XY==============
 
-Since PFS is mounted by all the compute nodes in the Trinity architecture, applications have the
-option to bypass the burst buffer and to use the file system directly for their I/O operations.
-We refer this scenario as \textit{Direct IO}. Apparently, the performance of \textit{Direct IO}
-is limited by the low bandwidth of the I/O nodes. However, applications will be exempted from
-waiting in the stage-in and stage-out phases in the case of \textit{Direct IO} rather than utilizing the burst buffer.
+Since PFS is mounted by all the compute nodes in the Trinity architecture, 
+applications have the option to bypass the burst buffer 
+and to use the file system directly for their I/O operations.
+We refer this scenario as \textit{Direct IO}. 
+Apparently, the performance of \textit{Direct IO}
+is limited by the low bandwidth of the I/O nodes. 
+However, applications will be exempted from
+waiting in the stage-in and stage-out phases in 
+the case of \textit{Direct IO} rather than utilizing the burst buffer.
 In this section, we compare the performance of applications utilizing the burst buffer
 against \textit{Direct IO}.
 

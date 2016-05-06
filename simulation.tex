@@ -145,11 +145,11 @@ e.g., 9,436 Intel Haswell nodes and 9,500 Intel Xeon Phi nodes.
 There are 576 burst buffer nodes with an aggregated 3.7 PB storage, which are globally accessible as the intermediate storage.
 The sequential read/write speed of burst buffer nodes is 8.0 GBps.
 The bandwidth between a CPU node and an IO node is set to 2.5 GBps.
-\NOTE{The time spent for job's I/O operation in our simulation is simply calculated by
-dividing the amount of transferred data by the corresponding bandwidth.}
+The time spent for job's I/O operation in our simulation is simply calculated by
+dividing the amount of transferred data by the corresponding bandwidth.
 
 Our Python implementation of BBSim is written in 1395 lines of code.
-There are four major modules.
+There are three major modules.
 The \texttt{simulator} module drives the event-driven simulation process.
 Various job models, job demands, and schedulers are in \texttt{scheduler} module.
 The \texttt{dp\_solver} module provides dynamic programming solution for
@@ -182,16 +182,6 @@ The codebase of BBSim and Cerberus are made public to the community\cite{bbsim-g
 % depends on both the model of the jobs and the experiment scenario.
 
 
-Since Trinity is not available to use at present, 
-there is no Trinity job log available for our study.
-We use the job log collected from ANL's Blue Gene Intrepid system. The log contains 68,936 jobs
-submitted to the system from January to September 2009~\cite{Tang:IPDPS:2010}.
-We patched three fields to each job's log entry: the amount of input data $data\_in$,
-the total amount of written data for checkpointings $data\_run$
-and the amount of output data $data\_out$.
-We assume $data\_run$ and $data\_out$ follows the uniform distribution with a
-lower bound of 1 TB and a upper bound of 60 TB;
-$data\_in$ follows the uniform distribution between 1 GB and 30 GB~\cite{Liu:MSST:2012}.
 
 
 
