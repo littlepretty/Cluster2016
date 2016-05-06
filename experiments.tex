@@ -55,7 +55,7 @@ a fixed time period (500 seconds), measures the system performance.
 \subsection{Utilizing Burst Buffer Versus Direct IO}
 \label{Sec:Sim:DirectIOvsBB}
 
-In this section, we examine the scheduling performance when 
+We examine the scheduling performance when 
 jobs perform I/O operation in two different ways, 
 namely, \textit{utilizing burst buffer} and \textit{Direct IO}.
 In the Trinity architecture, PFS is mounted by all the compute nodes,
@@ -181,7 +181,7 @@ and the average system throughput will be improved as much as 136\%.}
 
 
 
-\subsection{Three-Phase Model v.s. One-Phase Model}
+\subsection{Three-Phase Model Versus One-Phase Model}
 
 % In Figure~\ref{Fig:3Pvs1PResponse}, we plot 3 different scheduling results by 3 FCFS scheduler.
 % \begin{itemize}
@@ -205,8 +205,10 @@ and the average system throughput will be improved as much as 136\%.}
 % %Response time of system without burst buffer devices are also plotted for comparison.
 
 %========XY========================
-We validate our three-phase model by answering the question \textbf{Q2}.
-In Figure~\ref{Fig:3Pvs1PResponse}, the scheduling results based on three models
+We investigate the performance of scheduling jobs in different models. 
+As we discussed before, Cerberus is designed for scheduling the three-phase modeled jobs. 
+It makes scheduling decisions in fine granularity. 
+In Figure~\ref{Fig:3Pvs1PResponse}, the scheduling results based on three job models
 are presented:
 \begin{itemize}
         \item \textbf{1-Phase-1D}: Jobs are submitted with the total burst buffer demand,
@@ -216,10 +218,9 @@ are presented:
         \item \textbf{3-Phase-1D}: Jobs are submitted with the total burst buffer demand,
         their lifetime are divided into three phases as discussed in Section~\ref{Sec:Model}.
         
-        \item \textbf{3-Phase-3D}: Jobs are submitted with the detailed burst buffer demand for each phase.
-                %the same as Cerberus in section~\ref{Sec:Sim:DirectIOvsBB}
+        \item \textbf{3-Phase-3D}: Jobs are submitted with the detailed burst buffer demand in each phase.
+
 \end{itemize}
-%We simulate three cases with one set of randomly generated data volume sequences.
 We assume the overall burst buffer demand in 1-Phase-1D and 3-Phase-1D is
 $\max \{data\_in, data\_out, data\_run\}$.
 Notice that 1-phase BB scheduler must subject to the burst buffer capacity constraint.
@@ -424,12 +425,15 @@ justifies the necessity that a user needs to provide data capacity demand for ea
         %\label{Fig:DPvsFIFOThroughput}
 %\end{figure}
 
-Simulation results demonstrate that the job performance is improved 
-when Cerberus makes scheduling decision in each phase separately.
-Therefore, users are encouraged to provide detailed burst buffer demands in each phase for their jobs.
+The experimental results demonstrate that the performance of both jobs and the system is improved 
+when Cerberus makes fine granularity scheduling decisions for the three-phase modeled jobs.
+When users provide the \textit{burst buffer triple} for their jobs, 
+the job-level and system-level performance can further be improved.
+Therefore, users are encouraged to provide detailed burst buffer demands in each phase for their jobs. We can now answer the question \textbf{Q2}: 
+\textit{the fine-grained three-phase scheduling could benefit both job-level and system-level performance.}
 
 
-\subsection{Cerberus vs. FCFS Three-Phase Scheduling}
+\subsection{Cerberus Versus FCFS Three-Phase Scheduling}
 %If we consider optimizing either burst buffer's data throughput or the parallelism across jobs,
 %dynamic programming based job scheduler can further reduce jobs' wait time.
 %We plot in Figure~\ref{Fig:DPvsFIFOResponse} the resulting response time of
