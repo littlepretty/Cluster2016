@@ -11,13 +11,12 @@
 % For example, at the very beginning, submitted $job_i$ will enter \textbf{Waiting Stage-in} state;
 % at the meanwhile, $job_i$ is enqueued to $Q_I$ and scheduler is triggered to do scheduling.
 
-%=========XY===========
 \section{BBSim: An Event Driven Simulator of Cerberus}
 \label{Sec:Simulation}
 
 We develop an event-driven simulator, named \textbf{BBSim},
 to simulate how Cerberus schedules jobs on burst-buffer-enabled HPC systems.
-Besides demonstrating the lifetime of a job scheduled by Cerberus,
+Apart from demonstrating the lifetime of a job scheduled by Cerberus,
 Figure~\ref{Fig:JobFSM} also illustrates the various events in BBSim and how to handle
 them in an event-driven-simulation approach.
 The changes of job \textit{state} depend on the current status and the \textit{events} to trigger \textit{actions}.
@@ -105,8 +104,6 @@ The allocated resources are released at the following time points:
 % Both can be proved by the following experiments for various schedulers.
 
 
-%==========XY============
-
 %The timestamps of all the \textit{finish} events are calculated as follows:
 %\begin{align}
 %        & TS_{f\_stagein} = TS_{s\_stagein} + \frac{bb\_in}{BW_{io\_to\_bb}}\label{Equ:FinIn} \\
@@ -145,7 +142,7 @@ e.g., 9,436 Intel Haswell nodes and 9,500 Intel Xeon Phi nodes.
 There are 576 burst buffer nodes with an aggregated 3.7 PB storage, which are globally accessible as the intermediate storage.
 The sequential read/write speed of burst buffer nodes is 8.0 GBps.
 The bandwidth between a CPU node and an IO node is set to 2.5 GBps.
-The time spent for job's I/O operation in our simulation is simply calculated by
+The time spent for job's I/O operation in our simulation is calculated by
 dividing the amount of transferred data by the corresponding bandwidth.
 
 Our Python implementation of BBSim is written in 1395 lines of code.
@@ -162,8 +159,8 @@ The codebase of BBSim and Cerberus are made public to the community\cite{bbsim-g
 \begin{figure}[htp]
         \centering
         \includegraphics[width=3.5in]{BBArchitecturewithBandwidth}
-        \caption{Our simulated burst buffer enabled HPC system is inspired by Trinity at LANL. The bandwidth between compute nodes and burst buffer node is 8.0 GBps. The bandwidth between compute nodes and I/O nodes is 2.5 GBps. The bandwidth between I/O layer and the outside InfiniteBand Network is also set to 2.5 GBps.}
-        \label{Fig:BBArchitecture}
+        \caption{A burst buffer enabled system simulated in BBSim. The bandwidth between compute nodes and burst buffer node is 8.0 GBps (denoted by red arrow). The bandwidth between compute nodes and I/O nodes, and the bandwidth between I/O layer and the outside InfiniteBand Network are set to 2.5 GBps (denoted by purple arrow).}
+\label{Fig:BBArchitecture}
 \end{figure}
 
 % % trace
@@ -180,9 +177,3 @@ The codebase of BBSim and Cerberus are made public to the community\cite{bbsim-g
 % $data\_in$ follows uniform distribution between 1 GiB and 30 Gib.
 % The patches 3 fields may or may not be used in scheduling,
 % depends on both the model of the jobs and the experiment scenario.
-
-
-
-
-
-

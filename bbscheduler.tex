@@ -444,10 +444,10 @@ Email: \{dong.jin, lan\}@iit.edu
 %improve burst buffer equipped system.
 
 Burst buffer drastically improves the performance of computational applications by providing high perceived IO bandwidth.
-However, traditional batch schedulers have not embraced the full potential of burst buffer technology in practice. 
+However, traditional batch schedulers have barely embraced the full potential of burst buffer technology in practice. 
 %either barely knows BB's existence or cannot fully utilize them in practice.
-In this paper, we model the execution of typical scientific applications
-that generate tens of TB of data on a supercomputer equipped with BB.
+In this paper, we model the execution of scientific applications
+that generate tens of TB of data on a supercomputer equipped with burst buffer.
 We characterize the lifetime of generic applications into three phases:
 \textit{stage-in}, \textit{running}, and \textit{stage-out}.
 We develop a novel burst-buffer-aware batch scheduler \textit{Cerberus} to 
@@ -458,7 +458,7 @@ between burst buffer and the external storage system.
 In the running phase, Cerberus maximizes the predefined objectives of job scheduling.
 We evaluate our design through extensive event driven simulations. 
 Our preliminary results demonstrate that
-1) compared to non-burst-buffer systems, Cerberus accelerates the job execution, reduces the job response time and improves average system throughput by 192.50\%;
+1) compared to non-burst-buffer systems, Cerberus accelerates the job execution, reduces the job response time, and improves average system throughput by 192.50\%;
 2) three-phase based Cerberus extra boosts the average system throughput by 62.31\% comparing to traditional static burst-buffer-aware batch scheduler.
 \end{abstract}
 

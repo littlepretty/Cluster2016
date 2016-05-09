@@ -54,7 +54,6 @@
 % this new resource upon job submission.
 
 
-%================XY====================
 In the field of high performance computing (HPC), 
 system performance is no longer throttled only by computation capability,
 but also by the ever-increasing I/O gap
@@ -65,7 +64,7 @@ which is still far from the target of 60 TB/s for the exascale computers\cite{Sh
 The gap is critical because scientific applications typically exhibit
 ``bursty" I/O patterns,
 resulting from application's defensive I/O strategy
-and and the need  for subsequent data processing\cite{Carns:MSST:2011, Kim:PDSW:2010, Latham:CSD:2012, Naik:ICPPW:2009, Dennis:CUG:2009}. 
+and the need  for subsequent data processing\cite{Carns:MSST:2011, Kim:PDSW:2010, Latham:CSD:2012, Naik:ICPPW:2009, Dennis:CUG:2009}. 
 When multiple applications attempt to access the storage system simultaneously, 
 it is easy to saturate
 the I/O bandwidth, leading to severe performance degradation.
@@ -91,12 +90,12 @@ Cerberus is a monstrous three-headed dog (three-phase scheduler),
 who guards the gate of the underworld to the earth (HPC system),
 preventing the dead (jobs) from leaving (running).},
 a novel batch scheduler for HPC systems equipped with burst buffer. 
-We propose a three-phase model for user jobs. 
+We propose a three-phase job model.
 %based on the critical use cases of burst buffer, including
 %application checkpoint restart and staging in/out data. 
 The lifetime of a user job is divided into three phases:
 \textit{stage in}, \textit{running}, and \textit{stage-out}.
-burst buffer is used for different purposes in these phases.
+Burst buffer is used for different purposes in these phases.
 Unlike existing batch schedulers that make scheduling decision for each job upon its submission,
 Cerberus participates in all of the job phases.
 By dividing the lifetime of user jobs into three phases,
@@ -105,11 +104,11 @@ making scheduling decision based on job requirement at different phases.
 We conduct a series of event driven simulations to evaluate our design. 
 As we will show later on, 
 the preliminary results demonstrate that the three-phase design of Cerberus 
-can not only boost system responsiveness, but also improve job performance. 
+not only boosts system responsiveness, but also improves job performance. 
 Specifically,
 Cerberus accelerates job execution, reduces job response time 
 and improves the average system throughput by 62.31\%.
-In this work, we make three key contributions: 
+Put together, we make three key contributions in this work:
 \begin{enumerate}
         \item    We propose a three-phase job model (i.e., stage-in, running, and stage-out) 
         to describe user jobs and further to facilitate job scheduling in a fine granularity.
@@ -133,6 +132,6 @@ Section~\ref{Sec:Scheduler} describes the design of Cerberus.
 Section~\ref{Sec:Simulation} describes the design of BBsim, the event driven scheduling simulator.
 Section~\ref{Sec:Experiments} presents experiments to evaluate Cerberus under various configurations by using BBSim.
 Section~\ref{Sec:RelatedWorks} discusses the related works, 
-and Section~\ref{Sec:Conclusion} concludes the paper.
+and Section~\ref{Sec:Conclusion} concludes this paper.
 
 
