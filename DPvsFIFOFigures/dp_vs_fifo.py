@@ -32,7 +32,7 @@ def throughputPlot(prefix, delta=500.0):
     """data3 = np.genfromtxt(file_prefix + '_maxparallel.out.csv', delimiter=',',
                           skip_header=1, names=first_row3)"""
     lines = ['b:', 'r:', 'g:', 'b', 'r', 'g']
-    labels = ['FCFS', 'Cerberus', 'MaxP Cerberus']
+    labels = ['Naive', 'Cerberus', 'MaxP Cerberus']
     hatches = ['/', '\\', '-']
     all_data = [data1, data2]
     avgs = []
@@ -65,13 +65,13 @@ def throughputPlot(prefix, delta=500.0):
                 color=lines[i+3], label='Avg %s' % labels[i])
         i += 1
 
-    ax1.set_ylim([0, 16])
-    ax1.set_yticks(np.arange(0.0, 17, 2))
-    ax2.set_ylim([0, 2.4])
-    ax2.set_yticks(np.arange(0.0, 2.5, 0.3))
+    ax1.set_ylim([0, 14])
+    ax1.set_yticks(np.arange(0.0, 15, 2))
+    ax2.set_ylim([0, 2.8])
+    ax2.set_yticks(np.arange(0.0, 2.9, 0.4))
     ax1.grid()
-    ax1.legend(loc='upper left', fontsize=16)
-    ax2.legend(loc='upper right', fontsize=16)
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
     ax1.set_xlabel('Time Sequence / Seconds')
     ax1.set_ylabel('#Jobs / 500 Seconds')
     ax2.set_ylabel('Mean #Jobs')
@@ -122,7 +122,7 @@ def cdfPlot(prefix, column='wait'):
                           skip_header=1, names=first_row3)"""
     plt.figure(figure_no)
     figure_no += 1
-    labels = ['FCFS', 'Cerberus', 'MaxP Cerberus']
+    labels = ['Naive', 'Cerberus', 'MaxP Cerberus']
     lines = ['b-', 'r--', 'g:']
     i = 0
     for data in [data1, data2]:

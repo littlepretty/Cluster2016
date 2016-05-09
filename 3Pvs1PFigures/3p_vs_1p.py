@@ -192,8 +192,8 @@ def throughputPlot(prefix, delta=500.0):
         ax2.bar(end + i*width, avg, width, color=lines[i+3],
                 label='Avg %s' % labels[i], hatch=hatches[i])
         i += 1
-    ax1.legend(loc='upper left', fontsize=16)
-    ax2.legend(loc='upper right', fontsize=16)
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
     ax1.set_xlabel('Time Sequence / Seconds')
     ax1.set_ylabel('#Jobs / 500 Seconds')
     ax2.set_ylabel('Mean #Jobs')
