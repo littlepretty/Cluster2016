@@ -59,7 +59,7 @@ system performance is no longer throttled only by computation capability,
 but also by the ever-increasing I/O gap
 between computational resources and disk-based storage technologies.
 For example, on the early-state Trinity system~\cite{TrinitySystem}, the I/O nodes between
-the compute nodes and the external storage can deliver data at  the speed of 810 GB/s,
+the compute nodes and the external storage can deliver transfer speed at 810 GB/s,
 which is still far from the target of 60 TB/s for the exascale computers\cite{Shalf:HPCCS:2010}.
 The gap is critical because scientific applications typically exhibit
 ``bursty" I/O patterns,
@@ -97,30 +97,30 @@ The lifetime of a user job is divided into three phases:
 \textit{stage in}, \textit{running}, and \textit{stage-out}.
 Burst buffer is used for different purposes in these phases.
 Unlike existing batch schedulers that make scheduling decision for each job upon its submission,
-Cerberus participates in all of the job phases.
+Cerberus participates in all of the three phases.
 By dividing the lifetime of user jobs into three phases,
 Cerberus adopts different optimization strategies for 
-making scheduling decision based on job requirement at different phases. 
+making scheduling decision based on job requirement at each phase.
 We conduct a series of event driven simulations to evaluate our design. 
-As we will show later on, 
+As shown later on,
 the preliminary results demonstrate that the three-phase design of Cerberus 
 not only boosts system responsiveness, but also improves job performance. 
 Specifically,
 Cerberus accelerates job execution, reduces job response time 
-and improves the average system throughput by 62.31\%.
+and improves the average system throughput.
 Put together, we make three key contributions in this work:
 \begin{enumerate}
         \item    We propose a three-phase job model (i.e., stage-in, running, and stage-out) 
         to describe user jobs and further to facilitate job scheduling in a fine granularity.
         
         \item    We present Cerberus, 
-        a three-phase burst buffer aware scheduler for HPC systems equipped with burst buffer. 
+        a three-phase burst-buffer-aware scheduler for HPC systems equipped with burst buffer. 
         Our design consists of several key optimization strategies for 
         improving the performance of user jobs throughout different job phases.
         
         \item    We develop an event driven simulator called BBSim 
         for simulating and evaluating Cerberus on the Trinity 
-        supercomputer at LANL\cite{TrinitySystem}. 
+        supercomputer at Los Alamos National Laboratory (LANL)\cite{TrinitySystem}. 
         The simulator is open source and freely available to the community\cite{bbsim-github}.
 \end{enumerate}
 
@@ -130,7 +130,7 @@ motivation of using burst buffer on HPC systems.
 Section~\ref{Sec:Model} elaborates the three-phase job model.
 Section~\ref{Sec:Scheduler} describes the design of Cerberus.
 Section~\ref{Sec:Simulation} describes the design of BBsim, the event driven scheduling simulator.
-Section~\ref{Sec:Experiments} presents experiments to evaluate Cerberus under various configurations by using BBSim.
+Section~\ref{Sec:Experiments} evaluates Cerberus by comparing it with various alternatives.
 Section~\ref{Sec:RelatedWorks} discusses the related works, 
 and Section~\ref{Sec:Conclusion} concludes this paper.
 
