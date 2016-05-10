@@ -10,6 +10,30 @@
 
 \subsection{Three-Phase Job Scheduling}
 
+The traditional batch scheduler on a system without burst buffer only considers
+the job with the number of required nodes and the expected runtime
+for making the scheduling decisions.
+The most commonly used scheduling policy is the First Come First Serve with EASY backfilling~\cite{tsafrir-tpds-2007}.
+However, on burst-buffer-enabled systems,
+the amount of available burst buffer capacity becomes a new scheduling constraint.
+
+In this work,
+we propose Cerberus, a burst-buffer-aware batch scheduler.
+We assume that upon job submission, 
+a user specifies the amount of compute nodes, 
+the expected job runtime, 
+and the amount of burst buffer needed by her job. 
+Cerberus makes scheduling decisions based on the most common use cases of burst buffer:
+data stage-in, checkpointing, and data stage-out.
+It allocates burst buffer to each job with regard to its use cases
+by maintaining three distinct queues, as shown in Figure~\ref{Fig:CerberusQueues}.
+The input queue $Q_I$ contains all the jobs that need to prefetch data from the external storage to the burst buffer.
+The running queue $Q_R$ holds the jobs that are waiting for the compute nodes and the burst buffer used for checkpointing.
+Jobs waiting to be drained out to the external permanent storage are in the output queue $Q_O$.
+The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that burst buffer
+can fill in the memory gap between the memory on compute nodes and the hard disk storage.
+Cerberus coordinates three queues and makes scheduling decisions according to job requirements
+in each queue with the objective to maximize job performance and system utilization.
 
 %\NOTE{This paragraph moved to start of Section 3}The traditional batch scheduler on a system without burst buffer only considers
 %the job with the number of required nodes and the expected runtime for the scheduling decision making process.
@@ -28,11 +52,10 @@
 %The layered hierarchy in Figure~\ref{Fig:CerberusQueues} also indicates that burst buffer
 %can fill in the memory gap between the memory on compute nodes and the hard disk storage.
 
-As shown in Figure 1, Cerberus adopts a three-phase job scheduling strategy.
-To see how Cerberus schedules a particular job by coordinating three queues,
+To see how Cerberus schedules a particular job by manipulating three queues,
 we present the job transition diagram in Figure~\ref{Fig:JobFSM}.
 After the submission, a job enters $Q_I$ waiting for the stage-in-purpose burst buffer ($BB_{in}$).
-Once selected by Cerberus, the job is removed from $Q_I$ and start to stage in data.
+Once selected by Cerberus, the job is removed from $Q_I$ and start to stage input data.
 After finishing the stage-in phase, the job is enqueued to $Q_R$,
 where it waits for the required compute nodes and the \textit{new} burst buffer for checkpointing purpose ($BB_{run}$).
 Note that $BB_{in}$ is still held by the job at this time point.
@@ -47,14 +70,13 @@ output data are still available on the compute nodes.
 Without releasing the compute nodes, the job enters $Q_O$ and waits for a certain amount of burst buffer for staging out its data ($BB_{out}$).
 
 Once a job in $Q_O$ is chosen by Cerberus, its data flow from the main memory to the burst buffer
-in the \textbf{drain-out} phase, after which all the compute nodes can be released.
+in the \textbf{drain-out} sub-phase, after which all the compute nodes can be released.
 Then the burst buffer nodes are responsible for transferring the output data to the external storage.
 The job completes when all its data are staged out and $BB_{out}$ are returned to system.
-As indicated by Figure~\ref{Fig:JobFSM}, the resource release at anytime can trigger Cerberus
-to schedule jobs in those three queues.
 
-Cerberus conquers the scheduling problem in each phase.
-The details of how Cerberus makes scheduling decisions are
+As indicated by Figure~\ref{Fig:JobFSM}, the resource release at anytime can trigger Cerberus
+to schedule jobs in three queues.
+The details of how Cerberus makes scheduling decision for each queue are
 described in Section~\ref{SubSec:OptStageIn}-\ref{SubSec:OptStageOut}.
 %The fine scheduling granularity enables the full utilization of burst buffer for different purposes.
 %The divide-conquer approach provides a framework that can be extended to various scheduling
@@ -62,7 +84,7 @@ described in Section~\ref{SubSec:OptStageIn}-\ref{SubSec:OptStageOut}.
 %We propose and solve two optimizations targeting $Q_I/Q_O$ and $Q_R$ in Section~\ref{Sec:Opt}
 
 \subsection{Three-Phase Coordination}
-The three phases together with the corresponding queues, are not entirely independent.
+The three phases, together with the corresponding queues, are not entirely independent.
 First, only after finishing the stage-in phase can a job be ready for running.
 Similarly, only when finishing the running phase can a job waiting or entering the stage-out phase.
 This is reflected in the lifetime of a job's execution.
@@ -80,8 +102,8 @@ Cerberus has to handle multiple queues at the same time.
 Note that jobs finishing the \textit{running} and the \textit{stage-out} phases
 will (partially) release the resources, and we set the priority of queues to be $priority(Q_O) > priority(Q_R) > priority(Q_I)$.
 This greedy heuristic works well when the demand of the jobs in $J_{Q_I}$ is low.
-However, it is possible to make jobs stacking up at the entry of the system.
-The design of such a job stacking is part of our future work.
+However, it is possible to make jobs stacking up at the entry of the system,
+whose solution is part of our future work.
 
 
 
@@ -123,7 +145,7 @@ It can be solved in pseudo-polynomial time through dynamic programming.
 Memorization technique is applied in order to accelerate the solving process.
 The recursive relationship used in our solution is given by \equref{Equ:MaxTransferDataRecursion}.
 The time complexity of solving \equref{Equ:MaxTransferDataRecursion} and 
-backtracking $\mathcal{J}_{Q_I}$ or $\mathcal{J}_{Q_O}$ is $O(n\times BB)$.
+backtracking $\mathcal{J}_{Q_I}$ is $O(n\times BB)$.
 
 
 \subsection{Scheduling in the Running Phase}
@@ -191,6 +213,9 @@ The stage-out phase scheduling is designed based on the value of $bb\_out$ of th
 The optimization formula for the stage-out phase is the same as Problem 1, 
 except that $bb\_in_i$ is replaced with $bb\_out_i$, 
 and $J_{Q_I}$ is replaced with $J_{Q_O}$, the job set of output queue.
+The solution is also extremely similar to \equref{Equ:MaxTransferDataRecursion} and
+has the same $O(n\times BB)$ time complexity.
+
 
 %\subsection{Solving the Optimization Problems}
 %
