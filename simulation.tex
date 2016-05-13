@@ -145,12 +145,12 @@ Besides, it is easy to integrate other scheduling policies into BBSim.
 The codebase of BBSim and Cerberus are made public to the community\cite{bbsim-github}.
 
 
-As the tool for evaluating Cerberus, we use BBSim to simulate
+We use BBSim to simulate
 a burst-buffer-enabled HPC system shown in Figure~\ref{Fig:BBArchitecture}.
-This system architecture is inspired by Trinity, 
+This system architecture is inspired by Trinity\cite{TrinitySystem}, 
 the next generation supercomputer in Los Alamos National Laboratory.
 The parameters used in our simulation are taken from the 
-Trinity/NERSC-8 Use Case Scenarios technical report~\cite{TrinitySystem}.
+Trinity/NERSC-8 Use Case Scenarios technical report\cite{BBUseCase}.
 The simulated system consists of 18,936 compute nodes,
 e.g., 9,436 Intel Haswell nodes and 9,500 Intel Xeon Phi nodes.
 There are 576 burst buffer nodes with an aggregated 3.7 PB storage, which are globally accessible as the intermediate storage.
